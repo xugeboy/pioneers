@@ -1,10 +1,9 @@
 import React, { Fragment } from 'react'
 
-import type { Page } from '@/payload-types'
-
 import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
+import { FullscreenHeroBlock } from '@/blocks/FullscreenHero/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 
@@ -12,12 +11,17 @@ const blockComponents = {
   archive: ArchiveBlock,
   content: ContentBlock,
   cta: CallToActionBlock,
+  fullscreenHero: FullscreenHeroBlock,
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
 }
 
+type BlockInput = {
+  blockType?: keyof typeof blockComponents
+}
+
 export const RenderBlocks: React.FC<{
-  blocks: Page['layout'][0][]
+  blocks: BlockInput[]
 }> = (props) => {
   const { blocks } = props
 
@@ -28,13 +32,14 @@ export const RenderBlocks: React.FC<{
       <Fragment>
         {blocks.map((block, index) => {
           const { blockType } = block
+          const spacingClass = blockType === 'fullscreenHero' ? 'my-0' : 'my-16'
 
           if (blockType && blockType in blockComponents) {
             const Block = blockComponents[blockType]
 
             if (Block) {
               return (
-                <div className="my-16" key={index}>
+                <div className={spacingClass} key={index}>
                   {/* @ts-expect-error there may be some mismatch between the expected types here */}
                   <Block {...block} disableInnerContainer />
                 </div>

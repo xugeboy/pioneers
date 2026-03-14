@@ -1,6 +1,6 @@
 {
-  "name": "Pioneers",
-  "short_name": "Pioneers",
+  "name": "MyWebSite",
+  "short_name": "MySite",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -15,7 +15,7 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#8fff00",
+  "theme_color": "#00A650",
   "background_color": "#ffffff",
   "display": "standalone"
 }

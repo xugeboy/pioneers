@@ -222,3 +222,16 @@ html[data-theme='dark'],
 html[data-theme='light'] {
   opacity: initial;
 }
+
+@keyframes scroll-nudge {
+  0%,
+  100% {
+    opacity: 0.95;
+    transform: translateY(0);
+  }
+
+  50% {
+    opacity: 0.45;
+    transform: translateY(18px);
+  }
+}

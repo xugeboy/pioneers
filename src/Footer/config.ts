@@ -15,7 +15,21 @@ export const Footer: GlobalConfig = {
       fields: [
         link({
           appearances: false,
+          requireHref: false,
         }),
+        {
+          name: 'subItems',
+          type: 'array',
+          admin: {
+            initCollapsed: true,
+          },
+          fields: [
+            link({
+              appearances: false,
+            }),
+          ],
+          maxRows: 8,
+        },
       ],
       maxRows: 6,
       admin: {
