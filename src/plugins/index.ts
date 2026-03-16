@@ -9,6 +9,9 @@ import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { searchFields } from '@/search/fieldOverrides'
 import { beforeSyncWithSearch } from '@/search/beforeSync'
+import { storagePlugins } from './storage'
+import { isAdmin } from '@/access/isAdmin'
+import { isAdminUser } from '@/access/roles'
 
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -27,6 +30,15 @@ export const plugins: Plugin[] = [
   redirectsPlugin({
     collections: ['pages', 'posts'],
     overrides: {
+      access: {
+        create: isAdmin,
+        delete: isAdmin,
+        read: isAdmin,
+        update: isAdmin,
+      },
+      admin: {
+        hidden: ({ user }) => !isAdminUser(user),
+      },
       // @ts-expect-error - This is a valid override, mapped fields don't resolve to the same type
       fields: ({ defaultFields }) => {
         return defaultFields.map((field) => {
@@ -59,6 +71,15 @@ export const plugins: Plugin[] = [
       payment: false,
     },
     formOverrides: {
+      access: {
+        create: isAdmin,
+        delete: isAdmin,
+        read: isAdmin,
+        update: isAdmin,
+      },
+      admin: {
+        hidden: ({ user }) => !isAdminUser(user),
+      },
       fields: ({ defaultFields }) => {
         return defaultFields.map((field) => {
           if ('name' in field && field.name === 'confirmationMessage') {
@@ -79,14 +100,35 @@ export const plugins: Plugin[] = [
         })
       },
     },
+    formSubmissionOverrides: {
+      access: {
+        create: () => true,
+        delete: isAdmin,
+        read: isAdmin,
+        update: isAdmin,
+      },
+      admin: {
+        hidden: ({ user }) => !isAdminUser(user),
+      },
+    },
   }),
   searchPlugin({
     collections: ['posts'],
     beforeSync: beforeSyncWithSearch,
     searchOverrides: {
+      access: {
+        create: isAdmin,
+        delete: isAdmin,
+        read: () => true,
+        update: isAdmin,
+      },
+      admin: {
+        hidden: ({ user }) => !isAdminUser(user),
+      },
       fields: ({ defaultFields }) => {
         return [...defaultFields, ...searchFields]
       },
     },
   }),
+  ...storagePlugins(),
 ]

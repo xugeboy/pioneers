@@ -1,12 +1,17 @@
 import type { CollectionConfig } from 'payload'
 
+import path from 'path'
+import { fileURLToPath } from 'url'
+
 import { anyone } from '../access/anyone'
 import { isAdmin } from '../access/isAdmin'
 import { isEditorOrAdmin } from '../access/isEditorOrAdmin'
-import { slugField } from 'payload'
 
-export const Categories: CollectionConfig = {
-  slug: 'categories',
+const filename = fileURLToPath(import.meta.url)
+const dirname = path.dirname(filename)
+
+export const Videos: CollectionConfig = {
+  slug: 'videos',
   access: {
     create: isEditorOrAdmin,
     delete: isAdmin,
@@ -20,10 +25,10 @@ export const Categories: CollectionConfig = {
     {
       name: 'title',
       type: 'text',
-      required: true,
     },
-    slugField({
-      position: undefined,
-    }),
   ],
+  upload: {
+    staticDir: path.resolve(dirname, '../../public/videos'),
+    mimeTypes: ['video/*'],
+  },
 }

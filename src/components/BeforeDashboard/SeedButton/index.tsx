@@ -1,7 +1,8 @@
 'use client'
 
 import React, { Fragment, useCallback, useState } from 'react'
-import { toast } from '@payloadcms/ui'
+import { toast, useAuth } from '@payloadcms/ui'
+import { isAdminUser } from '@/access/roles'
 
 import './index.scss'
 
@@ -15,9 +16,22 @@ const SuccessMessage: React.FC = () => (
 )
 
 export const SeedButton: React.FC = () => {
+  const { user } = useAuth()
   const [loading, setLoading] = useState(false)
   const [seeded, setSeeded] = useState(false)
   const [error, setError] = useState<null | string>(null)
+
+  if (!isAdminUser(user)) {
+    return (
+      <>
+        Review your existing content and{' '}
+        <a href="/" target="_blank">
+          visit your website
+        </a>{' '}
+        to confirm everything looks right.
+      </>
+    )
+  }
 
   const handleClick = useCallback(
     async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -83,6 +97,11 @@ export const SeedButton: React.FC = () => {
         Seed your database
       </button>
       {message}
+      {' with a few pages, posts, and projects to jump-start your new site, then '}
+      <a href="/" target="_blank">
+        visit your website
+      </a>
+      {' to see the results.'}
     </Fragment>
   )
 }

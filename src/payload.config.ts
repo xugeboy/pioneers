@@ -11,11 +11,13 @@ import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Products } from './collections/Products'
 import { Users } from './collections/Users'
+import { Videos } from './collections/Videos'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
+import { isAdminUser } from './access/roles'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -64,7 +66,7 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL || '',
     },
   }),
-  collections: [Pages, Posts, Products, Media, Files, Categories, Users],
+  collections: [Pages, Posts, Products, Media, Files, Videos, Categories, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins,
@@ -77,7 +79,7 @@ export default buildConfig({
     access: {
       run: ({ req }: { req: PayloadRequest }): boolean => {
         // Allow logged in users to execute this endpoint (default)
-        if (req.user) return true
+        if (isAdminUser(req.user)) return true
 
         const secret = process.env.CRON_SECRET
         if (!secret) return false
@@ -90,5 +92,43 @@ export default buildConfig({
       },
     },
     tasks: [],
+  },
+  onInit: async (payload) => {
+    const usersWithoutRoles = await payload.find({
+      collection: 'users',
+      depth: 0,
+      limit: 1000,
+      pagination: false,
+      where: {
+        or: [
+          {
+            roles: {
+              exists: false,
+            },
+          },
+          {
+            roles: {
+              equals: null,
+            },
+          },
+        ],
+      },
+    })
+
+    if (!usersWithoutRoles.docs.length) return
+
+    payload.logger.info(`Backfilling admin roles for ${usersWithoutRoles.docs.length} existing users...`)
+
+    await Promise.all(
+      usersWithoutRoles.docs.map((user) =>
+        payload.update({
+          collection: 'users',
+          id: user.id,
+          data: {
+            roles: ['admin'],
+          },
+        }),
+      ),
+    )
   },
 })

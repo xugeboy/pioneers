@@ -4,7 +4,8 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 import { anyone } from '../access/anyone'
-import { authenticated } from '../access/authenticated'
+import { isAdmin } from '../access/isAdmin'
+import { isEditorOrAdmin } from '../access/isEditorOrAdmin'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -12,10 +13,10 @@ const dirname = path.dirname(filename)
 export const Files: CollectionConfig = {
   slug: 'files',
   access: {
-    create: authenticated,
-    delete: authenticated,
+    create: isEditorOrAdmin,
+    delete: isAdmin,
     read: anyone,
-    update: authenticated,
+    update: isEditorOrAdmin,
   },
   admin: {
     useAsTitle: 'title',

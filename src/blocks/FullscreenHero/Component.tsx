@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import React, { useEffect } from 'react'
 
 import type { FullscreenHeroBlock as FullscreenHeroBlockProps } from '@/payload-types'
@@ -20,23 +19,7 @@ export const FullscreenHeroBlock: React.FC<
   return (
     <section className="relative -mt-[10.5rem] min-h-[100svh] overflow-hidden bg-black">
       <div className="absolute inset-0">
-        {backgroundImage && typeof backgroundImage === 'object' ? (
-          <Media
-            fill
-            priority
-            imgClassName="object-cover object-center"
-            resource={backgroundImage}
-          />
-        ) : (
-          <Image
-            alt="Pioneers ratchet strap held in one hand"
-            className="object-cover object-center"
-            fill
-            priority
-            sizes="100vw"
-            src="/media/Fast, Secure, and Mess-Free Cargo Tie-Downs.png"
-          />
-        )}
+        <Media fill priority imgClassName="object-cover object-center" resource={backgroundImage} />
       </div>
 
       <div className="pointer-events-none absolute inset-x-0 bottom-8 z-10 flex justify-center md:bottom-10">

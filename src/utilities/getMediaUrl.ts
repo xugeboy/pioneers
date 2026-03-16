@@ -1,5 +1,26 @@
 import { getClientSideURL } from '@/utilities/getURL'
 
+const normalizeBaseURL = (value?: string | null): string => value?.replace(/\/+$/, '') || ''
+
+const remapAssetPathForCDN = (url: string): string => {
+  if (url.startsWith('/media/')) return url.replace('/media/', '/images/')
+  if (url.startsWith('/files/')) return url.replace('/files/', '/documents/')
+  return url
+}
+
+const getAssetBaseURL = (url: string): string => {
+  const cdnURL = normalizeBaseURL(process.env.NEXT_PUBLIC_CDN_URL)
+
+  if (
+    cdnURL &&
+    ['/media/', '/files/', '/images/', '/documents/'].some((prefix) => url.startsWith(prefix))
+  ) {
+    return cdnURL
+  }
+
+  return normalizeBaseURL(getClientSideURL())
+}
+
 /**
  * Processes media resource URL to ensure proper formatting
  * @param url The original URL from the resource
@@ -18,7 +39,8 @@ export const getMediaUrl = (url: string | null | undefined, cacheTag?: string | 
     return cacheTag ? `${url}?${cacheTag}` : url
   }
 
-  // Otherwise prepend client-side URL
-  const baseUrl = getClientSideURL()
-  return cacheTag ? `${baseUrl}${url}?${cacheTag}` : `${baseUrl}${url}`
+  // Otherwise prepend the CDN base URL for public assets when configured.
+  const baseUrl = getAssetBaseURL(url)
+  const assetPath = process.env.NEXT_PUBLIC_CDN_URL ? remapAssetPathForCDN(url) : url
+  return cacheTag ? `${baseUrl}${assetPath}?${cacheTag}` : `${baseUrl}${assetPath}`
 }

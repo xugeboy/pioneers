@@ -1,9 +1,10 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, CollectionSlug } from 'payload'
 
 import { slugField } from 'payload'
 
-import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
+import { isAdmin } from '../../access/isAdmin'
+import { isEditorOrAdmin } from '../../access/isEditorOrAdmin'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { Archive } from '../../blocks/ArchiveBlock/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
@@ -14,10 +15,10 @@ import { MediaBlock } from '../../blocks/MediaBlock/config'
 export const Products: CollectionConfig<'products'> = {
   slug: 'products',
   access: {
-    create: authenticated,
-    delete: authenticated,
+    create: isEditorOrAdmin,
+    delete: isAdmin,
     read: authenticatedOrPublished,
-    update: authenticated,
+    update: isEditorOrAdmin,
   },
   admin: {
     defaultColumns: ['title', 'model', '_status', 'updatedAt'],
@@ -147,7 +148,7 @@ export const Products: CollectionConfig<'products'> = {
         {
           name: 'file',
           type: 'upload',
-          relationTo: 'files',
+          relationTo: 'videos' as CollectionSlug,
           admin: {
             condition: (_data, siblingData) => siblingData?.type === 'upload',
           },
