@@ -1,12 +1,31 @@
 import type { Block, Field } from 'payload'
 
 import {
+  AlignFeature,
+  BlockquoteFeature,
+  BlocksFeature,
+  ChecklistFeature,
+  EXPERIMENTAL_TableFeature,
   FixedToolbarFeature,
   HeadingFeature,
+  HorizontalRuleFeature,
+  IndentFeature,
+  InlineCodeFeature,
   InlineToolbarFeature,
   lexicalEditor,
+  OrderedListFeature,
+  StrikethroughFeature,
+  SubscriptFeature,
+  SuperscriptFeature,
+  TextStateFeature,
+  UnorderedListFeature,
 } from '@payloadcms/richtext-lexical'
 
+import { Banner } from '@/blocks/Banner/config'
+import { CallToAction } from '@/blocks/CallToAction/config'
+import { Code } from '@/blocks/Code/config'
+import { FormBlock } from '@/blocks/Form/config'
+import { MediaBlock } from '@/blocks/MediaBlock/config'
 import { link } from '@/fields/link'
 
 const columnFields: Field[] = [
@@ -40,7 +59,21 @@ const columnFields: Field[] = [
       features: ({ rootFeatures }) => {
         return [
           ...rootFeatures,
-          HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
+          HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
+          AlignFeature(),
+          IndentFeature(),
+          UnorderedListFeature(),
+          OrderedListFeature(),
+          ChecklistFeature(),
+          BlockquoteFeature(),
+          StrikethroughFeature(),
+          SubscriptFeature(),
+          SuperscriptFeature(),
+          InlineCodeFeature(),
+          TextStateFeature(),
+          HorizontalRuleFeature(),
+          EXPERIMENTAL_TableFeature(),
+          BlocksFeature({ blocks: [Banner, CallToAction, Code, FormBlock, MediaBlock] }),
           FixedToolbarFeature(),
           InlineToolbarFeature(),
         ]

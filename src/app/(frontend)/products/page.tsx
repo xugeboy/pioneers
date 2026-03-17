@@ -1,5 +1,6 @@
 import type { Metadata } from 'next/types'
 
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import Link from 'next/link'
 import React from 'react'
 import configPromise from '@payload-config'
@@ -48,6 +49,7 @@ export default async function ProductsPage() {
   return (
     <div className="pt-24 pb-24">
       <PageClient />
+      <Breadcrumbs items={[{ href: '/', label: 'Home' }, { label: 'Products' }]} />
       <div className="container mb-10">
         <div className="max-w-2xl space-y-3">
           <p className="pioneers-kicker font-display">Catalog</p>

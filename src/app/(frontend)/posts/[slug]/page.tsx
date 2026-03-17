@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { RelatedPosts } from '@/blocks/RelatedPosts/Component'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
@@ -59,6 +60,14 @@ export default async function Post({ params: paramsPromise }: Args) {
       <PayloadRedirects disableNotFound url={url} />
 
       {draft && <LivePreviewListener />}
+
+      <Breadcrumbs
+        items={[
+          { href: '/', label: 'Home' },
+          { href: '/posts', label: 'Posts' },
+          { label: post.title },
+        ]}
+      />
 
       <PostHero post={post} />
 

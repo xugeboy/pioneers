@@ -1,5 +1,6 @@
 import type { Metadata } from 'next/types'
 
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { CollectionArchive } from '@/components/CollectionArchive'
 import { PageRange } from '@/components/PageRange'
 import { Pagination } from '@/components/Pagination'
@@ -30,6 +31,7 @@ export default async function Page() {
   return (
     <div className="pt-24 pb-24">
       <PageClient />
+      <Breadcrumbs items={[{ href: '/', label: 'Home' }, { label: 'Posts' }]} />
       <div className="container mb-16">
         <div className="prose dark:prose-invert max-w-none">
           <h1>Posts</h1>

@@ -1,4 +1,5 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import sharp from 'sharp'
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
@@ -21,6 +22,17 @@ import { isAdminUser } from './access/roles'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+const smtpPort = process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : undefined
+const smtpSecure = process.env.SMTP_SECURE === 'true'
+const hasSMTPConfig = Boolean(
+  process.env.SMTP_HOST &&
+    smtpPort &&
+    process.env.SMTP_USER &&
+    process.env.SMTP_PASS &&
+    process.env.EMAIL_FROM &&
+    process.env.EMAIL_FROM_NAME,
+)
 
 export default buildConfig({
   admin: {
@@ -61,6 +73,21 @@ export default buildConfig({
   },
   // This config helps us configure global or default features that the other editors can inherit
   editor: defaultLexical,
+  email: hasSMTPConfig
+    ? nodemailerAdapter({
+        defaultFromAddress: process.env.EMAIL_FROM as string,
+        defaultFromName: process.env.EMAIL_FROM_NAME as string,
+        transportOptions: {
+          auth: {
+            pass: process.env.SMTP_PASS,
+            user: process.env.SMTP_USER,
+          },
+          host: process.env.SMTP_HOST,
+          port: smtpPort,
+          secure: smtpSecure,
+        },
+      })
+    : undefined,
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URL || '',

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next/types'
 
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import Link from 'next/link'
 import React from 'react'
 import configPromise from '@payload-config'
@@ -104,6 +105,13 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
   return (
     <article className="pt-24 pb-24">
       <PageClient />
+      <Breadcrumbs
+        items={[
+          { href: '/', label: 'Home' },
+          { href: '/products', label: 'Products' },
+          { label: title || 'Product' },
+        ]}
+      />
 
       <div className="container mb-10">
         <Link className="text-sm text-muted-foreground" href="/products">

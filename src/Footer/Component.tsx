@@ -14,8 +14,8 @@ export async function Footer() {
 
   const legalLinks = [
     { href: '/accessibility', label: 'Accessibility' },
-    { href: '/terms', label: 'Terms of Use' },
-    { href: '/privacy', label: 'Privacy Policy' },
+    { href: '/terms', label: 'Terms' },
+    { href: '/privacy-policy', label: 'Privacy Policy' },
   ]
 
   return (
@@ -32,8 +32,8 @@ export async function Footer() {
                 Built for pioneers who push industries forward.
               </p>
               <p className="text-sm leading-6 text-slate-500 md:text-[15px]">
-                We engineer reliable cargo control solutions for brands, distributors, and
-                outdoor innovators.
+                We engineer reliable cargo control solutions for brands, distributors, and outdoor
+                innovators.
               </p>
             </div>
           </div>
@@ -46,7 +46,7 @@ export async function Footer() {
 
       <div className="border-t border-slate-900 bg-slate-900 text-slate-200">
         <div className="container flex flex-col gap-4 py-4 text-xs md:flex-row md:items-center md:justify-between">
-          <div>(c) {new Date().getFullYear()} Pioneers. All Rights Reserved.</div>
+          <div>© {new Date().getFullYear()} PioneersGears. All Rights Reserved.</div>
 
           <div className="flex flex-wrap items-center gap-3 md:gap-4">
             {legalLinks.map((item) => (

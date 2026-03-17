@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
 import { getPayload, type RequiredDataFromCollectionSlug } from 'payload'
@@ -64,7 +65,7 @@ export default async function Page({ params: paramsPromise }: Args) {
     return <PayloadRedirects url={url} />
   }
 
-  const { hero, layout } = page
+  const { hero, layout, title } = page
   const hasImmersiveStart = hero?.type === 'highImpact' || layout?.[0]?.blockType === 'fullscreenHero'
 
   return (
@@ -74,6 +75,10 @@ export default async function Page({ params: paramsPromise }: Args) {
       <PayloadRedirects disableNotFound url={url} />
 
       {draft && <LivePreviewListener />}
+
+      {decodedSlug !== 'home' && (
+        <Breadcrumbs items={[{ href: '/', label: 'Home' }, { label: title }]} />
+      )}
 
       <RenderHero {...hero} />
       <RenderBlocks blocks={layout} />
