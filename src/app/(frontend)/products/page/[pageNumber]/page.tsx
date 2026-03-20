@@ -1,21 +1,23 @@
 import type { Metadata } from 'next/types'
 
 import { Breadcrumbs } from '@/components/Breadcrumbs'
-import Link from 'next/link'
-import React from 'react'
+import { PageRange } from '@/components/PageRange'
+import { Pagination } from '@/components/Pagination'
+import { ProductCategoryCard } from '@/components/ProductCategoryCard'
+import { ProductLeadCard, type ProductLeadCardData } from '@/components/ProductLeadCard'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { notFound } from 'next/navigation'
-
-import { Media } from '@/components/Media'
-import { PageRange } from '@/components/PageRange'
-import { Pagination } from '@/components/Pagination'
+import React from 'react'
 
 import PageClient from '../../page.client'
+import {
+  PRODUCT_PAGE_LIMIT,
+  getAllProductCategories,
+  getTopLevelProductCategories,
+} from '@/utilities/productCategories'
 
 export const revalidate = 600
-
-const PAGE_LIMIT = 12
 
 type Args = {
   params: Promise<{
@@ -23,27 +25,19 @@ type Args = {
   }>
 }
 
-type ProductListItem = {
-  id: string
-  title?: string | null
-  model?: string | null
-  slug?: string | null
-  summary?: string | null
-  primaryImage?: unknown
-  secondaryImage?: unknown
-}
-
 export default async function ProductsPageNumber({ params: paramsPromise }: Args) {
   const { pageNumber } = await paramsPromise
   const payload = await getPayload({ config: configPromise })
+  const allCategories = await getAllProductCategories(payload)
+  const topLevelCategories = getTopLevelProductCategories(allCategories)
 
   const sanitizedPageNumber = Number(pageNumber)
-  if (!Number.isInteger(sanitizedPageNumber)) notFound()
+  if (!Number.isInteger(sanitizedPageNumber) || sanitizedPageNumber < 1) notFound()
 
   const products = await payload.find({
     collection: 'products',
     depth: 1,
-    limit: PAGE_LIMIT,
+    limit: PRODUCT_PAGE_LIMIT,
     page: sanitizedPageNumber,
     overrideAccess: false,
     select: {
@@ -51,11 +45,19 @@ export default async function ProductsPageNumber({ params: paramsPromise }: Args
       model: true,
       slug: true,
       summary: true,
+      primaryCategory: true,
+      additionalCategories: true,
       primaryImage: true,
       secondaryImage: true,
+      isFeatured: true,
+      specs: true,
     },
     sort: '-publishedAt',
   })
+
+  if (products.totalPages > 0 && sanitizedPageNumber > products.totalPages) {
+    notFound()
+  }
 
   return (
     <div className="pt-24 pb-24">
@@ -67,79 +69,63 @@ export default async function ProductsPageNumber({ params: paramsPromise }: Args
           { label: `Page ${sanitizedPageNumber}` },
         ]}
       />
+
       <div className="container mb-10">
-        <div className="max-w-2xl space-y-3">
-          <p className="pioneers-kicker font-display">Catalog</p>
-          <h1 className="font-display text-3xl md:text-4xl">产品目录</h1>
-          <p className="text-muted-foreground">
-            以户外越野、露营与水上装备为核心场景，支持多型号与定制规格组合。
+        <div className="max-w-3xl space-y-4">
+          <p className="pioneers-kicker font-display">B2B Catalog</p>
+          <h1 className="font-display text-3xl md:text-4xl">Retractable Cargo Control Systems</h1>
+          <p className="max-w-2xl text-muted-foreground">
+            Industrial-grade tie-down gear engineered for outdoor transport, off-road rigs,
+            powersports, marine use, and demanding cargo securement programs.
           </p>
         </div>
       </div>
+
+      {topLevelCategories.length > 0 ? (
+        <div className="container mb-14">
+          <div className="mb-6 max-w-2xl space-y-2">
+            <p className="pioneers-kicker font-display">Browse by Category</p>
+            <h2 className="font-display text-2xl md:text-3xl">Navigate the catalog by product family</h2>
+          </div>
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {topLevelCategories.map((category) => (
+              <ProductCategoryCard key={category.id} category={category} />
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       <div className="container mb-8">
         <PageRange
           collectionLabels={{ plural: 'Products', singular: 'Product' }}
           currentPage={products.page}
-          limit={PAGE_LIMIT}
+          limit={PRODUCT_PAGE_LIMIT}
           totalDocs={products.totalDocs}
         />
       </div>
 
       <div className="container">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {(products.docs as ProductListItem[]).map((product) => (
-            <ProductCard key={product.id} product={product} />
+        <div className="grid gap-7 sm:grid-cols-2 xl:grid-cols-3">
+          {(products.docs as ProductLeadCardData[]).map((product) => (
+            <ProductLeadCard key={product.id} product={product} />
           ))}
         </div>
       </div>
 
       <div className="container">
-        {products?.page && products?.totalPages > 1 && (
+        {products.page && products.totalPages > 1 ? (
           <Pagination basePath="/products" page={products.page} totalPages={products.totalPages} />
-        )}
+        ) : null}
       </div>
     </div>
   )
 }
 
-const ProductCard: React.FC<{ product: ProductListItem }> = ({ product }) => {
-  const { title, model, slug, summary, primaryImage, secondaryImage } = product
-  const href = slug ? `/products/${slug}` : '#'
-
-  return (
-    <Link className="group block" href={href}>
-      <div className="relative overflow-hidden rounded-2xl border border-border bg-card">
-        <div className="relative aspect-[4/3]">
-          {primaryImage && (
-            <Media
-              fill
-              imgClassName="object-cover transition-opacity duration-300"
-              resource={primaryImage}
-            />
-          )}
-          {secondaryImage && (
-            <Media
-              fill
-              imgClassName="object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-              resource={secondaryImage}
-            />
-          )}
-        </div>
-        <div className="p-5 space-y-2">
-          {model && <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{model}</p>}
-          <h3 className="font-display text-lg">{title}</h3>
-          {summary && <p className="text-sm text-muted-foreground">{summary}</p>}
-        </div>
-      </div>
-    </Link>
-  )
-}
-
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { pageNumber } = await paramsPromise
+
   return {
-    title: `Pioneers 产品目录 - 第 ${pageNumber || ''} 页`,
+    title: `Pioneers Product Catalog - Page ${pageNumber}`,
   }
 }
 
@@ -150,7 +136,7 @@ export async function generateStaticParams() {
     overrideAccess: false,
   })
 
-  const totalPages = Math.ceil(totalDocs / PAGE_LIMIT)
+  const totalPages = Math.ceil(totalDocs / PRODUCT_PAGE_LIMIT)
   const pages: { pageNumber: string }[] = []
 
   for (let i = 1; i <= totalPages; i++) {

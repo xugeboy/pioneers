@@ -11,6 +11,7 @@ import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
 import { FormBlock } from '../../blocks/Form/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
+import { revalidateDeleteProduct, revalidateProduct } from './hooks/revalidateProduct'
 
 export const Products: CollectionConfig<'products'> = {
   slug: 'products',
@@ -21,7 +22,7 @@ export const Products: CollectionConfig<'products'> = {
     update: isEditorOrAdmin,
   },
   admin: {
-    defaultColumns: ['title', 'model', '_status', 'updatedAt'],
+    defaultColumns: ['title', 'model', 'primaryCategory', '_status', 'updatedAt'],
     useAsTitle: 'title',
   },
   fields: [
@@ -65,6 +66,24 @@ export const Products: CollectionConfig<'products'> = {
         position: 'sidebar',
       },
       defaultValue: false,
+    },
+    {
+      name: 'primaryCategory',
+      type: 'relationship',
+      relationTo: 'product-categories',
+      required: true,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'additionalCategories',
+      type: 'relationship',
+      relationTo: 'product-categories',
+      hasMany: true,
+      admin: {
+        position: 'sidebar',
+      },
     },
     {
       name: 'relatedPosts',
@@ -182,6 +201,8 @@ export const Products: CollectionConfig<'products'> = {
     slugField(),
   ],
   hooks: {
+    afterChange: [revalidateProduct],
+    afterDelete: [revalidateDeleteProduct],
     beforeChange: [populatePublishedAt],
   },
   versions: {

@@ -3,29 +3,41 @@
 import { cn } from '@/utilities/ui'
 import { Menu, SearchIcon } from 'lucide-react'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
+import type { HeaderMegaNavGroup } from '@/Header/getMegaNavData'
 import type { Header as HeaderType } from '@/payload-types'
 
 import { resolveCMSLinkHref } from '@/utilities/resolveCMSLinkHref'
+import { ProductMegaNav } from './ProductMegaNav'
 
 type HeaderNavProps = {
   data: HeaderType
+  megaNavGroups: HeaderMegaNavGroup[]
   onOpenMenu: () => void
   tone?: 'dark' | 'light'
 }
 
 type NavLinkData = NonNullable<HeaderType['navItems']>[number]['link']
 
-export const HeaderNav: React.FC<HeaderNavProps> = ({ data, onOpenMenu, tone = 'dark' }) => {
+export const HeaderNav: React.FC<HeaderNavProps> = ({
+  data,
+  megaNavGroups,
+  onOpenMenu,
+  tone = 'dark',
+}) => {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const [query, setQuery] = useState(searchParams.get('q') ?? '')
+  const pathname = usePathname()
+  const [query, setQuery] = useState('')
 
   useEffect(() => {
-    setQuery(searchParams.get('q') ?? '')
-  }, [searchParams])
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    setQuery(new URLSearchParams(window.location.search).get('q') ?? '')
+  }, [pathname])
 
   const navItems = (data?.navItems || []) as Array<
     NonNullable<HeaderType['navItems']>[number] & {
@@ -61,7 +73,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({ data, onOpenMenu, tone = '
       : 'border-[#dad7d1] bg-[#faf9f7] hover:border-[#c8c1b7] hover:bg-white focus-within:border-[#b8b0a6] focus-within:bg-white focus-within:shadow-[0_0_0_3px_rgba(36,79,44,0.08)]',
   )
   const searchInputClasses = cn(
-    'h-11 w-full border-0 bg-transparent pr-12 text-[15px] shadow-none focus-visible:ring-0 focus-visible:outline-none',
+    'h-11 w-full border-0 bg-transparent pl-4 pr-12 text-[15px] shadow-none focus-visible:ring-0 focus-visible:outline-none',
     isLightTone
       ? 'text-white placeholder:text-white/72 [text-shadow:0_1px_18px_rgba(0,0,0,0.45)]'
       : 'text-[#2d2d2d] placeholder:text-[#a7a29a]',
@@ -78,88 +90,92 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({ data, onOpenMenu, tone = '
   )
 
   return (
-    <nav className="flex w-full min-w-0 flex-col gap-3 md:w-auto md:flex-row md:items-center md:justify-end md:gap-4">
-      <div className="hidden flex-wrap items-center gap-1 xl:flex md:gap-2">
-        {navItems.map((item, i) => {
-          const { link, subItems } = item
-          const hasSubItems = Array.isArray(subItems) && subItems.length > 0
-          const href = resolveCMSLinkHref(link)
+    <nav className="flex w-full min-w-0 flex-col gap-3 md:w-auto md:flex-row md:items-center md:gap-4">
+      <div className="hidden min-w-0 flex-1 items-center gap-6 xl:flex">
+        <ProductMegaNav groups={megaNavGroups} tone={tone} />
 
-          if (!hasSubItems) {
-            if (!href) return null
+        <div className="ml-auto flex min-w-0 items-center gap-1 md:gap-2">
+          {navItems.map((item, i) => {
+            const { link, subItems } = item
+            const hasSubItems = Array.isArray(subItems) && subItems.length > 0
+            const href = resolveCMSLinkHref(link)
+
+            if (!hasSubItems) {
+              if (!href) return null
+
+              return (
+                <Link
+                  className={navItemShellClasses}
+                  href={href}
+                  key={i}
+                  rel={link?.newTab ? 'noopener noreferrer' : undefined}
+                  target={link?.newTab ? '_blank' : undefined}
+                >
+                  <span className={navTextClasses}>{link?.label}</span>
+                </Link>
+              )
+            }
 
             return (
-              <Link
-                className={navItemShellClasses}
-                href={href}
-                key={i}
-                rel={link?.newTab ? 'noopener noreferrer' : undefined}
-                target={link?.newTab ? '_blank' : undefined}
-              >
-                <span className={navTextClasses}>{link?.label}</span>
-              </Link>
-            )
-          }
-
-          return (
-            <div className="group relative py-1" key={i}>
-              <div className={cn(navItemShellClasses, 'pr-3')}>
-                {href ? (
-                  <Link
-                    className={navTextClasses}
-                    href={href}
-                    rel={link?.newTab ? 'noopener noreferrer' : undefined}
-                    target={link?.newTab ? '_blank' : undefined}
+              <div className="group relative py-1" key={i}>
+                <div className={cn(navItemShellClasses, 'pr-3')}>
+                  {href ? (
+                    <Link
+                      className={navTextClasses}
+                      href={href}
+                      rel={link?.newTab ? 'noopener noreferrer' : undefined}
+                      target={link?.newTab ? '_blank' : undefined}
+                    >
+                      {link?.label}
+                    </Link>
+                  ) : (
+                    <span className={navTextClasses}>{link?.label}</span>
+                  )}
+                  <svg
+                    aria-hidden="true"
+                    className="size-3 transition-transform duration-200 group-hover:rotate-180"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
                   >
-                    {link?.label}
-                  </Link>
-                ) : (
-                  <span className={navTextClasses}>{link?.label}</span>
-                )}
-                <svg
-                  aria-hidden="true"
-                  className="size-3 transition-transform duration-200 group-hover:rotate-180"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
+                    <path
+                      clipRule="evenodd"
+                      d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.7a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.21 8.29a.75.75 0 0 1 .02-1.08Z"
+                      fillRule="evenodd"
+                    />
+                  </svg>
+                </div>
+
+                <div
+                  className={cn(
+                    'pointer-events-none invisible absolute left-1/2 top-full z-20 w-max -translate-x-1/2 translate-y-1 pt-2 opacity-0 transition-all duration-200',
+                    'group-hover:pointer-events-auto group-hover:visible group-hover:translate-y-0 group-hover:opacity-100',
+                    'group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100',
+                  )}
                 >
-                  <path
-                    clipRule="evenodd"
-                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.7a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.21 8.29a.75.75 0 0 1 .02-1.08Z"
-                    fillRule="evenodd"
-                  />
-                </svg>
-              </div>
+                  <div className={dropdownPanelClasses}>
+                    {subItems?.map((subItem, subIndex) => {
+                      const subHref = resolveCMSLinkHref(subItem.link)
 
-              <div
-                className={cn(
-                  'pointer-events-none invisible absolute left-1/2 top-full z-20 w-max -translate-x-1/2 translate-y-1 pt-2 opacity-0 transition-all duration-200',
-                  'group-hover:pointer-events-auto group-hover:visible group-hover:translate-y-0 group-hover:opacity-100',
-                  'group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100',
-                )}
-              >
-                <div className={dropdownPanelClasses}>
-                  {subItems?.map((subItem, subIndex) => {
-                    const subHref = resolveCMSLinkHref(subItem.link)
+                      if (!subHref) return null
 
-                    if (!subHref) return null
-
-                    return (
-                      <Link
-                        className={dropdownLinkClasses}
-                        href={subHref}
-                        key={subIndex}
-                        rel={subItem.link?.newTab ? 'noopener noreferrer' : undefined}
-                        target={subItem.link?.newTab ? '_blank' : undefined}
-                      >
-                        {subItem.link?.label}
-                      </Link>
-                    )
-                  })}
+                      return (
+                        <Link
+                          className={dropdownLinkClasses}
+                          href={subHref}
+                          key={subIndex}
+                          rel={subItem.link?.newTab ? 'noopener noreferrer' : undefined}
+                          target={subItem.link?.newTab ? '_blank' : undefined}
+                        >
+                          {subItem.link?.label}
+                        </Link>
+                      )
+                    })}
+                  </div>
                 </div>
               </div>
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
       </div>
 
       <div className="flex w-full min-w-0 items-center gap-2 md:w-auto">

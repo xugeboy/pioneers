@@ -7,15 +7,17 @@ import type { Header } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
 import { MobileDrawer } from '@/Header/MobileDrawer'
+import type { HeaderMegaNavGroup } from '@/Header/getMegaNavData'
 import { useHeaderTheme } from '@/providers/HeaderTheme'
 import { cn } from '@/utilities/ui'
 import { HeaderNav } from './Nav'
 
 interface HeaderClientProps {
   data: Header
+  megaNavGroups: HeaderMegaNavGroup[]
 }
 
-export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
+export const HeaderClient: React.FC<HeaderClientProps> = ({ data, megaNavGroups }) => {
   const [isInteractive, setIsInteractive] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { headerTheme, setHeaderTheme } = useHeaderTheme()
@@ -44,7 +46,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
     <>
       <header
         className={cn(
-          'fixed inset-x-0 top-0 z-40 transition-[background-color,box-shadow] duration-300',
+          'absolute inset-x-0 top-0 z-40 transition-[background-color,box-shadow] duration-300',
           showSolidHeader ? 'bg-white shadow-[0_14px_40px_rgba(0,0,0,0.08)]' : 'bg-transparent',
         )}
         onBlurCapture={(event) => {
@@ -76,6 +78,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 
           <HeaderNav
             data={data}
+            megaNavGroups={megaNavGroups}
             onOpenMenu={() => {
               setIsMenuOpen(true)
             }}
@@ -86,6 +89,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 
       <MobileDrawer
         items={data.navItems || []}
+        megaNavGroups={megaNavGroups}
         onClose={() => {
           setIsMenuOpen(false)
         }}

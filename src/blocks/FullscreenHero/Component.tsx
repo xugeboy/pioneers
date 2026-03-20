@@ -17,7 +17,7 @@ export const FullscreenHeroBlock: React.FC<
   }, [setHeaderTheme])
 
   return (
-    <section className="relative -mt-[10.5rem] min-h-[100svh] overflow-hidden bg-black">
+    <section className="relative min-h-[100svh] overflow-hidden bg-black">
       <div className="absolute inset-0">
         <Media fill priority imgClassName="object-cover object-center" resource={backgroundImage} />
       </div>

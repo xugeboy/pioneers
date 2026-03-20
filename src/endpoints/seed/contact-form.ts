@@ -90,8 +90,9 @@ export const contactForm: RequiredDataFromCollectionSlug<'forms'> = {
     {
       name: 'phone',
       blockName: 'phone',
-      blockType: 'number',
-      label: 'Phone',
+      blockType: 'phone',
+      label: 'Phone Number',
+      placeholder: 'Mobile or WhatsApp number',
       required: false,
       width: 100,
     },

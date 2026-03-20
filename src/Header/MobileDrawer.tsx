@@ -7,6 +7,8 @@ import React, { useState } from 'react'
 import type { Header } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
+import type { HeaderMegaNavGroup } from '@/Header/getMegaNavData'
+import { MobileProductMegaNav } from '@/Header/MobileProductMegaNav'
 import { socialLinks } from '@/components/socialLinks'
 import { resolveCMSLinkHref } from '@/utilities/resolveCMSLinkHref'
 import { cn } from '@/utilities/ui'
@@ -15,9 +17,10 @@ type HeaderNavItem = NonNullable<Header['navItems']>[number]
 
 export const MobileDrawer: React.FC<{
   items: HeaderNavItem[]
+  megaNavGroups: HeaderMegaNavGroup[]
   onClose: () => void
   open: boolean
-}> = ({ items, onClose, open }) => {
+}> = ({ items, megaNavGroups, onClose, open }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
 
   return (
@@ -45,6 +48,8 @@ export const MobileDrawer: React.FC<{
         </div>
 
         <div className="flex-1 overflow-y-auto px-5 py-4">
+          <MobileProductMegaNav groups={megaNavGroups} onClose={onClose} />
+
           <div>
             {items.map((item, index) => {
               const href = resolveCMSLinkHref(item.link)
@@ -148,8 +153,6 @@ export const MobileDrawer: React.FC<{
           </div>
           <div className="flex items-center gap-3">
             {socialLinks.map((item) => {
-              const Icon = item.icon
-
               return (
                 <a
                   aria-label={item.label}
@@ -157,7 +160,13 @@ export const MobileDrawer: React.FC<{
                   href={item.href}
                   key={item.label}
                 >
-                  <Icon className="size-4" />
+                  <svg
+                    aria-hidden="true"
+                    className="size-4 fill-current"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d={item.path} />
+                  </svg>
                 </a>
               )
             })}

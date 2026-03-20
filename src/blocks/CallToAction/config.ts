@@ -28,6 +28,17 @@ export const CallToAction: Block = {
       }),
       label: false,
     },
+    {
+      name: 'supportText',
+      type: 'text',
+      label: 'Support Text',
+    },
+    {
+      name: 'media',
+      type: 'upload',
+      label: 'Right-side Image',
+      relationTo: 'media',
+    },
     linkGroup({
       appearances: ['default', 'outline'],
       overrides: {

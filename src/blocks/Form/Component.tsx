@@ -1,8 +1,8 @@
 'use client'
-import type { FormFieldBlock, Form as FormType } from '@payloadcms/plugin-form-builder/types'
+import type { Form as PayloadForm } from '@/payload-types'
 
 import { useRouter } from 'next/navigation'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import RichText from '@/components/RichText'
 import { Button } from '@/components/ui/button'
@@ -15,7 +15,7 @@ export type FormBlockType = {
   blockName?: string
   blockType?: 'formBlock'
   enableIntro: boolean
-  form: FormType
+  form: PayloadForm | number
   introContent?: DefaultTypedEditorState
 }
 
@@ -24,30 +24,63 @@ export const FormBlock: React.FC<
     id?: string
   } & FormBlockType
 > = (props) => {
-  const {
-    enableIntro,
-    form: formFromProps,
-    form: { id: formID, confirmationMessage, confirmationType, redirect, submitButtonLabel } = {},
-    introContent,
-  } = props
-
   const formMethods = useForm({
-    defaultValues: formFromProps.fields,
+    defaultValues: {},
   })
   const {
     control,
     formState: { errors },
     handleSubmit,
     register,
+    reset,
   } = formMethods
-
   const [isLoading, setIsLoading] = useState(false)
   const [hasSubmitted, setHasSubmitted] = useState<boolean>()
   const [error, setError] = useState<{ message: string; status?: string } | undefined>()
   const router = useRouter()
+  const {
+    enableIntro,
+    form: formFromProps,
+    introContent,
+  } = props
+  const form = formFromProps && typeof formFromProps !== 'number' ? formFromProps : null
+  const formID = form?.id ?? 0
+  const formHTMLID = String(formID || 'form')
+  const confirmationMessage = form?.confirmationMessage
+  const confirmationType = form?.confirmationType
+  const redirect = form?.redirect
+  const submitButtonLabel = form?.submitButtonLabel || 'Submit'
+
+  const defaultValues = useMemo(
+    () =>
+      (form?.fields || []).reduce<Record<string, boolean | number | string>>(
+        (acc, field) => {
+          if ('name' in field && field.name) {
+            const fieldValue =
+              'defaultValue' in field
+                ? (field.defaultValue ?? '') as boolean | number | string
+                : ''
+
+            acc[field.name] = fieldValue
+          }
+
+          return acc
+        },
+        {},
+      ),
+    [form],
+  )
+
+  React.useEffect(() => {
+    reset(defaultValues)
+  }, [defaultValues, reset])
 
   const onSubmit = useCallback(
-    (data: FormFieldBlock[]) => {
+    (data: Record<string, unknown>) => {
+      if (!form) {
+        return
+      }
+
       let loadingTimerID: ReturnType<typeof setTimeout>
       const submitForm = async () => {
         setError(undefined)
@@ -110,8 +143,12 @@ export const FormBlock: React.FC<
 
       void submitForm()
     },
-    [router, formID, redirect, confirmationType],
+    [confirmationType, form, formID, redirect, router],
   )
+
+  if (!form) {
+    return null
+  }
 
   return (
     <div className="container lg:max-w-[48rem]">
@@ -120,27 +157,26 @@ export const FormBlock: React.FC<
       )}
       <div className="p-4 lg:p-6 border border-border rounded-[0.8rem]">
         <FormProvider {...formMethods}>
-          {!isLoading && hasSubmitted && confirmationType === 'message' && (
-            <RichText data={confirmationMessage} />
-          )}
+          {!isLoading && hasSubmitted && confirmationType === 'message' && confirmationMessage ? (
+            <RichText data={confirmationMessage as DefaultTypedEditorState} />
+          ) : null}
           {isLoading && !hasSubmitted && <p>Loading, please wait...</p>}
           {error && <div>{`${error.status || '500'}: ${error.message || ''}`}</div>}
           {!hasSubmitted && (
-            <form id={formID} onSubmit={handleSubmit(onSubmit)}>
+            <form id={formHTMLID} onSubmit={handleSubmit(onSubmit)}>
               <div
                 className="mb-6 space-y-6 md:grid md:gap-y-6 md:space-y-0"
                 style={{ gridTemplateColumns: 'repeat(100, minmax(0, 1fr))' }}
               >
-                {formFromProps &&
-                  formFromProps.fields &&
-                  formFromProps.fields?.map((field, index) => {
+                {form.fields &&
+                  form.fields.map((field, index) => {
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const Field: React.FC<any> = fields?.[field.blockType as keyof typeof fields]
                     if (Field) {
                       return (
                         <React.Fragment key={index}>
                           <Field
-                            form={formFromProps}
+                            form={form}
                             {...field}
                             {...formMethods}
                             control={control}
@@ -154,7 +190,7 @@ export const FormBlock: React.FC<
                   })}
               </div>
 
-              <Button form={formID} type="submit" variant="default">
+              <Button form={formHTMLID} type="submit" variant="default">
                 {submitButtonLabel}
               </Button>
             </form>

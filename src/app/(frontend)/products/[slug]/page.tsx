@@ -11,7 +11,13 @@ import { notFound } from 'next/navigation'
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
+import type {
+  File as PayloadFile,
+  Product as PayloadProduct,
+  Video as PayloadVideo,
+} from '@/payload-types'
 import { getMediaUrl } from '@/utilities/getMediaUrl'
+import { getProductCategoryBreadcrumbItems } from '@/utilities/productCategories'
 
 import PageClient from './page.client'
 
@@ -23,44 +29,7 @@ type Args = {
   }>
 }
 
-type UploadFile = {
-  url?: string | null
-  filename?: string | null
-  mimeType?: string | null
-  updatedAt?: string | null
-}
-
-type GalleryItem = {
-  image?: unknown
-  alt?: string | null
-}
-
-type SpecItem = {
-  label?: string | null
-  value?: string | null
-}
-
-type Product = {
-  title?: string | null
-  model?: string | null
-  slug?: string | null
-  summary?: string | null
-  description?: unknown
-  primaryImage?: unknown
-  secondaryImage?: unknown
-  gallery?: GalleryItem[] | null
-  specs?: SpecItem[] | null
-  video?: {
-    type?: 'url' | 'upload' | null
-    url?: string | null
-    file?: UploadFile | string | null
-  } | null
-  attachments?: Array<{
-    file?: UploadFile | string | null
-    label?: string | null
-  }> | null
-  customLayout?: Array<Record<string, unknown>> | null
-}
+type Product = PayloadProduct
 
 export default async function ProductDetailPage({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
@@ -92,6 +61,7 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
     title,
     model,
     summary,
+    primaryCategory,
     description,
     primaryImage,
     secondaryImage,
@@ -101,17 +71,17 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
     attachments,
     customLayout,
   } = product
+  const breadcrumbItems = [
+    ...getProductCategoryBreadcrumbItems(
+      typeof primaryCategory === 'object' && primaryCategory !== null ? primaryCategory : null,
+    ),
+    { label: title || 'Product' },
+  ]
 
   return (
     <article className="pt-24 pb-24">
       <PageClient />
-      <Breadcrumbs
-        items={[
-          { href: '/', label: 'Home' },
-          { href: '/products', label: 'Products' },
-          { label: title || 'Product' },
-        ]}
-      />
+      <Breadcrumbs items={breadcrumbItems} />
 
       <div className="container mb-10">
         <Link className="text-sm text-muted-foreground" href="/products">
@@ -215,8 +185,10 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
   )
 }
 
-const UploadedFilePreview: React.FC<{ file?: UploadFile | string | null }> = ({ file }) => {
-  if (!file || typeof file === 'string') return null
+const UploadedFilePreview: React.FC<{ file?: PayloadFile | PayloadVideo | number | null }> = ({
+  file,
+}) => {
+  if (!file || typeof file === 'number') return null
 
   const url = getMediaUrl(file.url, file.updatedAt)
   if (!url) return null
@@ -235,10 +207,10 @@ const UploadedFilePreview: React.FC<{ file?: UploadFile | string | null }> = ({ 
 }
 
 const AttachmentLink: React.FC<{
-  item: { file?: UploadFile | string | null; label?: string | null }
+  item: { file?: PayloadFile | number | null; label?: string | null }
 }> = ({ item }) => {
   const file = item.file
-  if (!file || typeof file === 'string') return null
+  if (!file || typeof file === 'number') return null
 
   const url = getMediaUrl(file.url, file.updatedAt)
   if (!url) return null

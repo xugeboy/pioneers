@@ -12,6 +12,7 @@ import { beforeSyncWithSearch } from '@/search/beforeSync'
 import { storagePlugins } from './storage'
 import { isAdmin } from '@/access/isAdmin'
 import { isAdminUser } from '@/access/roles'
+import { phoneField } from '@/blocks/Form/phoneField'
 
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -59,7 +60,7 @@ export const plugins: Plugin[] = [
     },
   }),
   nestedDocsPlugin({
-    collections: ['categories'],
+    collections: ['categories', 'product-categories'],
     generateURL: (docs) => docs.reduce((url, doc) => `${url}/${doc.slug}`, ''),
   }),
   seoPlugin({
@@ -68,6 +69,7 @@ export const plugins: Plugin[] = [
   }),
   formBuilderPlugin({
     fields: {
+      phone: phoneField,
       payment: false,
     },
     formOverrides: {

@@ -32,8 +32,9 @@ export async function Footer() {
                 Built for pioneers who push industries forward.
               </p>
               <p className="text-sm leading-6 text-slate-500 md:text-[15px]">
-                We engineer reliable cargo control solutions for brands, distributors, and outdoor
-                innovators.
+                PioneersGears is your expert in application-driven cargo control and mobility
+                restraints. We design and manufacture purpose-built, OEM/ODM custom tie-down
+                solutions for your specific industry scenarios.
               </p>
             </div>
           </div>
@@ -58,8 +59,6 @@ export async function Footer() {
 
           <div className="flex items-center gap-3">
             {socialLinks.map((item) => {
-              const Icon = item.icon
-
               return (
                 <a
                   aria-label={item.label}
@@ -67,7 +66,13 @@ export async function Footer() {
                   href={item.href}
                   key={item.label}
                 >
-                  <Icon className="h-4 w-4" />
+                  <svg
+                    aria-hidden="true"
+                    className="h-4 w-4 fill-current"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d={item.path} />
+                  </svg>
                 </a>
               )
             })}

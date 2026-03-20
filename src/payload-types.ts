@@ -70,6 +70,7 @@ export interface Config {
     pages: Page;
     posts: Post;
     products: Product;
+    'product-categories': ProductCategory;
     media: Media;
     files: File;
     videos: Video;
@@ -95,6 +96,7 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
+    'product-categories': ProductCategoriesSelect<false> | ProductCategoriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     files: FilesSelect<false> | FilesSelect<true>;
     videos: VideosSelect<false> | VideosSelect<true>;
@@ -229,6 +231,8 @@ export interface Page {
           };
           [k: string]: unknown;
         } | null;
+        supportText?: string | null;
+        media?: (number | null) | Media;
         links?:
           | {
               link: {
@@ -261,6 +265,7 @@ export interface Page {
         blockName?: string | null;
         blockType: 'cta';
       }
+    | FAQAccordionBlock
     | {
         columns?:
           | {
@@ -621,6 +626,8 @@ export interface Product {
   primaryImage: number | Media;
   secondaryImage?: (number | null) | Media;
   isFeatured?: boolean | null;
+  primaryCategory: number | ProductCategory;
+  additionalCategories?: (number | ProductCategory)[] | null;
   relatedPosts?: (number | Post)[] | null;
   description?: {
     root: {
@@ -655,6 +662,8 @@ export interface Product {
               };
               [k: string]: unknown;
             } | null;
+            supportText?: string | null;
+            media?: (number | null) | Media;
             links?:
               | {
                   link: {
@@ -726,6 +735,41 @@ export interface Product {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-categories".
+ */
+export interface ProductCategory {
+  id: number;
+  title: string;
+  description?: string | null;
+  heroImage?: (number | null) | Media;
+  sortOrder?: number | null;
+  /**
+   * Used by the website header mega menu. Only top-level categories are rendered even if a child category is checked.
+   */
+  showInMegaNav?: boolean | null;
+  /**
+   * Optional curated products for the header mega menu. If left empty, the website automatically falls back to featured and recent products from this category tree.
+   */
+  megaNavHotProducts?: (number | Product)[] | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  parent?: (number | null) | ProductCategory;
+  breadcrumbs?:
+    | {
+        doc?: (number | null) | ProductCategory;
+        url?: string | null;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -965,6 +1009,7 @@ export interface Form {
             blockName?: string | null;
             blockType: 'textarea';
           }
+        | PhoneField
       )[]
     | null;
   submitButtonLabel?: string | null;
@@ -1024,6 +1069,21 @@ export interface Form {
     | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PhoneField".
+ */
+export interface PhoneField {
+  name: string;
+  label?: string | null;
+  width?: number | null;
+  defaultValue?: string | null;
+  placeholder?: string | null;
+  required?: boolean | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'phone';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1115,6 +1175,35 @@ export interface FullscreenHeroBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'fullscreenHero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FAQAccordionBlock".
+ */
+export interface FAQAccordionBlock {
+  openFirstItem?: boolean | null;
+  items: {
+    question: string;
+    answer: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'faqAccordion';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1319,6 +1408,10 @@ export interface PayloadLockedDocument {
         value: number | Product;
       } | null)
     | ({
+        relationTo: 'product-categories';
+        value: number | ProductCategory;
+      } | null)
+    | ({
         relationTo: 'media';
         value: number | Media;
       } | null)
@@ -1433,6 +1526,7 @@ export interface PagesSelect<T extends boolean = true> {
     | {
         fullscreenHero?: T | FullscreenHeroBlockSelect<T>;
         cta?: T | CallToActionBlockSelect<T>;
+        faqAccordion?: T | FAQAccordionBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
@@ -1492,6 +1586,8 @@ export interface FullscreenHeroBlockSelect<T extends boolean = true> {
  */
 export interface CallToActionBlockSelect<T extends boolean = true> {
   richText?: T;
+  supportText?: T;
+  media?: T;
   links?:
     | T
     | {
@@ -1505,6 +1601,22 @@ export interface CallToActionBlockSelect<T extends boolean = true> {
               label?: T;
               appearance?: T;
             };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FAQAccordionBlock_select".
+ */
+export interface FAQAccordionBlockSelect<T extends boolean = true> {
+  openFirstItem?: T;
+  items?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
         id?: T;
       };
   id?: T;
@@ -1612,6 +1724,8 @@ export interface ProductsSelect<T extends boolean = true> {
   primaryImage?: T;
   secondaryImage?: T;
   isFeatured?: T;
+  primaryCategory?: T;
+  additionalCategories?: T;
   relatedPosts?: T;
   description?: T;
   customLayout?:
@@ -1657,6 +1771,31 @@ export interface ProductsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-categories_select".
+ */
+export interface ProductCategoriesSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  heroImage?: T;
+  sortOrder?: T;
+  showInMegaNav?: T;
+  megaNavHotProducts?: T;
+  generateSlug?: T;
+  slug?: T;
+  parent?: T;
+  breadcrumbs?:
+    | T
+    | {
+        doc?: T;
+        url?: T;
+        label?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1960,6 +2099,7 @@ export interface FormsSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        phone?: T | PhoneFieldSelect<T>;
       };
   submitButtonLabel?: T;
   confirmationType?: T;
@@ -1983,6 +2123,20 @@ export interface FormsSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PhoneField_select".
+ */
+export interface PhoneFieldSelect<T extends boolean = true> {
+  name?: T;
+  label?: T;
+  width?: T;
+  defaultValue?: T;
+  placeholder?: T;
+  required?: T;
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2354,6 +2508,8 @@ export interface CallToActionBlock {
     };
     [k: string]: unknown;
   } | null;
+  supportText?: string | null;
+  media?: (number | null) | Media;
   links?:
     | {
         link: {

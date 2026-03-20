@@ -20,18 +20,7 @@ export const SeedButton: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [seeded, setSeeded] = useState(false)
   const [error, setError] = useState<null | string>(null)
-
-  if (!isAdminUser(user)) {
-    return (
-      <>
-        Review your existing content and{' '}
-        <a href="/" target="_blank">
-          visit your website
-        </a>{' '}
-        to confirm everything looks right.
-      </>
-    )
-  }
+  const isAdmin = isAdminUser(user)
 
   const handleClick = useCallback(
     async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -53,7 +42,7 @@ export const SeedButton: React.FC = () => {
       setLoading(true)
 
       try {
-        toast.promise(
+        await toast.promise(
           new Promise((resolve, reject) => {
             try {
               fetch('/next/seed', { method: 'POST', credentials: 'include' })
@@ -65,11 +54,11 @@ export const SeedButton: React.FC = () => {
                     reject('An error occurred while seeding.')
                   }
                 })
-                .catch((error) => {
-                  reject(error)
+                .catch((requestError) => {
+                  reject(requestError)
                 })
-            } catch (error) {
-              reject(error)
+            } catch (requestError) {
+              reject(requestError)
             }
           }),
           {
@@ -79,12 +68,26 @@ export const SeedButton: React.FC = () => {
           },
         )
       } catch (err) {
-        const error = err instanceof Error ? err.message : String(err)
-        setError(error)
+        const nextError = err instanceof Error ? err.message : String(err)
+        setError(nextError)
+      } finally {
+        setLoading(false)
       }
     },
-    [loading, seeded, error],
+    [error, loading, seeded],
   )
+
+  if (!isAdmin) {
+    return (
+      <>
+        Review your existing content and{' '}
+        <a href="/" target="_blank">
+          visit your website
+        </a>{' '}
+        to confirm everything looks right.
+      </>
+    )
+  }
 
   let message = ''
   if (loading) message = ' (seeding...)'

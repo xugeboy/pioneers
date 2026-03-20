@@ -10,6 +10,7 @@ import { Files } from './collections/Files'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
+import { ProductCategories } from './collections/ProductCategories'
 import { Products } from './collections/Products'
 import { Users } from './collections/Users'
 import { Videos } from './collections/Videos'
@@ -93,7 +94,7 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL || '',
     },
   }),
-  collections: [Pages, Posts, Products, Media, Files, Videos, Categories, Users],
+  collections: [Pages, Posts, Products, ProductCategories, Media, Files, Videos, Categories, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins,
