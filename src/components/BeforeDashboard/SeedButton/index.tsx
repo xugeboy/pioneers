@@ -100,7 +100,7 @@ export const SeedButton: React.FC = () => {
         Seed your database
       </button>
       {message}
-      {' with a few pages, posts, and projects to jump-start your new site, then '}
+      {' with a few pages, blogs, and projects to jump-start your new site, then '}
       <a href="/" target="_blank">
         visit your website
       </a>

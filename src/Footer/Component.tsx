@@ -19,7 +19,7 @@ export async function Footer() {
   ]
 
   return (
-    <footer className="mt-auto border-t border-slate-200 bg-white text-slate-900">
+    <footer className="mt-16 md:mt-auto border-t border-slate-200 bg-white text-slate-900">
       <div className="container py-10 md:py-12">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,2.8fr)] lg:gap-10">
           <div className="space-y-4 md:space-y-5">
@@ -45,13 +45,13 @@ export async function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-slate-900 bg-slate-900 text-slate-200">
+      <div className="border-t text-slate-900">
         <div className="container flex flex-col gap-4 py-4 text-xs md:flex-row md:items-center md:justify-between">
           <div>© {new Date().getFullYear()} PioneersGears. All Rights Reserved.</div>
 
           <div className="flex flex-wrap items-center gap-3 md:gap-4">
             {legalLinks.map((item) => (
-              <Link className="text-slate-300 hover:text-white" href={item.href} key={item.href}>
+              <Link className="text-slate-900" href={item.href} key={item.href}>
                 {item.label}
               </Link>
             ))}
@@ -62,15 +62,11 @@ export async function Footer() {
               return (
                 <a
                   aria-label={item.label}
-                  className="flex h-9 w-9 items-center justify-center text-slate-300 transition-colors hover:text-white"
+                  className="flex h-9 w-9 items-center justify-center text-slate-900 transition-colors"
                   href={item.href}
                   key={item.label}
                 >
-                  <svg
-                    aria-hidden="true"
-                    className="h-4 w-4 fill-current"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg aria-hidden="true" className="h-4 w-4 fill-current" viewBox="0 0 24 24">
                     <path d={item.path} />
                   </svg>
                 </a>

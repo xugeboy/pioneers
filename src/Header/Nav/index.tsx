@@ -4,7 +4,7 @@ import { cn } from '@/utilities/ui'
 import { Menu, SearchIcon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import type { HeaderMegaNavGroup } from '@/Header/getMegaNavData'
 import type { Header as HeaderType } from '@/payload-types'
@@ -30,14 +30,54 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
   const router = useRouter()
   const pathname = usePathname()
   const [query, setQuery] = useState('')
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const searchContainerRef = useRef<HTMLElement | null>(null)
+  const searchInputRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
     if (typeof window === 'undefined') {
       return
     }
 
-    setQuery(new URLSearchParams(window.location.search).get('q') ?? '')
+    const nextQuery = new URLSearchParams(window.location.search).get('q') ?? ''
+
+    setQuery(nextQuery)
+    setIsSearchOpen(pathname.startsWith('/search') && nextQuery.length > 0)
   }, [pathname])
+
+  useEffect(() => {
+    if (!isSearchOpen) {
+      return
+    }
+
+    searchInputRef.current?.focus()
+  }, [isSearchOpen])
+
+  useEffect(() => {
+    if (!isSearchOpen) {
+      return
+    }
+
+    const handlePointerDown = (event: MouseEvent) => {
+      if (!searchContainerRef.current?.contains(event.target as Node)) {
+        setIsSearchOpen(false)
+      }
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsSearchOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handlePointerDown)
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isSearchOpen])
 
   const navItems = (data?.navItems || []) as Array<
     NonNullable<HeaderType['navItems']>[number] & {
@@ -47,13 +87,13 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
 
   const isLightTone = tone === 'light'
   const navItemShellClasses = cn(
-    'inline-flex cursor-pointer items-center gap-2 rounded-full px-4 py-2.5 text-[15px] font-medium no-underline transition-[background-color,color,box-shadow] duration-200 hover:no-underline lg:text-base',
+    'inline-flex cursor-pointer items-center gap-2 rounded-full px-3.5 py-2.5 text-[14px] font-medium no-underline transition-[background-color,color,box-shadow] duration-200 hover:no-underline lg:text-[15px]',
     isLightTone
       ? 'text-white [text-shadow:0_1px_18px_rgba(0,0,0,0.55)] hover:bg-white/14'
       : 'text-[#2d2d2d] hover:bg-[#f1eee8]',
   )
   const navTextClasses = cn(
-    'leading-none no-underline transition-colors hover:no-underline',
+    'leading-none whitespace-nowrap no-underline transition-colors hover:no-underline',
     isLightTone ? 'text-white' : 'text-[#2d2d2d]',
   )
   const dropdownPanelClasses = cn(
@@ -63,35 +103,49 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
       : 'border-black/8 bg-white/96 text-black',
   )
   const dropdownLinkClasses = cn(
-    'block rounded-[1rem] px-4 py-3 text-[15px] font-medium no-underline transition-[background-color,color] duration-150 hover:no-underline',
+    'block rounded-[1rem] px-4 py-3 text-[14px] font-medium no-underline transition-[background-color,color] duration-150 hover:no-underline lg:text-[15px]',
     isLightTone ? 'text-white hover:bg-white/10' : 'text-[#2d2d2d] hover:bg-[#f3f0ea]',
   )
-  const searchShellClasses = cn(
-    'relative min-w-0 flex-1 overflow-hidden rounded-[1rem] border transition-[background-color,border-color,box-shadow] duration-200 md:w-[16rem] md:flex-none md:rounded-full lg:w-[18rem]',
+  const searchToggleClasses = cn(
+    'inline-flex size-11 shrink-0 items-center justify-center rounded-full transition-[background-color,color,box-shadow] duration-200',
     isLightTone
-      ? 'border-white/38 bg-black/28 backdrop-blur-md hover:border-white/55 hover:bg-black/36 focus-within:border-white/70 focus-within:bg-black/40 focus-within:shadow-[0_0_0_3px_rgba(255,255,255,0.08)]'
-      : 'border-[#dad7d1] bg-[#faf9f7] hover:border-[#c8c1b7] hover:bg-white focus-within:border-[#b8b0a6] focus-within:bg-white focus-within:shadow-[0_0_0_3px_rgba(36,79,44,0.08)]',
+      ? 'text-white [text-shadow:0_1px_18px_rgba(0,0,0,0.45)] hover:bg-white/12 focus-visible:bg-white/12 focus-visible:outline-none'
+      : 'text-[#2d2d2d] hover:bg-[#f3f0ea] focus-visible:bg-[#f3f0ea] focus-visible:outline-none',
+  )
+  const searchFormClasses = cn(
+    'absolute inset-y-0 left-0 right-0 z-30 hidden items-center border-b pl-0 pr-0 transition-opacity duration-200 md:flex',
+    isLightTone
+      ? 'border-white/65 bg-black/92'
+      : 'border-[#2d2d2d]/20 bg-white',
   )
   const searchInputClasses = cn(
-    'h-11 w-full border-0 bg-transparent pl-4 pr-12 text-[15px] shadow-none focus-visible:ring-0 focus-visible:outline-none',
+    'h-full min-w-0 flex-1 border-0 bg-transparent px-0 pr-1 text-[14px] shadow-none focus-visible:ring-0 focus-visible:outline-none lg:text-[15px]',
     isLightTone
-      ? 'text-white placeholder:text-white/72 [text-shadow:0_1px_18px_rgba(0,0,0,0.45)]'
+      ? 'text-white placeholder:text-white/68 [text-shadow:0_1px_18px_rgba(0,0,0,0.45)]'
       : 'text-[#2d2d2d] placeholder:text-[#a7a29a]',
   )
-  const searchButtonClasses = cn(
-    'absolute right-1 top-1 inline-flex size-9 items-center justify-center rounded-full transition-colors',
-    isLightTone ? 'text-white hover:bg-white/12' : 'text-[#2d2d2d] hover:bg-black/5',
+  const searchSubmitClasses = cn(
+    'inline-flex size-9 shrink-0 items-center justify-center rounded-full transition-colors focus-visible:outline-none',
+    isLightTone ? 'text-white hover:bg-white/10' : 'text-[#2d2d2d] hover:bg-black/5',
   )
   const menuButtonClasses = cn(
-    'inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-[1rem] border px-4 text-[15px] font-medium transition-[background-color,border-color,color] duration-200 xl:hidden',
+    'inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-[1rem] px-4 text-[15px] font-medium transition-[background-color,color] duration-200 xl:hidden',
     isLightTone
-      ? 'border-white/35 bg-black/28 text-white backdrop-blur-md hover:border-white/55 hover:bg-black/36'
-      : 'border-[#dad7d1] bg-[#faf9f7] text-[#2d2d2d] hover:border-[#c8c1b7] hover:bg-white',
+      ? 'bg-transparent text-white hover:bg-white/10'
+      : 'bg-transparent text-[#2d2d2d] hover:bg-[#f3f0ea]',
   )
 
   return (
-    <nav className="flex w-full min-w-0 flex-col gap-3 md:w-auto md:flex-row md:items-center md:gap-4">
-      <div className="hidden min-w-0 flex-1 items-center gap-6 xl:flex">
+    <nav
+      className="relative flex w-full min-w-0 flex-col gap-3 md:w-auto md:flex-row md:items-center md:gap-4"
+      ref={searchContainerRef}
+    >
+      <div
+        className={cn(
+          'hidden min-w-0 flex-1 items-center gap-4 transition-opacity duration-150 xl:flex',
+          isSearchOpen && 'pointer-events-none opacity-0',
+        )}
+      >
         <ProductMegaNav groups={megaNavGroups} tone={tone} />
 
         <div className="ml-auto flex min-w-0 items-center gap-1 md:gap-2">
@@ -178,35 +232,53 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
         </div>
       </div>
 
-      <div className="flex w-full min-w-0 items-center gap-2 md:w-auto">
-        <form
-          className={searchShellClasses}
-          onSubmit={(event) => {
-            event.preventDefault()
+      <form
+        className={cn(
+          searchFormClasses,
+          isSearchOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0',
+        )}
+        onSubmit={(event) => {
+          event.preventDefault()
 
-            const trimmedQuery = query.trim()
+          const trimmedQuery = query.trim()
 
-            router.push(trimmedQuery ? `/search?q=${encodeURIComponent(trimmedQuery)}` : '/search')
+          router.push(trimmedQuery ? `/search?q=${encodeURIComponent(trimmedQuery)}` : '/search')
+        }}
+      >
+        <label className="sr-only" htmlFor="site-search">
+          Search the site
+        </label>
+        <input
+          autoComplete="off"
+          className={searchInputClasses}
+          id="site-search"
+          onChange={(event) => {
+            setQuery(event.target.value)
           }}
-        >
-          <label className="sr-only" htmlFor="site-search">
-            Search the site
-          </label>
-          <input
-            autoComplete="off"
-            className={searchInputClasses}
-            id="site-search"
-            onChange={(event) => {
-              setQuery(event.target.value)
+          placeholder="Search products, blogs, pages"
+          ref={searchInputRef}
+          type="search"
+          value={query}
+        />
+        <button aria-label="Search the site" className={searchSubmitClasses} type="submit">
+          <SearchIcon className="size-4" />
+        </button>
+      </form>
+
+      <div className="flex w-full min-w-0 items-center justify-end gap-2 md:w-auto">
+        <div className="relative flex shrink-0 items-center">
+          <button
+            aria-expanded={isSearchOpen}
+            aria-label={isSearchOpen ? 'Submit search' : 'Open search'}
+            className={searchToggleClasses}
+            onClick={() => {
+              setIsSearchOpen((currentValue) => !currentValue)
             }}
-            placeholder="Search products, blogs, pages"
-            type="search"
-            value={query}
-          />
-          <button aria-label="Search the site" className={searchButtonClasses} type="submit">
+            type="button"
+          >
             <SearchIcon className="size-4" />
           </button>
-        </form>
+        </div>
 
         <button className={menuButtonClasses} onClick={onOpenMenu} type="button">
           <Menu className="size-4" />

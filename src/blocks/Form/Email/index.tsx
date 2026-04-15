@@ -11,9 +11,10 @@ import { Width } from '../Width'
 export const Email: React.FC<
   EmailField & {
     errors: Partial<FieldErrorsImpl>
+    placeholder?: string | null
     register: UseFormRegister<FieldValues>
   }
-> = ({ name, defaultValue, errors, label, register, required, width }) => {
+> = ({ name, defaultValue, errors, label, placeholder, register, required, width }) => {
   return (
     <Width width={width}>
       <Label htmlFor={name}>
@@ -28,6 +29,7 @@ export const Email: React.FC<
       <Input
         defaultValue={defaultValue}
         id={name}
+        placeholder={placeholder || label || name}
         type="text"
         {...register(name, { pattern: /^\S[^\s@]*@\S+$/, required })}
       />

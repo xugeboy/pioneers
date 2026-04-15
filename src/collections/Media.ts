@@ -25,6 +25,17 @@ export const Media: CollectionConfig = {
     read: anyone,
     update: isEditorOrAdmin,
   },
+  hooks: {
+    afterRead: [
+      ({ doc }) => {
+        if (typeof doc?.url === 'string') {
+          doc.frontendURL = getMediaUrl(doc.url)
+        }
+
+        return doc
+      },
+    ],
+  },
   fields: [
     {
       name: 'alt',
@@ -39,6 +50,16 @@ export const Media: CollectionConfig = {
           return [...rootFeatures, FixedToolbarFeature(), InlineToolbarFeature()]
         },
       }),
+    },
+    {
+      name: 'frontendURL',
+      label: 'Frontend URL',
+      type: 'text',
+      virtual: true,
+      admin: {
+        readOnly: true,
+        description: 'Complete frontend asset URL generated from the uploaded media path.',
+      },
     },
   ],
   upload: {

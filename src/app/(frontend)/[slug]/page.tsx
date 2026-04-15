@@ -66,17 +66,18 @@ export default async function Page({ params: paramsPromise }: Args) {
   }
 
   const { hero, layout, title } = page
-  const hasImmersiveStart = hero?.type === 'highImpact' || layout?.[0]?.blockType === 'fullscreenHero'
+  const hasImmersiveStart =
+    hero?.type === 'highImpact' || layout?.[0]?.blockType === 'fullscreenHero'
 
   return (
-    <article className={hasImmersiveStart ? 'pb-24' : 'pt-16 pb-24'}>
+    <article className={hasImmersiveStart ? '' : 'pt-[68px] md:pt-24'}>
       <PageClient />
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
 
       {draft && <LivePreviewListener />}
 
-      {decodedSlug !== 'home' && (
+      {decodedSlug !== 'home' && decodedSlug !== 'about-us' && (
         <Breadcrumbs items={[{ href: '/', label: 'Home' }, { label: title }]} />
       )}
 
@@ -94,7 +95,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
     slug: decodedSlug,
   })
 
-  return generateMeta({ doc: page })
+  return generateMeta({ collection: 'pages', doc: page })
 }
 
 const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {

@@ -2,7 +2,7 @@ type CMSLinkLike = {
   type?: 'reference' | 'custom' | null
   url?: string | null
   reference?: {
-    relationTo: 'pages' | 'posts' | 'products'
+    relationTo: 'pages' | 'blogs' | 'products'
     value: { slug?: string | null } | string | number
   } | null
 }

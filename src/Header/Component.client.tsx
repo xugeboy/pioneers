@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import type { Header } from '@/payload-types'
 
@@ -20,8 +20,10 @@ interface HeaderClientProps {
 export const HeaderClient: React.FC<HeaderClientProps> = ({ data, megaNavGroups }) => {
   const [isInteractive, setIsInteractive] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [headerHeight, setHeaderHeight] = useState(96)
   const { headerTheme, setHeaderTheme } = useHeaderTheme()
   const pathname = usePathname()
+  const headerRef = useRef<HTMLElement | null>(null)
 
   useEffect(() => {
     setHeaderTheme(null)
@@ -38,7 +40,33 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, megaNavGroups 
     }
   }, [isMenuOpen])
 
-  const isImmersive = headerTheme === 'dark' || (pathname === '/' && headerTheme == null)
+  useEffect(() => {
+    const headerElement = headerRef.current
+
+    if (!headerElement || typeof ResizeObserver === 'undefined') {
+      return
+    }
+
+    const updateHeaderHeight = () => {
+      setHeaderHeight(headerElement.getBoundingClientRect().height)
+    }
+
+    updateHeaderHeight()
+
+    const resizeObserver = new ResizeObserver(() => {
+      updateHeaderHeight()
+    })
+
+    resizeObserver.observe(headerElement)
+
+    return () => {
+      resizeObserver.disconnect()
+    }
+  }, [])
+
+  const allowTransparentHeader = pathname === '/'
+  const isImmersive =
+    allowTransparentHeader && (headerTheme === 'dark' || headerTheme == null)
   const showSolidHeader = isMenuOpen || isInteractive || !isImmersive
   const useTransparentTone = isImmersive && !showSolidHeader
 
@@ -65,6 +93,12 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, megaNavGroups 
         onMouseLeave={() => {
           setIsInteractive(false)
         }}
+        ref={headerRef}
+        style={
+          {
+            '--header-height': `${headerHeight}px`,
+          } as React.CSSProperties
+        }
       >
         <div className="container flex w-full items-center justify-between gap-3 py-3 md:gap-6 md:py-4">
           <Link className="shrink-0" href="/">

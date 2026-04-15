@@ -45,34 +45,9 @@ export default async function ProductsPage() {
   })
 
   return (
-    <div className="pt-24 pb-24">
+    <div className="pt-[68px] md:pt-24">
       <PageClient />
       <Breadcrumbs items={[{ href: '/', label: 'Home' }, { label: 'Products' }]} />
-
-      <div className="container mb-10">
-        <div className="max-w-3xl space-y-4">
-          <p className="pioneers-kicker font-display">B2B Catalog</p>
-          <h1 className="font-display text-3xl md:text-4xl">Retractable Cargo Control Systems</h1>
-          <p className="max-w-2xl text-muted-foreground">
-            Industrial-grade tie-down gear engineered for outdoor transport, off-road rigs,
-            powersports, marine use, and demanding cargo securement programs.
-          </p>
-        </div>
-      </div>
-
-      {topLevelCategories.length > 0 ? (
-        <div className="container mb-14">
-          <div className="mb-6 max-w-2xl space-y-2">
-            <p className="pioneers-kicker font-display">Browse by Category</p>
-            <h2 className="font-display text-2xl md:text-3xl">Navigate the catalog by product family</h2>
-          </div>
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {topLevelCategories.map((category) => (
-              <ProductCategoryCard key={category.id} category={category} />
-            ))}
-          </div>
-        </div>
-      ) : null}
 
       <div className="container mb-8">
         <PageRange
@@ -93,11 +68,7 @@ export default async function ProductsPage() {
 
       <div className="container">
         {products.page && products.totalPages > 1 ? (
-          <Pagination
-            basePath="/products"
-            page={products.page}
-            totalPages={products.totalPages}
-          />
+          <Pagination basePath="/products" page={products.page} totalPages={products.totalPages} />
         ) : null}
       </div>
     </div>

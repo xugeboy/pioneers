@@ -10,9 +10,10 @@ import { Width } from '../Width'
 export const Number: React.FC<
   TextField & {
     errors: Partial<FieldErrorsImpl>
+    placeholder?: string | null
     register: UseFormRegister<FieldValues>
   }
-> = ({ name, defaultValue, errors, label, register, required, width }) => {
+> = ({ name, defaultValue, errors, label, placeholder, register, required, width }) => {
   return (
     <Width width={width}>
       <Label htmlFor={name}>
@@ -27,6 +28,7 @@ export const Number: React.FC<
       <Input
         defaultValue={defaultValue}
         id={name}
+        placeholder={placeholder || label || name}
         type="number"
         {...register(name, { required })}
       />

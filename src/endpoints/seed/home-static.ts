@@ -8,8 +8,9 @@ export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
     type: 'none',
   },
   meta: {
-    description: 'An open-source website built with Payload and Next.js.',
-    title: 'Payload Website Template',
+    description:
+      'Cargo control solutions for marine, outdoor, and off-road transport programs.',
+    title: 'Pioneers | Cargo Control Solutions',
   },
   title: 'Home',
   layout: [
@@ -47,6 +48,26 @@ export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
         },
       ],
       title: 'Fits In\nYour Palm',
+    },
+    {
+      blockName: 'Homepage Applications Nav',
+      blockType: 'homeApplicationsNav',
+    },
+    {
+      blockName: 'Homepage Product Families',
+      blockType: 'homeProductFamilies',
+    },
+    {
+      blockName: 'Homepage Strengths',
+      blockType: 'homeStrengths',
+    },
+    {
+      blockName: 'Homepage Trust Signals',
+      blockType: 'homeTrustSignals',
+    },
+    {
+      blockName: 'Homepage Closing CTA',
+      blockType: 'homeClosingCta',
     },
   ],
 }

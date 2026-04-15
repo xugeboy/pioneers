@@ -37,20 +37,20 @@ export const MobileDrawer: React.FC<{
       <aside
         aria-hidden={!open}
         className={cn(
-          'fixed inset-y-0 left-0 z-50 flex w-[86vw] max-w-[24rem] flex-col bg-[#f7f4ee] shadow-[20px_0_60px_rgba(0,0,0,0.18)] transition-transform duration-300 xl:hidden',
+          'fixed inset-y-0 left-0 z-50 flex w-[86vw] max-w-[24rem] flex-col bg-white shadow-[20px_0_60px_rgba(0,0,0,0.12)] transition-transform duration-300 xl:hidden',
           open ? 'translate-x-0' : '-translate-x-full',
         )}
       >
-        <div className="flex items-center justify-between border-b border-slate-200 px-5 py-5">
+        <div className="flex items-center justify-between px-5 py-5">
           <Link className="flex items-center" href="/" onClick={onClose}>
             <Logo className="h-10 w-auto" loading="eager" priority="high" />
           </Link>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-5 py-4">
+        <div className="flex-1 overflow-y-auto px-5 pb-4">
           <MobileProductMegaNav groups={megaNavGroups} onClose={onClose} />
 
-          <div>
+          <div className="space-y-1">
             {items.map((item, index) => {
               const href = resolveCMSLinkHref(item.link)
               const hasSubItems = Array.isArray(item.subItems) && item.subItems.length > 0
@@ -59,10 +59,7 @@ export const MobileDrawer: React.FC<{
               if (!hasSubItems) {
                 if (!href) {
                   return (
-                    <div
-                      className="border-b border-slate-200 py-4 text-base font-medium text-slate-800"
-                      key={index}
-                    >
+                    <div className="py-3 text-base font-medium text-slate-800" key={index}>
                       {item.link?.label}
                     </div>
                   )
@@ -70,7 +67,7 @@ export const MobileDrawer: React.FC<{
 
                 return (
                   <Link
-                    className="block border-b border-slate-200 py-4 text-base font-medium text-slate-800"
+                    className="block py-3 text-base font-medium text-slate-800 transition-colors hover:text-black"
                     href={href}
                     key={index}
                     onClick={onClose}
@@ -83,9 +80,9 @@ export const MobileDrawer: React.FC<{
               }
 
               return (
-                <div className="border-b border-slate-200" key={index}>
+                <div key={index}>
                   <button
-                    className="flex w-full items-center justify-between py-4 text-left"
+                    className="flex w-full items-center justify-between py-3 text-left"
                     onClick={() => {
                       setOpenIndex(isOpen ? null : index)
                     }}
@@ -107,7 +104,7 @@ export const MobileDrawer: React.FC<{
                     )}
                   >
                     <div className="overflow-hidden">
-                      <div className="space-y-1 pb-4">
+                      <div className="space-y-1 pb-2 pl-4">
                         {href && (
                           <Link
                             className="block py-2 text-sm font-medium text-slate-800"
@@ -147,16 +144,13 @@ export const MobileDrawer: React.FC<{
           </div>
         </div>
 
-        <div className="border-t border-slate-200 px-5 py-5">
-          <div className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-            Social Media
-          </div>
+        <div className="px-5 py-5">
           <div className="flex items-center gap-3">
             {socialLinks.map((item) => {
               return (
                 <a
                   aria-label={item.label}
-                  className="flex size-11 items-center justify-center text-slate-700 transition-colors hover:text-black"
+                  className="flex size-10 items-center justify-center text-slate-700 transition-colors hover:text-black"
                   href={item.href}
                   key={item.label}
                 >

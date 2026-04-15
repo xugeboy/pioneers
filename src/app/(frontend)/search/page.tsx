@@ -1,13 +1,15 @@
 import type { Metadata } from 'next/types'
 
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { CollectionArchive } from '@/components/CollectionArchive'
+import type { CardBlogData } from '@/components/Card'
+import { PageRange } from '@/components/PageRange'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import Link from 'next/link'
 import React from 'react'
-import { Input } from '@/components/ui/input'
+
 import PageClient from './page.client'
-import { CardPostData } from '@/components/Card'
 
 type Args = {
   searchParams: Promise<{
@@ -15,6 +17,7 @@ type Args = {
     page?: string
   }>
 }
+
 export default async function Page({ searchParams: searchParamsPromise }: Args) {
   const { q: query, page } = await searchParamsPromise
   const sanitizedQuery = (query || '').trim()
@@ -22,7 +25,7 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
   const currentPage = Number.isInteger(sanitizedPage) && sanitizedPage > 0 ? sanitizedPage : 1
   const payload = await getPayload({ config: configPromise })
 
-  const posts = sanitizedQuery
+  const blogs = sanitizedQuery
     ? await payload.find({
         collection: 'search',
         depth: 1,
@@ -35,109 +38,122 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
           categories: true,
           meta: true,
         },
-        ...(sanitizedQuery
-          ? {
-              where: {
-                or: [
-                  {
-                    title: {
-                      like: sanitizedQuery,
-                    },
-                  },
-                  {
-                    'meta.description': {
-                      like: sanitizedQuery,
-                    },
-                  },
-                  {
-                    'meta.title': {
-                      like: sanitizedQuery,
-                    },
-                  },
-                  {
-                    slug: {
-                      like: sanitizedQuery,
-                    },
-                  },
-                ],
+        where: {
+          or: [
+            {
+              title: {
+                like: sanitizedQuery,
               },
-            }
-          : {}),
+            },
+            {
+              'meta.description': {
+                like: sanitizedQuery,
+              },
+            },
+            {
+              'meta.title': {
+                like: sanitizedQuery,
+              },
+            },
+            {
+              slug: {
+                like: sanitizedQuery,
+              },
+            },
+          ],
+        },
       })
     : null
 
   return (
-    <div className="pt-24 pb-24">
+    <div className="pt-[68px] md:pt-24">
       <PageClient />
-      <div className="container mb-16">
-        <div className="max-w-2xl space-y-4">
-          <p className="pioneers-kicker font-display">Search</p>
-          <h1 className="font-display text-3xl md:text-4xl">搜索结果</h1>
-          <form action="/search" method="get" className="flex flex-col gap-3 sm:flex-row">
-            <Input
-              name="q"
-              placeholder="输入关键词"
-              defaultValue={sanitizedQuery}
-              className="h-11"
-            />
-            <button className="pioneers-btn pioneers-btn-primary" type="submit">
-              搜索
-            </button>
-          </form>
+      <Breadcrumbs items={[{ href: '/', label: 'Home' }, { label: 'Search' }]} />
+
+      <div className="container mb-12">
+        <div className="max-w-3xl space-y-4">
+          <p className="pioneers-kicker font-display">Site Search</p>
+          <h1 className="font-display text-3xl md:text-4xl">Search Results</h1>
+          <p className="max-w-2xl text-muted-foreground">
+            {sanitizedQuery
+              ? `Showing matches for "${sanitizedQuery}".`
+              : 'Use the header search icon to search products, blogs, and pages.'}
+          </p>
         </div>
       </div>
 
-      {posts && posts.totalDocs > 0 ? (
-        <CollectionArchive posts={posts.docs as CardPostData[]} />
+      {blogs ? (
+        <div className="container mb-8">
+          <PageRange
+            collectionLabels={{ plural: 'Results', singular: 'Result' }}
+            currentPage={blogs.page}
+            emptyMessage="Search produced no results."
+            limit={12}
+            totalDocs={blogs.totalDocs}
+          />
+        </div>
+      ) : null}
+
+      {blogs && blogs.totalDocs > 0 ? (
+        <CollectionArchive blogs={blogs.docs as CardBlogData[]} />
       ) : (
-        <div className="container">未找到</div>
+        <div className="container">
+          <div className="rounded-[1.5rem] border border-border bg-card px-6 py-8 text-muted-foreground">
+            {sanitizedQuery
+              ? 'No results matched your search.'
+              : 'No search has been submitted yet.'}
+          </div>
+        </div>
       )}
 
-      {posts && posts.totalPages > 1 && (
+      {blogs && blogs.totalPages > 1 ? (
         <div className="container mt-12 flex items-center justify-center gap-4 text-sm">
           {currentPage > 1 ? (
             <Link
-              className="rounded-full border border-border px-4 py-2"
+              className="rounded-full border border-border px-4 py-2 transition-colors hover:bg-muted"
               href={buildSearchHref(sanitizedQuery, currentPage - 1)}
             >
-              上一页
+              Previous
             </Link>
           ) : (
             <span className="rounded-full border border-border px-4 py-2 text-muted-foreground">
-              上一页
+              Previous
             </span>
           )}
           <span className="text-muted-foreground">
-            第 {currentPage} / {posts.totalPages} 页
+            Page {currentPage} of {blogs.totalPages}
           </span>
-          {currentPage < posts.totalPages ? (
+          {currentPage < blogs.totalPages ? (
             <Link
-              className="rounded-full border border-border px-4 py-2"
+              className="rounded-full border border-border px-4 py-2 transition-colors hover:bg-muted"
               href={buildSearchHref(sanitizedQuery, currentPage + 1)}
             >
-              下一页
+              Next
             </Link>
           ) : (
             <span className="rounded-full border border-border px-4 py-2 text-muted-foreground">
-              下一页
+              Next
             </span>
           )}
         </div>
-      )}
+      ) : null}
     </div>
   )
 }
 
 export function generateMetadata(): Metadata {
   return {
-    title: `搜索结果 | Pioneers`,
+    title: 'Search Results | Pioneers',
   }
 }
 
 const buildSearchHref = (query: string, page: number) => {
   const params = new URLSearchParams()
+
   if (query) params.set('q', query)
   if (page > 1) params.set('page', String(page))
+
   const qs = params.toString()
+
   return `/search${qs ? `?${qs}` : ''}`
 }

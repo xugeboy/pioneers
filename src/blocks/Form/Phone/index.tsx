@@ -57,7 +57,7 @@ export const Phone: React.FC<
                 event.preventDefault()
               }
             }}
-            placeholder={placeholder || 'Full phone number'}
+            placeholder={placeholder || label || name}
             type="tel"
             value={typeof value === 'string' ? normalizePhoneNumber(value) : ''}
           />

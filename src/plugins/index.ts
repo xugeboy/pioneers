@@ -14,22 +14,23 @@ import { isAdmin } from '@/access/isAdmin'
 import { isAdminUser } from '@/access/roles'
 import { phoneField } from '@/blocks/Form/phoneField'
 
-import { Page, Post } from '@/payload-types'
+import { Blog, Page } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 
-const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
+const generateTitle: GenerateTitle<Blog | Page> = ({ doc }) => {
   return doc?.title ? `${doc.title} | Payload Website Template` : 'Payload Website Template'
 }
 
-const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
+const generateURL: GenerateURL<Blog | Page> = ({ collectionConfig, doc }) => {
   const url = getServerSideURL()
+  const prefix = collectionConfig?.slug === 'blogs' ? '/blogs' : ''
 
-  return doc?.slug ? `${url}/${doc.slug}` : url
+  return doc?.slug ? `${url}${prefix}/${doc.slug}` : url
 }
 
 export const plugins: Plugin[] = [
   redirectsPlugin({
-    collections: ['pages', 'posts'],
+    collections: ['pages', 'blogs'],
     overrides: {
       access: {
         create: isAdmin,
@@ -115,7 +116,7 @@ export const plugins: Plugin[] = [
     },
   }),
   searchPlugin({
-    collections: ['posts'],
+    collections: ['blogs'],
     beforeSync: beforeSyncWithSearch,
     searchOverrides: {
       access: {

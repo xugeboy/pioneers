@@ -1,6 +1,15 @@
 import type { CollectionConfig, CollectionSlug } from 'payload'
 
 import { slugField } from 'payload'
+import {
+  EXPERIMENTAL_TableFeature,
+  FixedToolbarFeature,
+  HeadingFeature,
+  InlineToolbarFeature,
+  lexicalEditor,
+  OrderedListFeature,
+  UnorderedListFeature,
+} from '@payloadcms/richtext-lexical'
 
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { isAdmin } from '../../access/isAdmin'
@@ -86,10 +95,11 @@ export const Products: CollectionConfig<'products'> = {
       },
     },
     {
-      name: 'relatedPosts',
+      name: 'relatedBlogs',
       type: 'relationship',
-      relationTo: 'posts',
+      relationTo: 'blogs',
       hasMany: true,
+      label: 'Related Blogs',
       admin: {
         position: 'sidebar',
       },
@@ -97,7 +107,21 @@ export const Products: CollectionConfig<'products'> = {
     {
       name: 'description',
       type: 'richText',
+      editor: lexicalEditor({
+        features: ({ rootFeatures }) => {
+          return [
+            ...rootFeatures,
+            HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
+            UnorderedListFeature(),
+            OrderedListFeature(),
+            FixedToolbarFeature(),
+            InlineToolbarFeature(),
+            EXPERIMENTAL_TableFeature(),
+          ]
+        },
+      }),
       label: 'Product Description',
+      required: true,
     },
     {
       name: 'customLayout',
@@ -130,6 +154,8 @@ export const Products: CollectionConfig<'products'> = {
       name: 'specs',
       type: 'array',
       label: 'Specification Table',
+      required: true,
+      minRows: 1,
       fields: [
         {
           name: 'label',

@@ -20,7 +20,7 @@ export const Pagination: React.FC<{
 }> = (props) => {
   const router = useRouter()
 
-  const { basePath = '/posts', className, page, totalPages } = props
+  const { basePath = '/blogs', className, page, totalPages } = props
   const normalizedBasePath = basePath.endsWith('/') ? basePath.slice(0, -1) : basePath
   const getPagePath = (pageNumber: number) => `${normalizedBasePath}/page/${pageNumber}`
   const hasNextPage = page < totalPages

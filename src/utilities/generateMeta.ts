@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 
-import type { Media, Page, Post, Config } from '../payload-types'
+import type { Blog, Config, Media, Page } from '../payload-types'
+import type { CollectionSlug } from 'payload'
 
 import { getMediaUrl } from './getMediaUrl'
 import { mergeOpenGraph } from './mergeOpenGraph'
@@ -21,15 +22,19 @@ const getImageURL = (image?: Media | Config['db']['defaultIDType'] | null) => {
 }
 
 export const generateMeta = async (args: {
-  doc: Partial<Page> | Partial<Post> | null
+  collection?: CollectionSlug
+  doc: Partial<Page> | Partial<Blog> | null
 }): Promise<Metadata> => {
-  const { doc } = args
+  const { collection, doc } = args
 
   const ogImage = getImageURL(doc?.meta?.image)
 
   const title = doc?.meta?.title
     ? doc?.meta?.title + ' | Payload Website Template'
     : 'Payload Website Template'
+
+  const slug = Array.isArray(doc?.slug) ? doc.slug.join('/') : doc?.slug
+  const path = !slug ? '/' : collection === 'blogs' ? `/blogs/${slug}` : `/${slug}`
 
   return {
     description: doc?.meta?.description,
@@ -43,7 +48,7 @@ export const generateMeta = async (args: {
           ]
         : undefined,
       title,
-      url: Array.isArray(doc?.slug) ? doc?.slug.join('/') : '/',
+      url: path,
     }),
     title,
   }

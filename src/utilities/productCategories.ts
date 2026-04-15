@@ -4,6 +4,19 @@ import type { Payload, Where } from 'payload'
 
 export const PRODUCT_PAGE_LIMIT = 12
 
+export const productCardSelect = {
+  title: true,
+  model: true,
+  slug: true,
+  summary: true,
+  primaryCategory: true,
+  additionalCategories: true,
+  primaryImage: true,
+  secondaryImage: true,
+  isFeatured: true,
+  specs: true,
+} as const
+
 export const headerMegaNavProductSelect = {
   title: true,
   model: true,
@@ -68,7 +81,7 @@ export function getProductCategoryPath(category?: ProductCategorySummary | null)
 }
 
 export function getProductCategoryHrefFromPath(path?: string | null): string {
-  return path ? `/products/category${normalizeCategoryPath(path)}` : '/products'
+  return path ? `/product-categories${normalizeCategoryPath(path)}` : '/products'
 }
 
 export function getProductCategoryHref(category?: ProductCategorySummary | null): string {
@@ -198,7 +211,7 @@ export function getProductCategoryBreadcrumbItems(
 ): BreadcrumbItem[] {
   const items: BreadcrumbItem[] = [
     { href: '/', label: 'Home' },
-    { href: '/products', label: 'Products' },
+    { href: '/product-categories', label: 'Product Categories' },
   ]
 
   if (!category) return items

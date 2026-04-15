@@ -6,9 +6,9 @@ const defaultLabels = {
 }
 
 const defaultCollectionLabels = {
-  posts: {
-    plural: 'Posts',
-    singular: 'Post',
+  blogs: {
+    plural: 'Blogs',
+    singular: 'Blog',
   },
 }
 
@@ -20,6 +20,7 @@ export const PageRange: React.FC<{
     singular?: string
   }
   currentPage?: number
+  emptyMessage?: string
   limit?: number
   totalDocs?: number
 }> = (props) => {
@@ -28,6 +29,7 @@ export const PageRange: React.FC<{
     collection,
     collectionLabels: collectionLabelsFromProps,
     currentPage,
+    emptyMessage,
     limit,
     totalDocs,
   } = props
@@ -44,9 +46,11 @@ export const PageRange: React.FC<{
     defaultLabels ||
     {}
 
+  const emptyMessageToUse = emptyMessage || `No ${(plural || 'documents').toLowerCase()} found.`
+
   return (
     <div className={[className, 'font-semibold'].filter(Boolean).join(' ')}>
-      {(typeof totalDocs === 'undefined' || totalDocs === 0) && 'Search produced no results.'}
+      {(typeof totalDocs === 'undefined' || totalDocs === 0) && emptyMessageToUse}
       {typeof totalDocs !== 'undefined' &&
         totalDocs > 0 &&
         `Showing ${indexStart}${indexStart > 0 ? ` - ${indexEnd}` : ''} of ${totalDocs} ${

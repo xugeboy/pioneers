@@ -9,7 +9,7 @@ import { Categories } from './collections/Categories'
 import { Files } from './collections/Files'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
-import { Posts } from './collections/Posts'
+import { Blogs } from './collections/Blogs'
 import { ProductCategories } from './collections/ProductCategories'
 import { Products } from './collections/Products'
 import { Users } from './collections/Users'
@@ -28,11 +28,11 @@ const smtpPort = process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : undefin
 const smtpSecure = process.env.SMTP_SECURE === 'true'
 const hasSMTPConfig = Boolean(
   process.env.SMTP_HOST &&
-    smtpPort &&
-    process.env.SMTP_USER &&
-    process.env.SMTP_PASS &&
-    process.env.EMAIL_FROM &&
-    process.env.EMAIL_FROM_NAME,
+  smtpPort &&
+  process.env.SMTP_USER &&
+  process.env.SMTP_PASS &&
+  process.env.EMAIL_FROM &&
+  process.env.EMAIL_FROM_NAME,
 )
 
 export default buildConfig({
@@ -94,7 +94,7 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL || '',
     },
   }),
-  collections: [Pages, Posts, Products, ProductCategories, Media, Files, Videos, Categories, Users],
+  collections: [Pages, Blogs, Products, ProductCategories, Media, Files, Videos, Categories, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins,
@@ -145,7 +145,9 @@ export default buildConfig({
 
     if (!usersWithoutRoles.docs.length) return
 
-    payload.logger.info(`Backfilling admin roles for ${usersWithoutRoles.docs.length} existing users...`)
+    payload.logger.info(
+      `Backfilling admin roles for ${usersWithoutRoles.docs.length} existing users...`,
+    )
 
     await Promise.all(
       usersWithoutRoles.docs.map((user) =>

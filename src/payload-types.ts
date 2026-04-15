@@ -68,7 +68,7 @@ export interface Config {
   blocks: {};
   collections: {
     pages: Page;
-    posts: Post;
+    blogs: Blog;
     products: Product;
     'product-categories': ProductCategory;
     media: Media;
@@ -94,7 +94,7 @@ export interface Config {
   };
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
-    posts: PostsSelect<false> | PostsSelect<true>;
+    blogs: BlogsSelect<false> | BlogsSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     'product-categories': ProductCategoriesSelect<false> | ProductCategoriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -194,8 +194,8 @@ export interface Page {
                   value: number | Page;
                 } | null)
               | ({
-                  relationTo: 'posts';
-                  value: number | Post;
+                  relationTo: 'blogs';
+                  value: number | Blog;
                 } | null)
               | ({
                   relationTo: 'products';
@@ -215,6 +215,31 @@ export interface Page {
   };
   layout: (
     | FullscreenHeroBlock
+    | AboutHeroBlock
+    | AboutDifferentiatorsBlock
+    | AboutClientsBlock
+    | CompanyTimelineBlock
+    | AboutClosingCtaBlock
+    | CertificationsHeroBlock
+    | CertificationsProofCardsBlock
+    | CertificationsTestingProcessBlock
+    | CertificationsStandardsMatrixBlock
+    | CertificationsQualityCommitmentBlock
+    | CertificationsDownloadHubBlock
+    | CertificationsClosingCtaBlock
+    | ManufacturingOverviewBlock
+    | ProductionProcessBlock
+    | EquipmentVisualsBlock
+    | QualityControlBlock
+    | CapacityCapabilityBlock
+    | OemOdmCapabilityBlock
+    | FactoryGalleryBlock
+    | ManufacturingInquiryBlock
+    | HomeApplicationsNavBlock
+    | HomeProductFamiliesBlock
+    | HomeStrengthsBlock
+    | HomeTrustSignalsBlock
+    | HomeClosingCtaBlock
     | {
         richText?: {
           root: {
@@ -244,8 +269,8 @@ export interface Page {
                       value: number | Page;
                     } | null)
                   | ({
-                      relationTo: 'posts';
-                      value: number | Post;
+                      relationTo: 'blogs';
+                      value: number | Blog;
                     } | null)
                   | ({
                       relationTo: 'products';
@@ -295,8 +320,8 @@ export interface Page {
                       value: number | Page;
                     } | null)
                   | ({
-                      relationTo: 'posts';
-                      value: number | Post;
+                      relationTo: 'blogs';
+                      value: number | Blog;
                     } | null)
                   | ({
                       relationTo: 'products';
@@ -339,19 +364,20 @@ export interface Page {
           [k: string]: unknown;
         } | null;
         populateBy?: ('collection' | 'selection') | null;
-        relationTo?: 'posts' | null;
+        relationTo?: 'blogs' | null;
         categories?: (number | Category)[] | null;
         limit?: number | null;
         selectedDocs?:
           | {
-              relationTo: 'posts';
-              value: number | Post;
+              relationTo: 'blogs';
+              value: number | Blog;
             }[]
           | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'archive';
       }
+    | LatestBlogsBlock
     | {
         form: number | Form;
         enableIntro?: boolean | null;
@@ -395,9 +421,9 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts".
+ * via the `definition` "blogs".
  */
-export interface Post {
+export interface Blog {
   id: number;
   title: string;
   heroImage?: (number | null) | Media;
@@ -416,7 +442,7 @@ export interface Post {
     };
     [k: string]: unknown;
   };
-  relatedPosts?: (number | Post)[] | null;
+  relatedBlogs?: (number | Blog)[] | null;
   categories?: (number | Category)[] | null;
   meta?: {
     title?: string | null;
@@ -465,6 +491,10 @@ export interface Media {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Complete frontend asset URL generated from the uploaded media path.
+   */
+  frontendURL?: string | null;
   prefix?: string | null;
   folder?: (number | null) | FolderInterface;
   updatedAt: string;
@@ -628,8 +658,8 @@ export interface Product {
   isFeatured?: boolean | null;
   primaryCategory: number | ProductCategory;
   additionalCategories?: (number | ProductCategory)[] | null;
-  relatedPosts?: (number | Post)[] | null;
-  description?: {
+  relatedBlogs?: (number | Blog)[] | null;
+  description: {
     root: {
       type: string;
       children: {
@@ -643,7 +673,7 @@ export interface Product {
       version: number;
     };
     [k: string]: unknown;
-  } | null;
+  };
   customLayout?:
     | (
         | {
@@ -675,8 +705,8 @@ export interface Product {
                           value: number | Page;
                         } | null)
                       | ({
-                          relationTo: 'posts';
-                          value: number | Post;
+                          relationTo: 'blogs';
+                          value: number | Blog;
                         } | null)
                       | ({
                           relationTo: 'products';
@@ -707,13 +737,11 @@ export interface Product {
     alt?: string | null;
     id?: string | null;
   }[];
-  specs?:
-    | {
-        label: string;
-        value: string;
-        id?: string | null;
-      }[]
-    | null;
+  specs: {
+    label: string;
+    value: string;
+    id?: string | null;
+  }[];
   video?: {
     type?: ('url' | 'upload') | null;
     url?: string | null;
@@ -804,8 +832,8 @@ export interface ContentBlock {
                 value: number | Page;
               } | null)
             | ({
-                relationTo: 'posts';
-                value: number | Post;
+                relationTo: 'blogs';
+                value: number | Blog;
               } | null)
             | ({
                 relationTo: 'products';
@@ -856,13 +884,13 @@ export interface ArchiveBlock {
     [k: string]: unknown;
   } | null;
   populateBy?: ('collection' | 'selection') | null;
-  relationTo?: 'posts' | null;
+  relationTo?: 'blogs' | null;
   categories?: (number | Category)[] | null;
   limit?: number | null;
   selectedDocs?:
     | {
-        relationTo: 'posts';
-        value: number | Post;
+        relationTo: 'blogs';
+        value: number | Blog;
       }[]
     | null;
   id?: string | null;
@@ -1144,8 +1172,8 @@ export interface FullscreenHeroBlock {
                 value: number | Page;
               } | null)
             | ({
-                relationTo: 'posts';
-                value: number | Post;
+                relationTo: 'blogs';
+                value: number | Blog;
               } | null)
             | ({
                 relationTo: 'products';
@@ -1178,6 +1206,231 @@ export interface FullscreenHeroBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutHeroBlock".
+ */
+export interface AboutHeroBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'aboutHero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutDifferentiatorsBlock".
+ */
+export interface AboutDifferentiatorsBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'aboutDifferentiators';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutClientsBlock".
+ */
+export interface AboutClientsBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'aboutClients';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CompanyTimelineBlock".
+ */
+export interface CompanyTimelineBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'companyTimeline';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutClosingCtaBlock".
+ */
+export interface AboutClosingCtaBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'aboutClosingCta';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CertificationsHeroBlock".
+ */
+export interface CertificationsHeroBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'certificationsHero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CertificationsProofCardsBlock".
+ */
+export interface CertificationsProofCardsBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'certificationsProofCards';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CertificationsTestingProcessBlock".
+ */
+export interface CertificationsTestingProcessBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'certificationsTestingProcess';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CertificationsStandardsMatrixBlock".
+ */
+export interface CertificationsStandardsMatrixBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'certificationsStandardsMatrix';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CertificationsQualityCommitmentBlock".
+ */
+export interface CertificationsQualityCommitmentBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'certificationsQualityCommitment';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CertificationsDownloadHubBlock".
+ */
+export interface CertificationsDownloadHubBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'certificationsDownloadHub';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CertificationsClosingCtaBlock".
+ */
+export interface CertificationsClosingCtaBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'certificationsClosingCta';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ManufacturingOverviewBlock".
+ */
+export interface ManufacturingOverviewBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'manufacturingOverview';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProductionProcessBlock".
+ */
+export interface ProductionProcessBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'productionProcess';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EquipmentVisualsBlock".
+ */
+export interface EquipmentVisualsBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'equipmentVisuals';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "QualityControlBlock".
+ */
+export interface QualityControlBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'qualityControl';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CapacityCapabilityBlock".
+ */
+export interface CapacityCapabilityBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'capacityCapability';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "OemOdmCapabilityBlock".
+ */
+export interface OemOdmCapabilityBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'oemOdmCapability';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FactoryGalleryBlock".
+ */
+export interface FactoryGalleryBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'factoryGallery';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ManufacturingInquiryBlock".
+ */
+export interface ManufacturingInquiryBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'manufacturingInquiry';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HomeApplicationsNavBlock".
+ */
+export interface HomeApplicationsNavBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'homeApplicationsNav';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HomeProductFamiliesBlock".
+ */
+export interface HomeProductFamiliesBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'homeProductFamilies';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HomeStrengthsBlock".
+ */
+export interface HomeStrengthsBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'homeStrengths';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HomeTrustSignalsBlock".
+ */
+export interface HomeTrustSignalsBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'homeTrustSignals';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HomeClosingCtaBlock".
+ */
+export interface HomeClosingCtaBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'homeClosingCta';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "FAQAccordionBlock".
  */
 export interface FAQAccordionBlock {
@@ -1207,6 +1460,15 @@ export interface FAQAccordionBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LatestBlogsBlock".
+ */
+export interface LatestBlogsBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'latestBlogs';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1223,8 +1485,8 @@ export interface Redirect {
           value: number | Page;
         } | null)
       | ({
-          relationTo: 'posts';
-          value: number | Post;
+          relationTo: 'blogs';
+          value: number | Blog;
         } | null);
     url?: string | null;
   };
@@ -1259,8 +1521,8 @@ export interface Search {
   title?: string | null;
   priority?: number | null;
   doc: {
-    relationTo: 'posts';
-    value: number | Post;
+    relationTo: 'blogs';
+    value: number | Blog;
   };
   slug?: string | null;
   meta?: {
@@ -1400,8 +1662,8 @@ export interface PayloadLockedDocument {
         value: number | Page;
       } | null)
     | ({
-        relationTo: 'posts';
-        value: number | Post;
+        relationTo: 'blogs';
+        value: number | Blog;
       } | null)
     | ({
         relationTo: 'products';
@@ -1525,11 +1787,37 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         fullscreenHero?: T | FullscreenHeroBlockSelect<T>;
+        aboutHero?: T | AboutHeroBlockSelect<T>;
+        aboutDifferentiators?: T | AboutDifferentiatorsBlockSelect<T>;
+        aboutClients?: T | AboutClientsBlockSelect<T>;
+        companyTimeline?: T | CompanyTimelineBlockSelect<T>;
+        aboutClosingCta?: T | AboutClosingCtaBlockSelect<T>;
+        certificationsHero?: T | CertificationsHeroBlockSelect<T>;
+        certificationsProofCards?: T | CertificationsProofCardsBlockSelect<T>;
+        certificationsTestingProcess?: T | CertificationsTestingProcessBlockSelect<T>;
+        certificationsStandardsMatrix?: T | CertificationsStandardsMatrixBlockSelect<T>;
+        certificationsQualityCommitment?: T | CertificationsQualityCommitmentBlockSelect<T>;
+        certificationsDownloadHub?: T | CertificationsDownloadHubBlockSelect<T>;
+        certificationsClosingCta?: T | CertificationsClosingCtaBlockSelect<T>;
+        manufacturingOverview?: T | ManufacturingOverviewBlockSelect<T>;
+        productionProcess?: T | ProductionProcessBlockSelect<T>;
+        equipmentVisuals?: T | EquipmentVisualsBlockSelect<T>;
+        qualityControl?: T | QualityControlBlockSelect<T>;
+        capacityCapability?: T | CapacityCapabilityBlockSelect<T>;
+        oemOdmCapability?: T | OemOdmCapabilityBlockSelect<T>;
+        factoryGallery?: T | FactoryGalleryBlockSelect<T>;
+        manufacturingInquiry?: T | ManufacturingInquiryBlockSelect<T>;
+        homeApplicationsNav?: T | HomeApplicationsNavBlockSelect<T>;
+        homeProductFamilies?: T | HomeProductFamiliesBlockSelect<T>;
+        homeStrengths?: T | HomeStrengthsBlockSelect<T>;
+        homeTrustSignals?: T | HomeTrustSignalsBlockSelect<T>;
+        homeClosingCta?: T | HomeClosingCtaBlockSelect<T>;
         cta?: T | CallToActionBlockSelect<T>;
         faqAccordion?: T | FAQAccordionBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
+        latestBlogs?: T | LatestBlogsBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
       };
   meta?:
@@ -1577,6 +1865,206 @@ export interface FullscreenHeroBlockSelect<T extends boolean = true> {
         description?: T;
         id?: T;
       };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutHeroBlock_select".
+ */
+export interface AboutHeroBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutDifferentiatorsBlock_select".
+ */
+export interface AboutDifferentiatorsBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutClientsBlock_select".
+ */
+export interface AboutClientsBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CompanyTimelineBlock_select".
+ */
+export interface CompanyTimelineBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutClosingCtaBlock_select".
+ */
+export interface AboutClosingCtaBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CertificationsHeroBlock_select".
+ */
+export interface CertificationsHeroBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CertificationsProofCardsBlock_select".
+ */
+export interface CertificationsProofCardsBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CertificationsTestingProcessBlock_select".
+ */
+export interface CertificationsTestingProcessBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CertificationsStandardsMatrixBlock_select".
+ */
+export interface CertificationsStandardsMatrixBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CertificationsQualityCommitmentBlock_select".
+ */
+export interface CertificationsQualityCommitmentBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CertificationsDownloadHubBlock_select".
+ */
+export interface CertificationsDownloadHubBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CertificationsClosingCtaBlock_select".
+ */
+export interface CertificationsClosingCtaBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ManufacturingOverviewBlock_select".
+ */
+export interface ManufacturingOverviewBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProductionProcessBlock_select".
+ */
+export interface ProductionProcessBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EquipmentVisualsBlock_select".
+ */
+export interface EquipmentVisualsBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "QualityControlBlock_select".
+ */
+export interface QualityControlBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CapacityCapabilityBlock_select".
+ */
+export interface CapacityCapabilityBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "OemOdmCapabilityBlock_select".
+ */
+export interface OemOdmCapabilityBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FactoryGalleryBlock_select".
+ */
+export interface FactoryGalleryBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ManufacturingInquiryBlock_select".
+ */
+export interface ManufacturingInquiryBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HomeApplicationsNavBlock_select".
+ */
+export interface HomeApplicationsNavBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HomeProductFamiliesBlock_select".
+ */
+export interface HomeProductFamiliesBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HomeStrengthsBlock_select".
+ */
+export interface HomeStrengthsBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HomeTrustSignalsBlock_select".
+ */
+export interface HomeTrustSignalsBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HomeClosingCtaBlock_select".
+ */
+export interface HomeClosingCtaBlockSelect<T extends boolean = true> {
   id?: T;
   blockName?: T;
 }
@@ -1673,6 +2161,14 @@ export interface ArchiveBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LatestBlogsBlock_select".
+ */
+export interface LatestBlogsBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "FormBlock_select".
  */
 export interface FormBlockSelect<T extends boolean = true> {
@@ -1684,13 +2180,13 @@ export interface FormBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts_select".
+ * via the `definition` "blogs_select".
  */
-export interface PostsSelect<T extends boolean = true> {
+export interface BlogsSelect<T extends boolean = true> {
   title?: T;
   heroImage?: T;
   content?: T;
-  relatedPosts?: T;
+  relatedBlogs?: T;
   categories?: T;
   meta?:
     | T
@@ -1726,7 +2222,7 @@ export interface ProductsSelect<T extends boolean = true> {
   isFeatured?: T;
   primaryCategory?: T;
   additionalCategories?: T;
-  relatedPosts?: T;
+  relatedBlogs?: T;
   description?: T;
   customLayout?:
     | T
@@ -1804,6 +2300,7 @@ export interface ProductCategoriesSelect<T extends boolean = true> {
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
+  frontendURL?: T;
   prefix?: T;
   folder?: T;
   updatedAt?: T;
@@ -2281,8 +2778,8 @@ export interface Header {
                 value: number | Page;
               } | null)
             | ({
-                relationTo: 'posts';
-                value: number | Post;
+                relationTo: 'blogs';
+                value: number | Blog;
               } | null)
             | ({
                 relationTo: 'products';
@@ -2302,8 +2799,8 @@ export interface Header {
                       value: number | Page;
                     } | null)
                   | ({
-                      relationTo: 'posts';
-                      value: number | Post;
+                      relationTo: 'blogs';
+                      value: number | Blog;
                     } | null)
                   | ({
                       relationTo: 'products';
@@ -2338,8 +2835,8 @@ export interface Footer {
                 value: number | Page;
               } | null)
             | ({
-                relationTo: 'posts';
-                value: number | Post;
+                relationTo: 'blogs';
+                value: number | Blog;
               } | null)
             | ({
                 relationTo: 'products';
@@ -2359,8 +2856,8 @@ export interface Footer {
                       value: number | Page;
                     } | null)
                   | ({
-                      relationTo: 'posts';
-                      value: number | Post;
+                      relationTo: 'blogs';
+                      value: number | Blog;
                     } | null)
                   | ({
                       relationTo: 'products';
@@ -2476,8 +2973,8 @@ export interface TaskSchedulePublish {
           value: number | Page;
         } | null)
       | ({
-          relationTo: 'posts';
-          value: number | Post;
+          relationTo: 'blogs';
+          value: number | Blog;
         } | null)
       | ({
           relationTo: 'products';
@@ -2521,8 +3018,8 @@ export interface CallToActionBlock {
                 value: number | Page;
               } | null)
             | ({
-                relationTo: 'posts';
-                value: number | Post;
+                relationTo: 'blogs';
+                value: number | Blog;
               } | null)
             | ({
                 relationTo: 'products';

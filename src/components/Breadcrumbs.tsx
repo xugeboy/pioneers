@@ -12,14 +12,14 @@ export const Breadcrumbs: React.FC<{
   if (!items.length) return null
 
   return (
-    <nav aria-label="Breadcrumb" className="container mb-8 mt-5 md:mb-10 md:mt-7">
+    <nav aria-label="Breadcrumb" className="container mb-8 mt-2 md:mb-10 md:mt-7">
       <ol className="inline-flex min-h-11 flex-wrap items-center gap-2 py-2.5 text-sm text-muted-foreground backdrop-blur-sm">
         {items.map((item, index) => {
           const isLast = index === items.length - 1
 
           return (
             <React.Fragment key={`${item.label}-${index}`}>
-              <li>
+              <li aria-current={isLast ? 'page' : undefined}>
                 {item.href && !isLast ? (
                   <Link
                     className="transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
