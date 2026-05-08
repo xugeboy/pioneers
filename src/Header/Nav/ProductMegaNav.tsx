@@ -39,8 +39,7 @@ const DesktopMegaNavGroup: React.FC<GroupItemProps> = ({ group, tone }) => {
   const [isOpen, setIsOpen] = useState(false)
   const panelRef = useRef<HTMLDivElement | null>(null)
   const closeTimeoutRef = useRef<number | null>(null)
-  const activeItem =
-    group.items.find((item) => item.id === activeItemID) || defaultItem || null
+  const activeItem = group.items.find((item) => item.id === activeItemID) || defaultItem || null
   const isLightTone = tone === 'light'
 
   const clearCloseTimeout = () => {
@@ -69,6 +68,21 @@ const DesktopMegaNavGroup: React.FC<GroupItemProps> = ({ group, tone }) => {
     }
   }, [])
 
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handleScroll = () => {
+      setIsOpen(false)
+      clearCloseTimeout()
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [isOpen])
+
   const triggerClasses = cn(
     'inline-flex items-center gap-2 rounded-full px-3.5 py-2.5 text-[14px] font-medium no-underline transition-[background-color,color,box-shadow] duration-200 hover:no-underline lg:text-[15px]',
     isLightTone
@@ -77,7 +91,9 @@ const DesktopMegaNavGroup: React.FC<GroupItemProps> = ({ group, tone }) => {
   )
   const panelClasses = cn(
     'border-t border-b shadow-[0_18px_45px_rgba(8,15,10,0.08)]',
-    isLightTone ? 'border-white/12 bg-black/94 text-white' : 'border-[#e4e7df] bg-white text-[#162019]',
+    isLightTone
+      ? 'border-white/12 bg-black/94 text-white'
+      : 'border-[#e4e7df] bg-white text-[#162019]',
   )
   const listItemClasses = cn(
     'flex items-center justify-between gap-4 rounded-full px-4 py-3 text-left text-[14px] font-medium transition-[background-color,color] duration-150 motion-reduce:transition-none lg:text-[15px]',
@@ -133,7 +149,9 @@ const DesktopMegaNavGroup: React.FC<GroupItemProps> = ({ group, tone }) => {
       <div
         className={cn(
           'fixed inset-x-0 z-30 transition-opacity duration-200 motion-reduce:transition-none',
-          isOpen ? 'pointer-events-auto visible opacity-100' : 'pointer-events-none invisible opacity-0',
+          isOpen
+            ? 'pointer-events-auto visible opacity-100'
+            : 'pointer-events-none invisible opacity-0',
         )}
         onMouseEnter={() => {
           openMenu()
@@ -146,19 +164,8 @@ const DesktopMegaNavGroup: React.FC<GroupItemProps> = ({ group, tone }) => {
       >
         <div className={panelClasses}>
           <div className="container">
-            <div className="grid min-h-[20rem] grid-cols-[18rem_minmax(0,1fr)] gap-10 py-8">
+            <div className="grid min-h-80 grid-cols-[18rem_minmax(0,1fr)] gap-10 py-8">
               <div className="space-y-1">
-                <div className="mb-4 px-4">
-                  <p
-                    className={cn(
-                      'text-[0.7rem] font-semibold uppercase tracking-[0.22em]',
-                      isLightTone ? 'text-white/64' : 'text-[#5d6f62]',
-                    )}
-                  >
-                    Product Family
-                  </p>
-                </div>
-
                 <div className="space-y-1">
                   {group.items.map((item) => {
                     const isActive = item.id === activeItem.id
@@ -199,7 +206,9 @@ const DesktopMegaNavGroup: React.FC<GroupItemProps> = ({ group, tone }) => {
                   <div
                     className={cn(
                       'flex h-full min-h-[12rem] w-full items-center justify-center rounded-[1.25rem] border border-dashed px-6 text-center text-sm',
-                      isLightTone ? 'border-white/18 text-white/72' : 'border-[#d5ddd4] text-[#556459]',
+                      isLightTone
+                        ? 'border-white/18 text-white/72'
+                        : 'border-[#d5ddd4] text-[#556459]',
                     )}
                   >
                     <p>No featured products yet.</p>

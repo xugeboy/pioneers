@@ -22,11 +22,14 @@ export const FooterNavSections: React.FC<{ items: FooterNavItem[] }> = ({ items 
         const isOpen = openIndex === index
 
         return (
-          <div className="lg:border-l lg:border-slate-200 lg:pl-8" key={`${item.link?.label}-${index}`}>
+          <div
+            className="lg:border-l lg:border-white/24 lg:pl-8"
+            key={`${item.link?.label}-${index}`}
+          >
             <div className="hidden space-y-3 lg:block">
               {href ? (
                 <Link
-                  className="text-sm font-semibold uppercase tracking-[0.08em] text-slate-700"
+                  className="text-sm font-semibold uppercase tracking-[0.08em] text-white"
                   href={href}
                   rel={item.link?.newTab ? 'noopener noreferrer' : undefined}
                   target={item.link?.newTab ? '_blank' : undefined}
@@ -34,13 +37,13 @@ export const FooterNavSections: React.FC<{ items: FooterNavItem[] }> = ({ items 
                   {item.link?.label}
                 </Link>
               ) : (
-                <div className="text-sm font-semibold uppercase tracking-[0.08em] text-slate-700">
+                <div className="text-sm font-semibold uppercase tracking-[0.08em] text-white">
                   {item.link?.label}
                 </div>
               )}
 
               {hasSubItems && (
-                <div className="flex flex-col gap-2 text-sm text-slate-500">
+                <div className="flex flex-col gap-2 text-sm text-white/80">
                   {item.subItems?.map((subItem, subIndex) => {
                     const subHref = resolveCMSLinkHref(subItem.link)
 
@@ -48,7 +51,7 @@ export const FooterNavSections: React.FC<{ items: FooterNavItem[] }> = ({ items 
 
                     return (
                       <Link
-                        className="text-slate-500 transition-colors hover:text-slate-900"
+                        className="text-white/80 transition-colors hover:text-white"
                         href={subHref}
                         key={subIndex}
                         rel={subItem.link?.newTab ? 'noopener noreferrer' : undefined}
@@ -62,7 +65,7 @@ export const FooterNavSections: React.FC<{ items: FooterNavItem[] }> = ({ items 
               )}
             </div>
 
-            <div className="border-b border-slate-200 lg:hidden">
+            <div className="border-b border-white/24 lg:hidden">
               <button
                 className="flex w-full items-center justify-between py-4 text-left"
                 onClick={() => {
@@ -70,11 +73,14 @@ export const FooterNavSections: React.FC<{ items: FooterNavItem[] }> = ({ items 
                 }}
                 type="button"
               >
-                <span className="text-sm font-semibold uppercase tracking-[0.08em] text-slate-800">
+                <span className="text-sm font-semibold uppercase tracking-[0.08em] text-white">
                   {item.link?.label}
                 </span>
                 <Plus
-                  className={cn('size-4 text-slate-500 transition-transform duration-200', isOpen && 'rotate-45')}
+                  className={cn(
+                    'size-4 text-white/80 transition-transform duration-200',
+                    isOpen && 'rotate-45',
+                  )}
                 />
               </button>
 
@@ -88,7 +94,7 @@ export const FooterNavSections: React.FC<{ items: FooterNavItem[] }> = ({ items 
                   <div className="space-y-1 pb-4">
                     {href && (
                       <Link
-                        className="block py-2 text-sm font-medium text-slate-800"
+                        className="block py-2 text-sm font-medium text-white"
                         href={href}
                         rel={item.link?.newTab ? 'noopener noreferrer' : undefined}
                         target={item.link?.newTab ? '_blank' : undefined}
@@ -105,7 +111,7 @@ export const FooterNavSections: React.FC<{ items: FooterNavItem[] }> = ({ items 
 
                         return (
                           <Link
-                            className="block py-2 text-sm text-slate-600 transition-colors hover:text-slate-900"
+                            className="block py-2 text-sm text-white/80 transition-colors hover:text-white"
                             href={subHref}
                             key={subIndex}
                             rel={subItem.link?.newTab ? 'noopener noreferrer' : undefined}

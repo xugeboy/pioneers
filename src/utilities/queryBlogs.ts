@@ -5,6 +5,7 @@ import { cache } from 'react'
 
 export const BLOG_FEATURED_LIMIT = 4
 export const BLOG_ARCHIVE_PAGE_SIZE = 12
+export const BLOG_CAROUSEL_LIMIT = 5
 
 const blogArchiveSelect = {
   id: true,
@@ -20,6 +21,7 @@ const latestBlogSelect = {
   ...blogArchiveSelect,
   heroImage: true,
   publishedAt: true,
+  updatedAt: true,
 } as const
 
 const buildExcludeWhere = (excludeIDs: Array<number | string>) =>
@@ -43,6 +45,28 @@ export const getLatestPublishedBlogs = cache(async (limit = BLOG_FEATURED_LIMIT)
     pagination: false,
     select: latestBlogSelect,
     sort: '-publishedAt',
+  })
+
+  return result.docs
+})
+
+export const getRecentlyUpdatedBlogs = cache(async (limit = BLOG_CAROUSEL_LIMIT) => {
+  const payload = await getPayload({ config: configPromise })
+
+  const result = await payload.find({
+    collection: 'blogs',
+    depth: 1,
+    draft: false,
+    limit,
+    overrideAccess: false,
+    pagination: false,
+    select: latestBlogSelect,
+    sort: '-updatedAt',
+    where: {
+      _status: {
+        equals: 'published',
+      },
+    },
   })
 
   return result.docs

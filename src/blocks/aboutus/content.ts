@@ -3,10 +3,6 @@ export const aboutMedia = {
     alt: 'Pioneers Gears support and contact team',
     url: 'https://cdn.pioneersgears.com/images/contact%20our%20team.webp',
   },
-  differentiators: {
-    alt: 'Pioneers Gears team in the production environment',
-    url: 'https://cdn.pioneersgears.com/images/Xiangle%20Team.webp',
-  },
   focus: [
     {
       alt: 'Cargo restraint assembly detail for application-led engineering',
@@ -25,28 +21,6 @@ export const aboutMedia = {
     alt: 'Pioneers Gears leadership and operations team',
     url: 'https://cdn.pioneersgears.com/images/Xiangle%20Team.webp',
   },
-} as const
-
-export const aboutDifferentiatorsContent = {
-  eyebrow: 'What we stand for',
-  items: [
-    {
-      body: 'Products and product lines designed to be simple and consistent.',
-      title: 'Clear by design',
-    },
-    {
-      body: 'Built for demanding environments where durability and reliability matter.',
-      title: 'Rugged by purpose',
-    },
-    {
-      body: 'Products shaped by real working conditions and customer needs.',
-      title: 'Driven by real use',
-    },
-    {
-      body: 'Working with partners who build lasting product programs.',
-      title: 'Built for long-term trust',
-    },
-  ],
 } as const
 
 export const aboutClientsContent = {

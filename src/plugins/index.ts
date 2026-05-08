@@ -13,6 +13,7 @@ import { storagePlugins } from './storage'
 import { isAdmin } from '@/access/isAdmin'
 import { isAdminUser } from '@/access/roles'
 import { phoneField } from '@/blocks/Form/phoneField'
+import { textareaField } from '@/blocks/Form/textareaField'
 
 import { Blog, Page } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -71,13 +72,15 @@ export const plugins: Plugin[] = [
   formBuilderPlugin({
     fields: {
       phone: phoneField,
+      textarea: textareaField,
       payment: false,
     },
     formOverrides: {
       access: {
         create: isAdmin,
         delete: isAdmin,
-        read: isAdmin,
+        // Frontend FormBlock needs to read form definitions to render fields.
+        read: () => true,
         update: isAdmin,
       },
       admin: {

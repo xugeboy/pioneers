@@ -1,14 +1,29 @@
 'use client'
 
-import { CheckCheck, PackageCheck, ScanSearch, ShieldCheck } from 'lucide-react'
+import { BadgeCheck, Leaf, ShieldCheck } from 'lucide-react'
 import React, { useRef } from 'react'
 
 import type { QualityControlBlock as QualityControlBlockProps } from '@/payload-types'
 
-import { manufacturingQualityContent } from '@/blocks/manufacturing/content'
 import { useScrollScene } from '@/utilities/gsap'
 
-const icons = [ShieldCheck, ScanSearch, CheckCheck, PackageCheck] as const
+const qualityPoints = [
+  {
+    body: 'Selected for strength and long-term reliability.',
+    icon: Leaf,
+    title: 'Consistent Materials',
+  },
+  {
+    body: 'Standardized processes ensure stable quality.',
+    icon: ShieldCheck,
+    title: 'Controlled Production',
+  },
+  {
+    body: 'Tested to perform under real-world conditions.',
+    icon: BadgeCheck,
+    title: 'Verified Performance',
+  },
+] as const
 
 export const QualityControlBlock: React.FC<
   QualityControlBlockProps & { disableInnerContainer?: boolean }
@@ -18,55 +33,57 @@ export const QualityControlBlock: React.FC<
   useScrollScene(sectionRef, ({ gsap, reduceMotion, scope }) => {
     if (reduceMotion) return
 
-    gsap.from(scope.querySelectorAll('[data-qc-card]'), {
-      duration: 0.8,
+    gsap.from(scope.querySelectorAll('[data-qc-reveal]'), {
+      duration: 0.85,
       ease: 'power2.out',
       opacity: 0,
-      stagger: 0.1,
+      stagger: 0.08,
       scrollTrigger: {
         start: 'top 80%',
         toggleActions: 'play none none reverse',
         trigger: scope,
       },
-      y: 22,
+      y: 24,
     })
   })
 
   return (
-    <section className="bg-[#10203a] text-white" ref={sectionRef}>
-      <div className="container py-[4.5rem] md:py-24">
-        <div className="max-w-4xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#90ebb1]">
-            {manufacturingQualityContent.eyebrow}
-          </p>
-          <h2 className="mt-4 font-industrial text-4xl uppercase leading-[0.92] tracking-[-0.04em] text-white md:text-6xl">
-            {manufacturingQualityContent.title}
-          </h2>
-        </div>
+    <section className="relative isolate overflow-hidden bg-[#f8f8f4]">
+      <div className="absolute inset-0" />
 
-        <div className="mt-12 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {manufacturingQualityContent.items.map((item, index) => {
-            const Icon = icons[index]
+      <div className="container relative py-16 md:py-20 lg:py-24">
+        <div className="mx-auto w-full text-center">
+          <div className="mx-auto max-w-3xl">
+            <h2
+              className="text-4xl font-semibold leading-[1.12] tracking-[-0.04em] text-[#15191a] md:text-5xl"
+              data-qc-reveal
+            >
+              Quality is built into every step.
+            </h2>
+          </div>
 
-            return (
-              <article
-                className="border border-white/12 bg-white/5 p-6 shadow-[0_18px_44px_rgba(2,6,23,0.22)]"
-                data-qc-card
-                key={item.title}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="flex size-12 items-center justify-center border border-[#00a650]/40 bg-[#00a650]/10 text-[#90ebb1]">
-                    <Icon className="size-5" />
-                  </span>
-                  <span className="h-1.5 w-12 bg-[#00a650]" />
-                </div>
-                <h3 className="mt-5 text-2xl font-semibold uppercase tracking-[-0.03em] text-white">
-                  {item.title}
-                </h3>
-                <p className="mt-3 text-base leading-8 text-slate-300">{item.body}</p>
-              </article>
-            )
-          })}
+          <div className="mt-10 grid gap-5 md:grid-cols-3" data-qc-reveal>
+            {qualityPoints.map((point) => {
+              const Icon = point.icon
+
+              return (
+                <article
+                  className="bg-white/55 px-6 py-7 text-center shadow-[0_16px_42px_rgba(21,25,26,0.04)]"
+                  key={point.title}
+                >
+                  <div className="mx-auto flex size-14 items-center justify-center bg-[#829064]/10 text-[#76845c]">
+                    <Icon className="size-8" strokeWidth={1.8} />
+                  </div>
+                  <h3 className="mt-5 text-lg font-semibold leading-7 text-[#15191a]">
+                    {point.title}
+                  </h3>
+                  <p className="mx-auto mt-3 max-w-[15rem] text-sm leading-7 text-[#4d5252]">
+                    {point.body}
+                  </p>
+                </article>
+              )
+            })}
+          </div>
         </div>
       </div>
     </section>

@@ -1,6 +1,7 @@
 'use client'
 /* eslint-disable @next/next/no-img-element */
 
+import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import React, { useEffect, useRef } from 'react'
 
@@ -60,69 +61,39 @@ export const ManufacturingOverviewBlock: React.FC<
     >
       <div className="absolute inset-0">
         <img
-          alt={manufacturingMedia.team.alt}
-          className="h-full w-full object-cover object-[64%_center]"
+          alt={manufacturingMedia.banner.alt}
+          className="absolute inset-x-0 -inset-y-[8%] h-[116%] w-full object-cover object-[64%_center]"
           data-overview-image
           fetchPriority="high"
-          src={manufacturingMedia.team.url}
+          src={manufacturingMedia.banner.url}
         />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,23,42,0.9)_0%,rgba(15,23,42,0.82)_42%,rgba(15,23,42,0.38)_78%,rgba(15,23,42,0.08)_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(0,166,80,0.18),transparent_24%)]" />
+        {/* Dark overlay to make text readable */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/30 to-black/60" />
       </div>
 
-      <div className="container relative py-[4.5rem] md:py-24 lg:py-28">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-end">
-          <div className="max-w-4xl">
-            <p
-              className="text-xs font-semibold uppercase tracking-[0.34em] text-[#90ebb1]"
-              data-overview-reveal
-            >
-              {manufacturingOverviewContent.eyebrow}
-            </p>
-            <h1
-              className="mt-5 font-industrial text-5xl uppercase leading-[0.9] tracking-[-0.05em] sm:text-6xl md:text-[4.75rem] lg:text-[6rem]"
-              data-overview-reveal
-            >
-              {manufacturingOverviewContent.title}
-            </h1>
-            <p
-              className="mt-6 max-w-2xl text-base leading-8 text-slate-200 md:text-lg md:leading-9"
-              data-overview-reveal
-            >
-              {manufacturingOverviewContent.summary}
-            </p>
+      <div className="container relative flex min-h-[42rem] items-center justify-end py-32 md:min-h-[48rem] md:py-40 lg:min-h-[54rem] lg:py-48">
+        <div className="ml-auto max-w-3xl text-right">
+          <h1
+            className="mt-6 font-industrial text-5xl font-bold uppercase leading-[1.1] tracking-wide sm:text-6xl md:text-[4.75rem] lg:text-[5.5rem]"
+            data-overview-reveal
+          >
+            <span className="text-white block whitespace-pre-wrap">
+              {manufacturingOverviewContent.titlePart1}
+            </span>
+            <span className="text-[#00A650] block">{manufacturingOverviewContent.titlePart2}</span>
+          </h1>
 
-            <div className="mt-8 flex flex-wrap gap-3" data-overview-reveal>
-              <Button
-                asChild
-                className="h-12 rounded-none border border-[#00a650] bg-[#00a650] px-6 text-sm font-semibold uppercase tracking-[0.14em] text-white hover:border-[#119d52] hover:bg-[#119d52]"
-                size="clear"
-              >
-                <Link href="/request-quote">Start an OEM / ODM inquiry</Link>
-              </Button>
-              <Button
-                asChild
-                className="h-12 rounded-none border border-white/25 bg-white/10 px-6 text-sm font-semibold uppercase tracking-[0.14em] text-white hover:border-white hover:bg-white hover:text-[#10203a]"
-                size="clear"
-                variant="outline"
-              >
-                <Link href="/contact-us">Talk to manufacturing</Link>
-              </Button>
-            </div>
-          </div>
-
-          <div className="grid gap-3 sm:grid-cols-2" data-overview-reveal>
-            {manufacturingOverviewContent.stats.map((item) => (
-              <div
-                className="border border-white/12 bg-white/[0.08] px-5 py-5 backdrop-blur-sm"
-                key={item.label}
-              >
-                <p className="text-2xl font-semibold uppercase tracking-[0.12em] text-white">
-                  {item.value}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-200">{item.label}</p>
-              </div>
-            ))}
+          <div className="mt-10 flex flex-wrap items-center justify-end gap-4" data-overview-reveal>
+            <Button
+              asChild
+              className="h-12 rounded-none border border-[#00A650] bg-[#00A650] px-8 text-xs font-bold uppercase tracking-widest text-white hover:border-[#00A650] hover:bg-[#00A650]"
+              size="clear"
+            >
+              <Link href="/request-quote" className="flex items-center gap-2">
+                START YOUR PROJECT
+                <ArrowRight className="size-4" />
+              </Link>
+            </Button>
           </div>
         </div>
       </div>

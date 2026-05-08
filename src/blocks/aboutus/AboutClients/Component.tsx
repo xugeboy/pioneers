@@ -1,11 +1,38 @@
 'use client'
+/* eslint-disable @next/next/no-img-element */
 
 import React, { useRef } from 'react'
 
 import type { AboutClientsBlock as AboutClientsBlockProps } from '@/payload-types'
 
-import { aboutClientsContent } from '@/blocks/aboutus/content'
+import { aboutMedia } from '@/blocks/aboutus/content'
 import { useScrollScene } from '@/utilities/gsap'
+
+const advantageCards = [
+  {
+    image: aboutMedia.focus[0],
+    title: 'Right Product, Right Fit',
+    points: [
+      'Application-led product selection',
+      'Factory-direct production',
+      'Custom solution support',
+    ],
+  },
+  {
+    image: aboutMedia.closing,
+    title: 'Clear Planning, Faster Response',
+    points: ['Fast project review', 'Clear quotation process', 'Flexible OEM / ODM support'],
+  },
+  {
+    image: aboutMedia.closing,
+    title: 'Reliable Supply, Built to Scale',
+    points: [
+      'Stable quality control',
+      'Consistent production capacity',
+      'On-time delivery support',
+    ],
+  },
+] as const
 
 export const AboutClientsBlock: React.FC<
   AboutClientsBlockProps & { disableInnerContainer?: boolean }
@@ -13,74 +40,67 @@ export const AboutClientsBlock: React.FC<
   const sectionRef = useRef<HTMLElement | null>(null)
 
   useScrollScene(sectionRef, ({ gsap, reduceMotion, scope }) => {
-    const cards = scope.querySelectorAll<HTMLElement>('[data-client-card]')
-
     if (reduceMotion) return
 
-    gsap.from(scope.querySelectorAll<HTMLElement>('[data-client-copy]'), {
-      duration: 0.7,
+    gsap.from(scope.querySelectorAll<HTMLElement>('[data-client-reveal]'), {
+      duration: 0.75,
       ease: 'power2.out',
       opacity: 0,
-      stagger: 0.06,
+      stagger: 0.08,
       scrollTrigger: {
         start: 'top 82%',
         toggleActions: 'play none none reverse',
         trigger: scope,
       },
-      y: 20,
-    })
-
-    gsap.from(cards, {
-      delay: 0.12,
-      duration: 0.8,
-      ease: 'power2.out',
-      opacity: 0,
-      stagger: 0.1,
-      scrollTrigger: {
-        start: 'top 78%',
-        toggleActions: 'play none none reverse',
-        trigger: scope,
-      },
-      y: 26,
+      y: 24,
     })
   })
 
   return (
-    <section className="bg-[#e8e1d6]" ref={sectionRef}>
-      <div className="container py-18 md:py-24">
-        <div className="max-w-3xl">
-          <h2 className="mt-4 max-w-5xl font-industrial text-4xl uppercase leading-[0.9] tracking-[-0.05em] text-[#10203a] md:text-6xl lg:text-[4.75rem]">
-            {aboutClientsContent.eyebrow}
+    <section className="bg-white text-[#202833]" ref={sectionRef}>
+      <div className="py-10 md:py-12">
+        <div className="container text-center" data-client-reveal>
+          <h2 className="font-industrial text-2xl font-bold uppercase tracking-wide text-[#202833] md:text-3xl">
+            The Pioneers Gears Advantage
           </h2>
-          <p
-            className="mt-5 max-w-2xl text-lg leading-8 text-[#10203a] md:text-xl md:leading-9"
-            data-client-copy
-          >
-            {aboutClientsContent.title}
-          </p>
         </div>
 
-        <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {aboutClientsContent.items.map((item) => (
+        <div className="mt-8 grid gap-4 px-4 md:grid-cols-3 md:px-6 lg:px-8">
+          {advantageCards.map((card) => (
             <article
-              className="group flex min-h-52 flex-col justify-between border border-[#10203a]/10 bg-[#f8f6f1] p-6 transition-[border-color,background-color,transform] duration-200 hover:-translate-y-1 hover:border-[#10203a]/18"
-              data-client-card
-              key={item.kicker}
+              className="relative min-h-[14rem] overflow-hidden bg-[#1f2933] text-center text-white"
+              data-client-reveal
+              key={card.title}
             >
-              <div className="text-xs font-semibold uppercase tracking-[0.28em] text-[#00a650]">
-                {item.kicker}
-              </div>
-
-              <div className="mt-10">
-                <p className="font-industrial text-[3.4rem] uppercase leading-none tracking-[-0.05em] text-[#10203a] md:text-[4rem]">
-                  {item.metric}
-                </p>
-                <p className="mt-4 max-w-[18ch] text-base leading-7 text-[#10203a]">
-                  {item.description}
-                </p>
+              <img
+                alt={card.image.alt}
+                className="absolute inset-0 h-full w-full object-cover"
+                loading="lazy"
+                src={card.image.url}
+              />
+              <div className="absolute inset-0 bg-black/48" />
+              <div className="relative flex min-h-[22rem] flex-col items-center justify-center px-6 py-8">
+                <h3 className="max-w-[22rem] font-industrial text-4xl font-bold uppercase leading-[0.95] tracking-wide text-white md:text-[2.5rem]">
+                  {card.title}
+                </h3>
+                <ul className="mt-4 space-y-1 text-lg font-medium leading-5 text-white/92">
+                  {card.points.map((point) => (
+                    <li key={point}>{point}</li>
+                  ))}
+                </ul>
               </div>
             </article>
           ))}
+        </div>
+
+        <div className="container mt-20 mb-10 text-center md:mt-22 md:mb-12" data-client-reveal>
+          <h3 className="font-industrial text-2xl font-bold uppercase tracking-wide text-[#202833] md:text-3xl">
+            High-quality products, when you need them
+          </h3>
+          <p className="mx-auto mt-4 max-w-3xl md:text-lg leading-7 text-[#5f6670]">
+            Our production and support teams help customers keep projects on track. Tell us what you
+            need, and we will help you find the right product path for your application.
+          </p>
         </div>
       </div>
     </section>

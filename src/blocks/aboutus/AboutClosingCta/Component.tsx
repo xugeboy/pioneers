@@ -9,7 +9,6 @@ import type { AboutClosingCtaBlock as AboutClosingCtaBlockProps } from '@/payloa
 import { aboutClosingContent, aboutMedia } from '@/blocks/aboutus/content'
 import { Button } from '@/components/ui/button'
 import { useScrollScene } from '@/utilities/gsap'
-import { cn } from '@/utilities/ui'
 
 export const AboutClosingCtaBlock: React.FC<
   AboutClosingCtaBlockProps & { disableInnerContainer?: boolean }
@@ -34,54 +33,42 @@ export const AboutClosingCtaBlock: React.FC<
   })
 
   return (
-    <section className="relative overflow-hidden bg-[#0f172a] text-white" ref={sectionRef}>
+    <section className="relative overflow-hidden bg-[#15191f] text-white" ref={sectionRef}>
       <div className="absolute inset-0">
         <img
           alt={aboutMedia.closing.alt}
-          className="h-full w-full object-cover object-center opacity-[0.26]"
+          className="h-full w-full object-cover object-center"
           loading="lazy"
           src={aboutMedia.closing.url}
         />
-        <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(11,19,36,0.92)_0%,rgba(11,19,36,0.84)_48%,rgba(11,19,36,0.68)_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(0,166,80,0.2),transparent_26%)]" />
+        <div className="absolute inset-0 bg-black/58" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.3)_0%,rgba(0,0,0,0.72)_50%,rgba(0,0,0,0.3)_100%)]" />
       </div>
 
-      <div className="container relative py-[4.5rem] md:py-24">
-        <div className="mx-auto max-w-5xl text-center">
+      <div className="container relative flex min-h-[18rem] items-center justify-center py-12 md:min-h-[22rem] md:py-14">
+        <div className="mx-auto max-w-3xl text-center">
           <h2
-            className="mt-4 font-industrial text-4xl uppercase leading-[0.9] tracking-[-0.05em] text-white md:text-6xl lg:text-[4.75rem]"
+            className="font-industrial text-3xl font-bold uppercase leading-none tracking-wide text-white md:text-4xl"
             data-cta-reveal
           >
-            {aboutClosingContent.title}
+            Contact Us Today
           </h2>
 
           <p
-            className="mx-auto mt-6 max-w-3xl text-base leading-8 text-slate-200 md:text-lg md:leading-9"
+            className="mx-auto mt-3 max-w-2xl text-sm font-medium leading-6 text-white md:text-base"
             data-cta-reveal
           >
-            {aboutClosingContent.summary}
+            View our product catalog and use our quick quote builder to expedite your free estimate,
+            or contact us today to speak with one of our product specialists.
           </p>
 
-          <div className="mt-9 flex flex-wrap items-center justify-center gap-3" data-cta-reveal>
+          <div className="mt-7 flex justify-center" data-cta-reveal>
             <Button
               asChild
-              className="h-12 rounded-none border border-[#00a650] bg-[#00a650] px-6 text-sm font-semibold uppercase tracking-[0.12em] text-white hover:border-[#119d52] hover:bg-[#119d52]"
+              className="h-11 rounded-none border border-[#00A650] bg-[#00A650] px-7 text-xs font-bold uppercase tracking-[0.08em] text-white hover:border-[#00A650] hover:bg-[#00A650]"
               size="clear"
             >
-              <Link href={aboutClosingContent.primaryHref}>{aboutClosingContent.primaryLabel}</Link>
-            </Button>
-
-            <Button
-              asChild
-              className={cn(
-                'h-12 rounded-none border border-white/25 bg-white/10 px-6 text-sm font-semibold uppercase tracking-[0.12em] text-white hover:border-white hover:bg-white hover:text-[#10203a]',
-              )}
-              size="clear"
-              variant="outline"
-            >
-              <Link href={aboutClosingContent.secondaryHref}>
-                {aboutClosingContent.secondaryLabel}
-              </Link>
+              <Link href={aboutClosingContent.primaryHref}>Contact A Specialist</Link>
             </Button>
           </div>
         </div>

@@ -4,37 +4,28 @@ import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { isAdmin } from '../../access/isAdmin'
 import { isEditorOrAdmin } from '../../access/isEditorOrAdmin'
 import { Archive } from '../../blocks/ArchiveBlock/config'
+import { BlogCarousel } from '../../blocks/BlogCarousel/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
+import { FeaturedProductsCarousel } from '../../blocks/FeaturedProductsCarousel/config'
 import { FAQAccordion } from '../../blocks/FAQAccordion/config'
 import { FullscreenHero } from '../../blocks/FullscreenHero/config'
 import { FormBlock } from '../../blocks/Form/config'
+import { GoogleMapLocation } from '../../blocks/GoogleMapLocation/config'
 import { LatestBlogs } from '../../blocks/LatestBlogs/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { AboutClients } from '../../blocks/aboutus/AboutClients/config'
 import { AboutClosingCta } from '../../blocks/aboutus/AboutClosingCta/config'
-import { AboutDifferentiators } from '../../blocks/aboutus/AboutDifferentiators/config'
 import { AboutHero } from '../../blocks/aboutus/AboutHero/config'
 import { CompanyTimeline } from '../../blocks/aboutus/CompanyTimeline/config'
-import { CertificationsClosingCta } from '../../blocks/certifications/CertificationsClosingCta/config'
-import { CertificationsDownloadHub } from '../../blocks/certifications/CertificationsDownloadHub/config'
-import { CertificationsHero } from '../../blocks/certifications/CertificationsHero/config'
-import { CertificationsProofCards } from '../../blocks/certifications/CertificationsProofCards/config'
-import { CertificationsQualityCommitment } from '../../blocks/certifications/CertificationsQualityCommitment/config'
-import { CertificationsStandardsMatrix } from '../../blocks/certifications/CertificationsStandardsMatrix/config'
-import { CertificationsTestingProcess } from '../../blocks/certifications/CertificationsTestingProcess/config'
-import { CapacityCapability } from '../../blocks/manufacturing/CapacityCapability/config'
-import { EquipmentVisuals } from '../../blocks/manufacturing/EquipmentVisuals/config'
+import { CertificationsLibrary } from '../../blocks/certifications/CertificationsLibrary/config'
 import { FactoryGallery } from '../../blocks/manufacturing/FactoryGallery/config'
 import { ManufacturingInquiry } from '../../blocks/manufacturing/ManufacturingInquiry/config'
 import { ManufacturingOverview } from '../../blocks/manufacturing/ManufacturingOverview/config'
 import { OemOdmCapability } from '../../blocks/manufacturing/OemOdmCapability/config'
-import { ProductionProcess } from '../../blocks/manufacturing/ProductionProcess/config'
 import { QualityControl } from '../../blocks/manufacturing/QualityControl/config'
 import { HomeApplicationsNav } from '../../blocks/home/HomeApplicationsNav/config'
 import { HomeClosingCta } from '../../blocks/home/HomeClosingCta/config'
-import { HomeProductFamilies } from '../../blocks/home/HomeProductFamilies/config'
-import { HomeStrengths } from '../../blocks/home/HomeStrengths/config'
 import { HomeTrustSignals } from '../../blocks/home/HomeTrustSignals/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
@@ -104,30 +95,20 @@ export const Pages: CollectionConfig<'pages'> = {
               blocks: [
                 FullscreenHero,
                 AboutHero,
-                AboutDifferentiators,
                 AboutClients,
                 CompanyTimeline,
                 AboutClosingCta,
-                CertificationsHero,
-                CertificationsProofCards,
-                CertificationsTestingProcess,
-                CertificationsStandardsMatrix,
-                CertificationsQualityCommitment,
-                CertificationsDownloadHub,
-                CertificationsClosingCta,
+                CertificationsLibrary,
                 ManufacturingOverview,
-                ProductionProcess,
-                EquipmentVisuals,
                 QualityControl,
-                CapacityCapability,
                 OemOdmCapability,
                 FactoryGallery,
                 ManufacturingInquiry,
                 HomeApplicationsNav,
-                HomeProductFamilies,
-                HomeStrengths,
                 HomeTrustSignals,
                 HomeClosingCta,
+                FeaturedProductsCarousel,
+                BlogCarousel,
                 CallToAction,
                 FAQAccordion,
                 Content,
@@ -135,6 +116,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 Archive,
                 LatestBlogs,
                 FormBlock,
+                GoogleMapLocation,
               ],
               required: true,
               admin: {

@@ -1,6 +1,7 @@
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'payload'
 
 import { revalidatePath, revalidateTag } from 'next/cache'
+import { SITE_SITEMAP_TAG } from '@/utilities/sitemapConstants'
 
 import type { Blog } from '../../../payload-types'
 
@@ -16,7 +17,7 @@ export const revalidateBlog: CollectionAfterChangeHook<Blog> = ({
       payload.logger.info(`Revalidating blog at path: ${path}`)
 
       revalidatePath(path)
-      revalidateTag('blogs-sitemap')
+      revalidateTag(SITE_SITEMAP_TAG)
     }
 
     if (previousDoc._status === 'published' && doc._status !== 'published') {
@@ -25,7 +26,7 @@ export const revalidateBlog: CollectionAfterChangeHook<Blog> = ({
       payload.logger.info(`Revalidating old blog at path: ${oldPath}`)
 
       revalidatePath(oldPath)
-      revalidateTag('blogs-sitemap')
+      revalidateTag(SITE_SITEMAP_TAG)
     }
   }
 
@@ -40,7 +41,7 @@ export const revalidateDeleteBlog: CollectionAfterDeleteHook<Blog> = ({
     const path = `/blogs/${doc?.slug}`
 
     revalidatePath(path)
-    revalidateTag('blogs-sitemap')
+    revalidateTag(SITE_SITEMAP_TAG)
   }
 
   return doc

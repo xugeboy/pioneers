@@ -64,7 +64,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, megaNavGroups 
     }
   }, [])
 
-  const allowTransparentHeader = pathname === '/'
+  const allowTransparentHeader = pathname === '/' || headerTheme === 'dark'
   const isImmersive =
     allowTransparentHeader && (headerTheme === 'dark' || headerTheme == null)
   const showSolidHeader = isMenuOpen || isInteractive || !isImmersive

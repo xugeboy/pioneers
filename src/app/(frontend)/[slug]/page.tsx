@@ -67,7 +67,10 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   const { hero, layout, title } = page
   const hasImmersiveStart =
-    hero?.type === 'highImpact' || layout?.[0]?.blockType === 'fullscreenHero'
+    hero?.type === 'highImpact' ||
+    layout?.[0]?.blockType === 'fullscreenHero' ||
+    layout?.[0]?.blockType === 'aboutHero' ||
+    layout?.[0]?.blockType === 'manufacturingOverview'
 
   return (
     <article className={hasImmersiveStart ? '' : 'pt-[68px] md:pt-24'}>
@@ -77,7 +80,7 @@ export default async function Page({ params: paramsPromise }: Args) {
 
       {draft && <LivePreviewListener />}
 
-      {decodedSlug !== 'home' && decodedSlug !== 'about-us' && (
+      {decodedSlug !== 'home' && decodedSlug !== 'about-us' && decodedSlug !== 'manufacturing' && (
         <Breadcrumbs items={[{ href: '/', label: 'Home' }, { label: title }]} />
       )}
 

@@ -216,30 +216,20 @@ export interface Page {
   layout: (
     | FullscreenHeroBlock
     | AboutHeroBlock
-    | AboutDifferentiatorsBlock
     | AboutClientsBlock
     | CompanyTimelineBlock
     | AboutClosingCtaBlock
-    | CertificationsHeroBlock
-    | CertificationsProofCardsBlock
-    | CertificationsTestingProcessBlock
-    | CertificationsStandardsMatrixBlock
-    | CertificationsQualityCommitmentBlock
-    | CertificationsDownloadHubBlock
-    | CertificationsClosingCtaBlock
+    | CertificationsLibraryBlock
     | ManufacturingOverviewBlock
-    | ProductionProcessBlock
-    | EquipmentVisualsBlock
     | QualityControlBlock
-    | CapacityCapabilityBlock
     | OemOdmCapabilityBlock
     | FactoryGalleryBlock
     | ManufacturingInquiryBlock
     | HomeApplicationsNavBlock
-    | HomeProductFamiliesBlock
-    | HomeStrengthsBlock
     | HomeTrustSignalsBlock
     | HomeClosingCtaBlock
+    | FeaturedProductsCarouselBlock
+    | BlogCarouselBlock
     | {
         richText?: {
           root: {
@@ -400,6 +390,7 @@ export interface Page {
         blockName?: string | null;
         blockType: 'formBlock';
       }
+    | GoogleMapLocationBlock
   )[];
   meta?: {
     title?: string | null;
@@ -1031,7 +1022,9 @@ export interface Form {
             name: string;
             label?: string | null;
             width?: number | null;
+            rows?: number | null;
             defaultValue?: string | null;
+            placeholder?: string | null;
             required?: boolean | null;
             id?: string | null;
             blockName?: string | null;
@@ -1158,9 +1151,7 @@ export interface File {
  * via the `definition` "FullscreenHeroBlock".
  */
 export interface FullscreenHeroBlock {
-  eyebrow: string;
   title: string;
-  description: string;
   links?:
     | {
         link: {
@@ -1193,13 +1184,6 @@ export interface FullscreenHeroBlock {
    * Optional. If empty, the block falls back to the default Pioneers homepage artwork.
    */
   backgroundImage?: (number | null) | Media;
-  featureCards?:
-    | {
-        title: string;
-        description: string;
-        id?: string | null;
-      }[]
-    | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'fullscreenHero';
@@ -1212,15 +1196,6 @@ export interface AboutHeroBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'aboutHero';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "AboutDifferentiatorsBlock".
- */
-export interface AboutDifferentiatorsBlock {
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'aboutDifferentiators';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1251,66 +1226,25 @@ export interface AboutClosingCtaBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CertificationsHeroBlock".
+ * via the `definition` "CertificationsLibraryBlock".
  */
-export interface CertificationsHeroBlock {
+export interface CertificationsLibraryBlock {
+  groups?:
+    | {
+        title: string;
+        items?:
+          | {
+              label?: string | null;
+              file: number | Media;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'certificationsHero';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CertificationsProofCardsBlock".
- */
-export interface CertificationsProofCardsBlock {
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'certificationsProofCards';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CertificationsTestingProcessBlock".
- */
-export interface CertificationsTestingProcessBlock {
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'certificationsTestingProcess';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CertificationsStandardsMatrixBlock".
- */
-export interface CertificationsStandardsMatrixBlock {
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'certificationsStandardsMatrix';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CertificationsQualityCommitmentBlock".
- */
-export interface CertificationsQualityCommitmentBlock {
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'certificationsQualityCommitment';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CertificationsDownloadHubBlock".
- */
-export interface CertificationsDownloadHubBlock {
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'certificationsDownloadHub';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CertificationsClosingCtaBlock".
- */
-export interface CertificationsClosingCtaBlock {
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'certificationsClosingCta';
+  blockType: 'certLibrary';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1323,39 +1257,12 @@ export interface ManufacturingOverviewBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ProductionProcessBlock".
- */
-export interface ProductionProcessBlock {
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'productionProcess';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "EquipmentVisualsBlock".
- */
-export interface EquipmentVisualsBlock {
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'equipmentVisuals';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "QualityControlBlock".
  */
 export interface QualityControlBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'qualityControl';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CapacityCapabilityBlock".
- */
-export interface CapacityCapabilityBlock {
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'capacityCapability';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1395,24 +1302,6 @@ export interface HomeApplicationsNavBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "HomeProductFamiliesBlock".
- */
-export interface HomeProductFamiliesBlock {
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'homeProductFamilies';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "HomeStrengthsBlock".
- */
-export interface HomeStrengthsBlock {
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'homeStrengths';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "HomeTrustSignalsBlock".
  */
 export interface HomeTrustSignalsBlock {
@@ -1428,6 +1317,26 @@ export interface HomeClosingCtaBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'homeClosingCta';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeaturedProductsCarouselBlock".
+ */
+export interface FeaturedProductsCarouselBlock {
+  title: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'featuredProductsCarousel';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BlogCarouselBlock".
+ */
+export interface BlogCarouselBlock {
+  title: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'blogCarousel';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1466,6 +1375,22 @@ export interface LatestBlogsBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'latestBlogs';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "GoogleMapLocationBlock".
+ */
+export interface GoogleMapLocationBlock {
+  placeName: string;
+  height: 'compact' | 'standard' | 'tall';
+  address: string;
+  /**
+   * Optional Google Maps embed URL. Leave blank to auto-generate from the place name and address.
+   */
+  embedUrl?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'googleMapLocation';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1788,30 +1713,20 @@ export interface PagesSelect<T extends boolean = true> {
     | {
         fullscreenHero?: T | FullscreenHeroBlockSelect<T>;
         aboutHero?: T | AboutHeroBlockSelect<T>;
-        aboutDifferentiators?: T | AboutDifferentiatorsBlockSelect<T>;
         aboutClients?: T | AboutClientsBlockSelect<T>;
         companyTimeline?: T | CompanyTimelineBlockSelect<T>;
         aboutClosingCta?: T | AboutClosingCtaBlockSelect<T>;
-        certificationsHero?: T | CertificationsHeroBlockSelect<T>;
-        certificationsProofCards?: T | CertificationsProofCardsBlockSelect<T>;
-        certificationsTestingProcess?: T | CertificationsTestingProcessBlockSelect<T>;
-        certificationsStandardsMatrix?: T | CertificationsStandardsMatrixBlockSelect<T>;
-        certificationsQualityCommitment?: T | CertificationsQualityCommitmentBlockSelect<T>;
-        certificationsDownloadHub?: T | CertificationsDownloadHubBlockSelect<T>;
-        certificationsClosingCta?: T | CertificationsClosingCtaBlockSelect<T>;
+        certLibrary?: T | CertificationsLibraryBlockSelect<T>;
         manufacturingOverview?: T | ManufacturingOverviewBlockSelect<T>;
-        productionProcess?: T | ProductionProcessBlockSelect<T>;
-        equipmentVisuals?: T | EquipmentVisualsBlockSelect<T>;
         qualityControl?: T | QualityControlBlockSelect<T>;
-        capacityCapability?: T | CapacityCapabilityBlockSelect<T>;
         oemOdmCapability?: T | OemOdmCapabilityBlockSelect<T>;
         factoryGallery?: T | FactoryGalleryBlockSelect<T>;
         manufacturingInquiry?: T | ManufacturingInquiryBlockSelect<T>;
         homeApplicationsNav?: T | HomeApplicationsNavBlockSelect<T>;
-        homeProductFamilies?: T | HomeProductFamiliesBlockSelect<T>;
-        homeStrengths?: T | HomeStrengthsBlockSelect<T>;
         homeTrustSignals?: T | HomeTrustSignalsBlockSelect<T>;
         homeClosingCta?: T | HomeClosingCtaBlockSelect<T>;
+        featuredProductsCarousel?: T | FeaturedProductsCarouselBlockSelect<T>;
+        blogCarousel?: T | BlogCarouselBlockSelect<T>;
         cta?: T | CallToActionBlockSelect<T>;
         faqAccordion?: T | FAQAccordionBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
@@ -1819,6 +1734,7 @@ export interface PagesSelect<T extends boolean = true> {
         archive?: T | ArchiveBlockSelect<T>;
         latestBlogs?: T | LatestBlogsBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        googleMapLocation?: T | GoogleMapLocationBlockSelect<T>;
       };
   meta?:
     | T
@@ -1839,9 +1755,7 @@ export interface PagesSelect<T extends boolean = true> {
  * via the `definition` "FullscreenHeroBlock_select".
  */
 export interface FullscreenHeroBlockSelect<T extends boolean = true> {
-  eyebrow?: T;
   title?: T;
-  description?: T;
   links?:
     | T
     | {
@@ -1858,13 +1772,6 @@ export interface FullscreenHeroBlockSelect<T extends boolean = true> {
         id?: T;
       };
   backgroundImage?: T;
-  featureCards?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        id?: T;
-      };
   id?: T;
   blockName?: T;
 }
@@ -1873,14 +1780,6 @@ export interface FullscreenHeroBlockSelect<T extends boolean = true> {
  * via the `definition` "AboutHeroBlock_select".
  */
 export interface AboutHeroBlockSelect<T extends boolean = true> {
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "AboutDifferentiatorsBlock_select".
- */
-export interface AboutDifferentiatorsBlockSelect<T extends boolean = true> {
   id?: T;
   blockName?: T;
 }
@@ -1910,57 +1809,22 @@ export interface AboutClosingCtaBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CertificationsHeroBlock_select".
+ * via the `definition` "CertificationsLibraryBlock_select".
  */
-export interface CertificationsHeroBlockSelect<T extends boolean = true> {
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CertificationsProofCardsBlock_select".
- */
-export interface CertificationsProofCardsBlockSelect<T extends boolean = true> {
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CertificationsTestingProcessBlock_select".
- */
-export interface CertificationsTestingProcessBlockSelect<T extends boolean = true> {
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CertificationsStandardsMatrixBlock_select".
- */
-export interface CertificationsStandardsMatrixBlockSelect<T extends boolean = true> {
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CertificationsQualityCommitmentBlock_select".
- */
-export interface CertificationsQualityCommitmentBlockSelect<T extends boolean = true> {
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CertificationsDownloadHubBlock_select".
- */
-export interface CertificationsDownloadHubBlockSelect<T extends boolean = true> {
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CertificationsClosingCtaBlock_select".
- */
-export interface CertificationsClosingCtaBlockSelect<T extends boolean = true> {
+export interface CertificationsLibraryBlockSelect<T extends boolean = true> {
+  groups?:
+    | T
+    | {
+        title?: T;
+        items?:
+          | T
+          | {
+              label?: T;
+              file?: T;
+              id?: T;
+            };
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }
@@ -1974,33 +1838,9 @@ export interface ManufacturingOverviewBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ProductionProcessBlock_select".
- */
-export interface ProductionProcessBlockSelect<T extends boolean = true> {
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "EquipmentVisualsBlock_select".
- */
-export interface EquipmentVisualsBlockSelect<T extends boolean = true> {
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "QualityControlBlock_select".
  */
 export interface QualityControlBlockSelect<T extends boolean = true> {
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CapacityCapabilityBlock_select".
- */
-export interface CapacityCapabilityBlockSelect<T extends boolean = true> {
   id?: T;
   blockName?: T;
 }
@@ -2038,22 +1878,6 @@ export interface HomeApplicationsNavBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "HomeProductFamiliesBlock_select".
- */
-export interface HomeProductFamiliesBlockSelect<T extends boolean = true> {
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "HomeStrengthsBlock_select".
- */
-export interface HomeStrengthsBlockSelect<T extends boolean = true> {
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "HomeTrustSignalsBlock_select".
  */
 export interface HomeTrustSignalsBlockSelect<T extends boolean = true> {
@@ -2065,6 +1889,24 @@ export interface HomeTrustSignalsBlockSelect<T extends boolean = true> {
  * via the `definition` "HomeClosingCtaBlock_select".
  */
 export interface HomeClosingCtaBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeaturedProductsCarouselBlock_select".
+ */
+export interface FeaturedProductsCarouselBlockSelect<T extends boolean = true> {
+  title?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BlogCarouselBlock_select".
+ */
+export interface BlogCarouselBlockSelect<T extends boolean = true> {
+  title?: T;
   id?: T;
   blockName?: T;
 }
@@ -2175,6 +2017,18 @@ export interface FormBlockSelect<T extends boolean = true> {
   form?: T;
   enableIntro?: T;
   introContent?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "GoogleMapLocationBlock_select".
+ */
+export interface GoogleMapLocationBlockSelect<T extends boolean = true> {
+  placeName?: T;
+  height?: T;
+  address?: T;
+  embedUrl?: T;
   id?: T;
   blockName?: T;
 }
@@ -2591,7 +2445,9 @@ export interface FormsSelect<T extends boolean = true> {
               name?: T;
               label?: T;
               width?: T;
+              rows?: T;
               defaultValue?: T;
+              placeholder?: T;
               required?: T;
               id?: T;
               blockName?: T;

@@ -168,9 +168,9 @@ export const ProductInquiryForm: React.FC<ProductInquiryFormProps> = ({
   return (
     <section className={cn(className)} id="product-inquiry-form">
       <div className="mb-5 space-y-2">
-        <p className="text-sm font-medium uppercase">Have Questions?</p>
+        <p className="text-sm font-medium uppercase">Need Custom Solutions?</p>
         <h2 className="font-display text-[1rem] font-semibold leading-tight text-[#101914] md:text-[1.25rem]">
-          Fill out the form below
+          Fill out the form below with your specifications.
         </h2>
       </div>
 

@@ -38,11 +38,7 @@ export const FormBlock: React.FC<
   const [hasSubmitted, setHasSubmitted] = useState<boolean>()
   const [error, setError] = useState<{ message: string; status?: string } | undefined>()
   const router = useRouter()
-  const {
-    enableIntro,
-    form: formFromProps,
-    introContent,
-  } = props
+  const { enableIntro, form: formFromProps, introContent } = props
   const form = formFromProps && typeof formFromProps !== 'number' ? formFromProps : null
   const formID = form?.id ?? 0
   const formHTMLID = String(formID || 'form')
@@ -53,21 +49,16 @@ export const FormBlock: React.FC<
 
   const defaultValues = useMemo(
     () =>
-      (form?.fields || []).reduce<Record<string, boolean | number | string>>(
-        (acc, field) => {
-          if ('name' in field && field.name) {
-            const fieldValue =
-              'defaultValue' in field
-                ? (field.defaultValue ?? '') as boolean | number | string
-                : ''
+      (form?.fields || []).reduce<Record<string, boolean | number | string>>((acc, field) => {
+        if ('name' in field && field.name) {
+          const fieldValue =
+            'defaultValue' in field ? ((field.defaultValue ?? '') as boolean | number | string) : ''
 
-            acc[field.name] = fieldValue
-          }
+          acc[field.name] = fieldValue
+        }
 
-          return acc
-        },
-        {},
-      ),
+        return acc
+      }, {}),
     [form],
   )
 
@@ -155,7 +146,7 @@ export const FormBlock: React.FC<
       {enableIntro && introContent && !hasSubmitted && (
         <RichText className="mb-8 lg:mb-12" data={introContent} enableGutter={false} />
       )}
-      <div className="p-4 lg:p-6 border border-border rounded-[0.8rem]">
+      <div>
         <FormProvider {...formMethods}>
           {!isLoading && hasSubmitted && confirmationType === 'message' && confirmationMessage ? (
             <RichText data={confirmationMessage as DefaultTypedEditorState} />

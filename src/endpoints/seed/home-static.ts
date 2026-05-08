@@ -8,8 +8,7 @@ export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
     type: 'none',
   },
   meta: {
-    description:
-      'Cargo control solutions for marine, outdoor, and off-road transport programs.',
+    description: 'Cargo control solutions for marine, outdoor, and off-road transport programs.',
     title: 'Pioneers | Cargo Control Solutions',
   },
   title: 'Home',
@@ -17,18 +16,6 @@ export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
     {
       blockName: 'Homepage Fullscreen Hero',
       blockType: 'fullscreenHero',
-      description: "Don't let the size fool you. Industrial performance in a pocket-sized form factor.",
-      eyebrow: 'Ergonomic Engineering',
-      featureCards: [
-        {
-          description: 'Simple trigger mechanism for effortless use.',
-          title: 'One-Hand Operation',
-        },
-        {
-          description: 'Ready when you are, wherever you go.',
-          title: 'Tactical Portability',
-        },
-      ],
       links: [
         {
           link: {

@@ -1,12 +1,11 @@
 'use client'
+/* eslint-disable @next/next/no-img-element */
 
-import Link from 'next/link'
 import React, { useRef } from 'react'
 
 import type { OemOdmCapabilityBlock as OemOdmCapabilityBlockProps } from '@/payload-types'
 
-import { manufacturingOemOdmContent } from '@/blocks/manufacturing/content'
-import { Button } from '@/components/ui/button'
+import { manufacturingMedia } from '@/blocks/manufacturing/content'
 import { useScrollScene } from '@/utilities/gsap'
 
 export const OemOdmCapabilityBlock: React.FC<
@@ -32,66 +31,33 @@ export const OemOdmCapabilityBlock: React.FC<
   })
 
   return (
-    <section className="bg-white" ref={sectionRef}>
-      <div className="container py-[4.5rem] md:py-24">
-        <div className="max-w-4xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#00a650]">
-            {manufacturingOemOdmContent.eyebrow}
-          </p>
-          <h2 className="mt-4 font-industrial text-4xl uppercase leading-[0.92] tracking-[-0.04em] text-[#10203a] md:text-6xl">
-            {manufacturingOemOdmContent.title}
-          </h2>
-        </div>
+    <section className="relative overflow-hidden bg-[#f8f8f4] text-[#17202a]" ref={sectionRef}>
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-[45%] opacity-[0.035] [background-image:radial-gradient(ellipse_at_18%_42%,transparent_0,transparent_28%,#17202a_29%,transparent_30%),radial-gradient(ellipse_at_17%_42%,transparent_0,transparent_42%,#17202a_43%,transparent_44%),radial-gradient(ellipse_at_18%_44%,transparent_0,transparent_56%,#17202a_57%,transparent_58%)]" />
 
-        <div className="mt-12 grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:items-stretch">
-          <article className="border border-slate-200 bg-[#f5f7fb] p-6 shadow-[0_14px_36px_rgba(15,23,42,0.05)] md:p-7" data-oemodm-reveal>
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#10203a]">OEM</p>
-            <h3 className="mt-4 text-2xl font-semibold uppercase tracking-[-0.03em] text-[#10203a]">
-              {manufacturingOemOdmContent.oem.title}
-            </h3>
-            <ul className="mt-5 grid gap-3 text-sm leading-7 text-slate-600">
-              {manufacturingOemOdmContent.oem.points.map((point) => (
-                <li className="border-l-2 border-[#00a650] pl-4" key={point}>
-                  {point}
-                </li>
-              ))}
-            </ul>
-          </article>
-
-          <div className="flex flex-col items-center justify-center gap-3 px-2" data-oemodm-reveal>
-            {manufacturingOemOdmContent.shared.map((item) => (
-              <span
-                className="whitespace-nowrap border border-[#10203a]/12 bg-[#ece7df] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#10203a]"
-                key={item}
-              >
-                {item}
-              </span>
-            ))}
+      <div className="container relative py-16 md:py-20 lg:py-24">
+        <div className="grid gap-10 lg:grid-cols-[minmax(20rem,33rem)_1fr] lg:items-start xl:gap-16">
+          <div className="pt-2" data-gallery-reveal>
+            <h2 className="mt-9 max-w-[34rem] text-4xl font-semibold leading-[1.15] tracking-[-0.04em] md:text-5xl">
+              Built for your brand. From concept to confidence.{' '}
+            </h2>
+            <p className="mt-8 max-w-[25rem] text-lg leading-8 text-[#737985]">
+              We support OEM and ODM programs with end-to-end capabilities, flexible customization,
+              and reliable production-so you can focus on growing your brand.
+            </p>
           </div>
 
-          <article className="border border-slate-200 bg-[#10203a] p-6 text-white shadow-[0_14px_36px_rgba(15,23,42,0.12)] md:p-7" data-oemodm-reveal>
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-white">ODM</p>
-            <h3 className="mt-4 text-2xl font-semibold uppercase tracking-[-0.03em] text-white">
-              {manufacturingOemOdmContent.odm.title}
-            </h3>
-            <ul className="mt-5 grid gap-3 text-sm leading-7 text-slate-200">
-              {manufacturingOemOdmContent.odm.points.map((point) => (
-                <li className="border-l-2 border-[#00a650] pl-4" key={point}>
-                  {point}
-                </li>
-              ))}
-            </ul>
-          </article>
-        </div>
-
-        <div className="mt-8 flex justify-start" data-oemodm-reveal>
-          <Button
-            asChild
-            className="h-12 rounded-none border border-[#00a650] bg-[#00a650] px-6 text-sm font-semibold uppercase tracking-[0.14em] text-white hover:border-[#119d52] hover:bg-[#119d52]"
-            size="clear"
+          <figure
+            className="group relative aspect-[4/3] w-full overflow-hidden bg-[#d9d9d4]"
+            data-gallery-reveal
           >
-            <Link href={manufacturingOemOdmContent.ctaHref}>{manufacturingOemOdmContent.ctaLabel}</Link>
-          </Button>
+            <img
+              alt={manufacturingMedia.oem.alt}
+              className="h-full w-full object-cover object-center"
+              loading="lazy"
+              src={manufacturingMedia.oem.url}
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(11,15,18,0)_45%,rgba(11,15,18,0.72)_100%)]" />
+          </figure>
         </div>
       </div>
     </section>
