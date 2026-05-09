@@ -4,7 +4,6 @@ import { slugField } from 'payload'
 
 import { anyone } from '../access/anyone'
 import { isAdmin } from '../access/isAdmin'
-import { isEditorOrAdmin } from '../access/isEditorOrAdmin'
 import {
   revalidateDeleteProductCategory,
   revalidateProductCategory,
@@ -13,10 +12,10 @@ import {
 export const ProductCategories: CollectionConfig<'product-categories'> = {
   slug: 'product-categories',
   access: {
-    create: isEditorOrAdmin,
+    create: isAdmin,
     delete: isAdmin,
     read: anyone,
-    update: isEditorOrAdmin,
+    update: isAdmin,
   },
   admin: {
     defaultColumns: ['title', 'sortOrder', 'updatedAt'],
