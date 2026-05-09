@@ -1,13 +1,22 @@
 build
-dist / media
+dist
 node_modules
 .DS_Store
 .env
+.env.*
+!.env.example
 .env.local
 .env.production
+.env*.local
+.env*.production
 .next
 .vercel
 .codex
+*.tsbuildinfo
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Payload default media upload directory
 public/media/
