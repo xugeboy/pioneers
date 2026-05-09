@@ -216,8 +216,8 @@ export interface Page {
   layout: (
     | FullscreenHeroBlock
     | AboutHeroBlock
-    | AboutClientsBlock
-    | CompanyTimelineBlock
+    | AboutCompanyProfileBlock
+    | AboutAdvantageBlock
     | AboutClosingCtaBlock
     | CertificationsLibraryBlock
     | ManufacturingOverviewBlock
@@ -1199,21 +1199,21 @@ export interface AboutHeroBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "AboutClientsBlock".
+ * via the `definition` "AboutCompanyProfileBlock".
  */
-export interface AboutClientsBlock {
+export interface AboutCompanyProfileBlock {
   id?: string | null;
   blockName?: string | null;
-  blockType: 'aboutClients';
+  blockType: 'aboutCompanyProfile';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CompanyTimelineBlock".
+ * via the `definition` "AboutAdvantageBlock".
  */
-export interface CompanyTimelineBlock {
+export interface AboutAdvantageBlock {
   id?: string | null;
   blockName?: string | null;
-  blockType: 'companyTimeline';
+  blockType: 'aboutAdvantage';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1713,8 +1713,8 @@ export interface PagesSelect<T extends boolean = true> {
     | {
         fullscreenHero?: T | FullscreenHeroBlockSelect<T>;
         aboutHero?: T | AboutHeroBlockSelect<T>;
-        aboutClients?: T | AboutClientsBlockSelect<T>;
-        companyTimeline?: T | CompanyTimelineBlockSelect<T>;
+        aboutCompanyProfile?: T | AboutCompanyProfileBlockSelect<T>;
+        aboutAdvantage?: T | AboutAdvantageBlockSelect<T>;
         aboutClosingCta?: T | AboutClosingCtaBlockSelect<T>;
         certLibrary?: T | CertificationsLibraryBlockSelect<T>;
         manufacturingOverview?: T | ManufacturingOverviewBlockSelect<T>;
@@ -1785,17 +1785,17 @@ export interface AboutHeroBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "AboutClientsBlock_select".
+ * via the `definition` "AboutCompanyProfileBlock_select".
  */
-export interface AboutClientsBlockSelect<T extends boolean = true> {
+export interface AboutCompanyProfileBlockSelect<T extends boolean = true> {
   id?: T;
   blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CompanyTimelineBlock_select".
+ * via the `definition` "AboutAdvantageBlock_select".
  */
-export interface CompanyTimelineBlockSelect<T extends boolean = true> {
+export interface AboutAdvantageBlockSelect<T extends boolean = true> {
   id?: T;
   blockName?: T;
 }

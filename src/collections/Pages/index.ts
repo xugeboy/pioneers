@@ -14,10 +14,10 @@ import { FormBlock } from '../../blocks/Form/config'
 import { GoogleMapLocation } from '../../blocks/GoogleMapLocation/config'
 import { LatestBlogs } from '../../blocks/LatestBlogs/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
-import { AboutClients } from '../../blocks/aboutus/AboutClients/config'
+import { AboutAdvantage } from '../../blocks/aboutus/AboutAdvantage/config'
 import { AboutClosingCta } from '../../blocks/aboutus/AboutClosingCta/config'
+import { AboutCompanyProfile } from '../../blocks/aboutus/AboutCompanyProfile/config'
 import { AboutHero } from '../../blocks/aboutus/AboutHero/config'
-import { CompanyTimeline } from '../../blocks/aboutus/CompanyTimeline/config'
 import { CertificationsLibrary } from '../../blocks/certifications/CertificationsLibrary/config'
 import { FactoryGallery } from '../../blocks/manufacturing/FactoryGallery/config'
 import { ManufacturingInquiry } from '../../blocks/manufacturing/ManufacturingInquiry/config'
@@ -95,8 +95,8 @@ export const Pages: CollectionConfig<'pages'> = {
               blocks: [
                 FullscreenHero,
                 AboutHero,
-                AboutClients,
-                CompanyTimeline,
+                AboutCompanyProfile,
+                AboutAdvantage,
                 AboutClosingCta,
                 CertificationsLibrary,
                 ManufacturingOverview,

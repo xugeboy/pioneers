@@ -11,10 +11,10 @@ import { GoogleMapLocationBlock } from '@/blocks/GoogleMapLocation/Component'
 import { FAQAccordionBlock } from '@/blocks/FAQAccordion/Component'
 import { LatestBlogsBlock } from '@/blocks/LatestBlogs/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
-import { AboutClientsBlock } from '@/blocks/aboutus/AboutClients/Component'
+import { AboutAdvantageBlock } from '@/blocks/aboutus/AboutAdvantage/Component'
 import { AboutClosingCtaBlock } from '@/blocks/aboutus/AboutClosingCta/Component'
+import { AboutCompanyProfileBlock } from '@/blocks/aboutus/AboutCompanyProfile/Component'
 import { AboutHeroBlock } from '@/blocks/aboutus/AboutHero/Component'
-import { CompanyTimelineBlock } from '@/blocks/aboutus/CompanyTimeline/Component'
 import { CertificationsLibraryBlock } from '@/blocks/certifications/CertificationsLibrary/Component'
 import { HomeApplicationsNavBlock } from '@/blocks/home/HomeApplicationsNav/Component'
 import { HomeClosingCtaBlock } from '@/blocks/home/HomeClosingCta/Component'
@@ -26,13 +26,13 @@ import { OemOdmCapabilityBlock } from '@/blocks/manufacturing/OemOdmCapability/C
 import { QualityControlBlock } from '@/blocks/manufacturing/QualityControl/Component'
 
 const blockComponents = {
-  aboutClients: AboutClientsBlock,
+  aboutAdvantage: AboutAdvantageBlock,
   aboutClosingCta: AboutClosingCtaBlock,
+  aboutCompanyProfile: AboutCompanyProfileBlock,
   aboutHero: AboutHeroBlock,
   archive: ArchiveBlock,
   blogCarousel: BlogCarouselBlock,
   certLibrary: CertificationsLibraryBlock,
-  companyTimeline: CompanyTimelineBlock,
   content: ContentBlock,
   cta: CallToActionBlock,
   faqAccordion: FAQAccordionBlock,
@@ -71,8 +71,8 @@ export const RenderBlocks: React.FC<{
           const spacingClass =
             blockType === 'fullscreenHero' ||
             blockType === 'aboutHero' ||
-            blockType === 'aboutClients' ||
-            blockType === 'companyTimeline' ||
+            blockType === 'aboutCompanyProfile' ||
+            blockType === 'aboutAdvantage' ||
             blockType === 'aboutClosingCta' ||
             blockType === 'certLibrary' ||
             blockType === 'manufacturingOverview' ||

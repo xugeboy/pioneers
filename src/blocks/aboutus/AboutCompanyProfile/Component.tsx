@@ -3,13 +3,13 @@
 
 import React, { useRef } from 'react'
 
-import type { CompanyTimelineBlock as CompanyTimelineBlockProps } from '@/payload-types'
+import type { AboutCompanyProfileBlock as AboutCompanyProfileBlockProps } from '@/payload-types'
 
-import { aboutMedia } from '@/blocks/aboutus/content'
+import { aboutCompanyProfileContent } from '@/blocks/aboutus/content'
 import { useScrollScene } from '@/utilities/gsap'
 
-export const CompanyTimelineBlock: React.FC<
-  CompanyTimelineBlockProps & { disableInnerContainer?: boolean }
+export const AboutCompanyProfileBlock: React.FC<
+  AboutCompanyProfileBlockProps & { disableInnerContainer?: boolean }
 > = () => {
   const sectionRef = useRef<HTMLElement | null>(null)
 
@@ -37,32 +37,23 @@ export const CompanyTimelineBlock: React.FC<
           <div className="overflow-hidden bg-[#e7e8e3]" data-about-company-reveal>
             <div className="aspect-[16/9] lg:aspect-[4/3]">
               <img
-                alt={aboutMedia.hero.alt}
+                alt={aboutCompanyProfileContent.image.alt}
                 className="h-full w-full object-cover object-[64%_center]"
                 loading="lazy"
-                src={aboutMedia.hero.url}
+                src={aboutCompanyProfileContent.image.url}
               />
             </div>
           </div>
 
           <div data-about-company-reveal>
             <h2 className="font-industrial text-4xl font-bold uppercase leading-none tracking-wide text-[#1b2430] md:text-5xl">
-              About Us
+              {aboutCompanyProfileContent.title}
             </h2>
 
             <div className="mt-6 space-y-6 text-base leading-8 text-[#5f6670] md:text-lg md:leading-9">
-              <p>
-                Pioneers Gears has grown from a focused tie-down manufacturer into a reliable
-                partner for outdoor, overlanding, cargo control, and custom restraint products. We
-                supply practical, durable gear for brands and buyers who need consistency from
-                development through delivery.
-              </p>
-
-              <p>
-                Our work is built around real use, clear communication, and dependable production.
-                From material selection and sampling to quality checks and packing, we help
-                customers shape product programs that are easier to launch, repeat, and trust.
-              </p>
+              {aboutCompanyProfileContent.body.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
             </div>
           </div>
         </div>
