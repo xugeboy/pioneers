@@ -1,7 +1,7 @@
 'use client'
 /* eslint-disable @next/next/no-img-element */
 
-import { ArrowRight, ClipboardCheck, Globe2, MessageCircleMore, Mountain } from 'lucide-react'
+import { ArrowRight, ClipboardCheck, Globe2, MessageCircleMore } from 'lucide-react'
 import Link from 'next/link'
 import React, { useRef } from 'react'
 

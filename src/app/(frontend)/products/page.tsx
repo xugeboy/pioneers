@@ -3,26 +3,19 @@ import type { Metadata } from 'next/types'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { PageRange } from '@/components/PageRange'
 import { Pagination } from '@/components/Pagination'
-import { ProductCategoryCard } from '@/components/ProductCategoryCard'
 import { ProductLeadCard, type ProductLeadCardData } from '@/components/ProductLeadCard'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 
 import PageClient from './page.client'
-import {
-  PRODUCT_PAGE_LIMIT,
-  getAllProductCategories,
-  getTopLevelProductCategories,
-} from '@/utilities/productCategories'
+import { PRODUCT_PAGE_LIMIT } from '@/utilities/productCategories'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
 
 export default async function ProductsPage() {
   const payload = await getPayload({ config: configPromise })
-  const allCategories = await getAllProductCategories(payload)
-  const topLevelCategories = getTopLevelProductCategories(allCategories)
 
   const products = await payload.find({
     collection: 'products',

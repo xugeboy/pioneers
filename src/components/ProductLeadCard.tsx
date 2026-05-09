@@ -6,7 +6,6 @@ import React, { useEffect, useState } from 'react'
 import type { Product } from '@/payload-types'
 
 import { Media } from '@/components/Media'
-import { Button } from '@/components/ui/button'
 import { cn } from '@/utilities/ui'
 
 export type ProductLeadCardData = Pick<
@@ -31,7 +30,6 @@ export const ProductLeadCard: React.FC<{
 }> = ({ className, product, layout = 'grid', reverseInList = false }) => {
   const { model, primaryImage, secondaryImage, slug, summary, title } = product
   const href = slug ? `/products/${slug}` : '/products'
-  const quoteHref = `${href}?intent=quote`
   const isListLayout = layout === 'list'
   const [showSecondaryImage, setShowSecondaryImage] = useState(false)
 

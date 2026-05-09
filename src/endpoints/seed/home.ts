@@ -47,14 +47,6 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
         blockType: 'homeApplicationsNav',
       },
       {
-        blockName: 'Homepage Product Families',
-        blockType: 'homeProductFamilies',
-      },
-      {
-        blockName: 'Homepage Strengths',
-        blockType: 'homeStrengths',
-      },
-      {
         blockName: 'Homepage Trust Signals',
         blockType: 'homeTrustSignals',
       },
