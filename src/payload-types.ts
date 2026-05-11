@@ -486,6 +486,7 @@ export interface Media {
    * Complete frontend asset URL generated from the uploaded media path.
    */
   frontendURL?: string | null;
+  prefix?: string | null;
   folder?: (number | null) | FolderInterface;
   updatedAt: string;
   createdAt: string;
@@ -1065,10 +1066,6 @@ export interface Form {
         bcc?: string | null;
         replyTo?: string | null;
         emailFrom?: string | null;
-        /**
-         * Select a published Resend template. Leave empty to use the message field.
-         */
-        resendTemplateID?: string | null;
         subject: string;
         /**
          * Enter the message that should be sent in this email.
@@ -1116,6 +1113,7 @@ export interface PhoneField {
 export interface Video {
   id: number;
   title?: string | null;
+  prefix?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -1135,6 +1133,7 @@ export interface Video {
 export interface File {
   id: number;
   title?: string | null;
+  prefix?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -2156,6 +2155,7 @@ export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
   frontendURL?: T;
+  prefix?: T;
   folder?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -2249,6 +2249,7 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface FilesSelect<T extends boolean = true> {
   title?: T;
+  prefix?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -2267,6 +2268,7 @@ export interface FilesSelect<T extends boolean = true> {
  */
 export interface VideosSelect<T extends boolean = true> {
   title?: T;
+  prefix?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -2468,7 +2470,6 @@ export interface FormsSelect<T extends boolean = true> {
         bcc?: T;
         replyTo?: T;
         emailFrom?: T;
-        resendTemplateID?: T;
         subject?: T;
         message?: T;
         id?: T;

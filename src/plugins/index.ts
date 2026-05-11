@@ -14,6 +14,7 @@ import { isAdmin } from '@/access/isAdmin'
 import { isAdminUser } from '@/access/roles'
 import { phoneField } from '@/blocks/Form/phoneField'
 import { textareaField } from '@/blocks/Form/textareaField'
+import { fixFormBuilderEmailHTML } from '@/email/formEmailSerializer'
 
 import { Blog, Page } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -70,6 +71,7 @@ export const plugins: Plugin[] = [
     generateURL,
   }),
   formBuilderPlugin({
+    beforeEmail: fixFormBuilderEmailHTML,
     fields: {
       phone: phoneField,
       textarea: textareaField,

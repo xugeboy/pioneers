@@ -44,7 +44,14 @@ type ProductCategorySitemapDoc = {
     | null
 }
 
-const RESERVED_PAGE_SLUGS = new Set(['home', 'blogs', 'products', 'product-categories', 'search'])
+const RESERVED_PAGE_SLUGS = new Set([
+  'home',
+  'blogs',
+  'products',
+  'product-categories',
+  'search',
+  'thank-you',
+])
 
 const normalizePath = (path: string) => {
   const trimmed = path.trim()
@@ -60,7 +67,8 @@ const toAbsoluteUrl = (path: string) => `${getCanonicalSiteUrl()}${normalizePath
 const getLastModified = (value?: string | null) => value || new Date().toISOString()
 
 const getLatestUpdatedAt = (...values: Array<string | null | undefined>) =>
-  values.filter(Boolean).sort((left, right) => String(right).localeCompare(String(left)))[0] || undefined
+  values.filter(Boolean).sort((left, right) => String(right).localeCompare(String(left)))[0] ||
+  undefined
 
 const getProductCategoryPath = (category: ProductCategorySitemapDoc) => {
   const breadcrumbPath = category.breadcrumbs?.[category.breadcrumbs.length - 1]?.url
@@ -217,7 +225,13 @@ export const getSiteSitemap = unstable_cache(
       ]
     })
 
-    return [...coreEntries, ...pageEntries, ...blogEntries, ...productEntries, ...productCategoryEntries]
+    return [
+      ...coreEntries,
+      ...pageEntries,
+      ...blogEntries,
+      ...productEntries,
+      ...productCategoryEntries,
+    ]
   },
   [SITE_SITEMAP_TAG],
   {
@@ -231,7 +245,7 @@ export const getSiteRobots = (): MetadataRoute.Robots => {
   return {
     rules: {
       userAgent: '*',
-      disallow: ['/admin', '/admin/*'],
+      disallow: ['/admin', '/admin/*', '/thank-you'],
     },
     sitemap: `${siteUrl}/sitemap.xml`,
   }
