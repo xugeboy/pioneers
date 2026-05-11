@@ -80,7 +80,7 @@ export const HomeClosingCtaBlock: React.FC<
               className="h-12 rounded-none bg-[#00A650] px-8 text-xs font-bold uppercase tracking-[0.15em] text-white hover:bg-[#008f45]"
               size="clear"
             >
-              <Link href="/contact" className="flex items-center gap-2">
+              <Link href="/request-quote" className="flex items-center gap-2">
                 Contact Us Today
                 <ArrowRight className="size-4" />
               </Link>

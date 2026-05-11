@@ -126,7 +126,7 @@ export const HomeTrustSignalsBlock: React.FC<
                 className="h-12 rounded-none bg-[#00A650] px-8 text-xs font-bold uppercase tracking-widest text-white hover:bg-[#7a7e58]"
                 size="clear"
               >
-                <Link href="/about" className="flex items-center gap-2">
+                <Link href="/about-us" className="flex items-center gap-2">
                   Learn More About Us
                   <ArrowRight className="size-4" />
                 </Link>

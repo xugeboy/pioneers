@@ -87,7 +87,7 @@ export const ManufacturingInquiryBlock: React.FC<
                 className="h-14 min-w-[13rem] rounded-[3px] border border-[#00A650] bg-[#00A650] px-7 text-sm font-bold uppercase tracking-[0.08em] text-white hover:border-[#00A650] hover:bg-[#00A650]"
                 size="clear"
               >
-                <Link className="flex items-center justify-center gap-5" href="/contact-us">
+                <Link className="flex items-center justify-center gap-5" href="/request-quote">
                   TALK TO OUR TEAM
                   <ArrowRight className="size-4" />
                 </Link>
