@@ -1,0 +1,281 @@
+.specs-table-field {
+  margin-bottom: calc(var(--base) * 1.5);
+
+  &--has-error {
+    .specs-table-field__table {
+      border-color: var(--theme-error-500);
+    }
+  }
+
+  &__header,
+  &__header-actions,
+  &__importer-top,
+  &__controls,
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--base) * 0.5);
+  }
+
+  &__header {
+    justify-content: space-between;
+    margin-bottom: calc(var(--base) * 0.6);
+  }
+
+  &__collapse-toggle {
+    display: inline-flex;
+    min-width: 0;
+    align-items: center;
+    gap: calc(var(--base) * 0.35);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--theme-text);
+    cursor: pointer;
+    text-align: left;
+
+    svg {
+      flex: 0 0 auto;
+      color: var(--theme-elevation-600);
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: var(--theme-success-700);
+      outline: none;
+
+      svg {
+        color: var(--theme-success-700);
+      }
+    }
+  }
+
+  &__title {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    font-size: 1.125rem;
+    font-weight: 600;
+
+    span {
+        margin-left: 0.125rem;
+        color: var(--theme-error-500);
+    }
+  }
+
+  &__count {
+    flex: 0 0 auto;
+    color: var(--theme-elevation-600);
+    font-size: 0.8125rem;
+    font-weight: 400;
+  }
+
+  &__header-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  &__collapsed-summary {
+    padding: calc(var(--base) * 0.65) calc(var(--base) * 0.75);
+    border: 1px solid var(--theme-elevation-150);
+    border-radius: var(--border-radius-m);
+    background: var(--theme-elevation-50);
+    color: var(--theme-elevation-650);
+    font-size: 0.875rem;
+  }
+
+  &__importer {
+    margin-bottom: calc(var(--base) * 0.8);
+    padding: calc(var(--base) * 0.8);
+    border: 1px solid var(--theme-elevation-150);
+    border-radius: var(--border-radius-m);
+    background: var(--theme-elevation-50);
+  }
+
+  &__importer-top {
+    justify-content: space-between;
+    margin-bottom: calc(var(--base) * 0.55);
+
+    p {
+      margin: 0;
+      color: var(--theme-elevation-650);
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+  }
+
+  &__textarea {
+    width: 100%;
+    min-height: 9rem;
+    padding: calc(var(--base) * 0.6);
+    border: 1px solid var(--theme-elevation-200);
+    border-radius: var(--border-radius-s);
+    background: var(--theme-input-bg);
+    color: var(--theme-text);
+    font: inherit;
+    line-height: 1.5;
+    resize: vertical;
+
+    &:focus {
+      border-color: var(--theme-success-500);
+      outline: none;
+      box-shadow: 0 0 0 2px var(--theme-success-100);
+    }
+  }
+
+  &__controls {
+    justify-content: space-between;
+    margin-top: calc(var(--base) * 0.6);
+  }
+
+  &__checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--base) * 0.35);
+    color: var(--theme-elevation-700);
+    font-size: 0.875rem;
+    cursor: pointer;
+
+    input {
+      cursor: pointer;
+    }
+  }
+
+  &__actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  &__table {
+    overflow: hidden;
+    border: 1px solid var(--theme-elevation-150);
+    border-radius: var(--border-radius-m);
+    background: var(--theme-bg);
+  }
+
+  &__table-head,
+  &__table-row {
+    display: grid;
+    grid-template-columns: minmax(12rem, 0.9fr) minmax(12rem, 1.1fr) 3rem;
+    gap: calc(var(--base) * 0.5);
+    align-items: center;
+  }
+
+  &__table-head {
+    padding: calc(var(--base) * 0.45) calc(var(--base) * 0.6);
+    border-bottom: 1px solid var(--theme-elevation-150);
+    background: var(--theme-elevation-100);
+    color: var(--theme-elevation-650);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  &__table-row {
+    padding: calc(var(--base) * 0.4) calc(var(--base) * 0.6);
+
+    & + & {
+      border-top: 1px solid var(--theme-elevation-100);
+    }
+
+    input {
+      width: 100%;
+      min-width: 0;
+      height: 2.25rem;
+      padding: 0 calc(var(--base) * 0.45);
+      border: 1px solid var(--theme-elevation-150);
+      border-radius: var(--border-radius-s);
+      background: var(--theme-input-bg);
+      color: var(--theme-text);
+      font: inherit;
+
+      &:focus {
+        border-color: var(--theme-success-500);
+        outline: none;
+        box-shadow: 0 0 0 2px var(--theme-success-100);
+      }
+    }
+  }
+
+  &__icon-button {
+    display: inline-flex;
+    width: 2.25rem;
+    height: 2.25rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    border-radius: var(--border-radius-s);
+    background: transparent;
+    color: var(--theme-elevation-600);
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      border-color: var(--theme-error-200);
+      background: var(--theme-error-100);
+      color: var(--theme-error-700);
+      outline: none;
+    }
+  }
+
+  &__empty {
+    padding: var(--base);
+    color: var(--theme-elevation-600);
+    font-size: 0.875rem;
+  }
+
+  &__message {
+    margin: calc(var(--base) * 0.6) 0 0;
+    color: var(--theme-success-700);
+    font-size: 0.875rem;
+
+    &--error {
+      color: var(--theme-error-600);
+    }
+  }
+
+  @media (max-width: 768px) {
+    &__header,
+    &__importer-top,
+    &__controls {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    &__header-actions,
+    &__actions {
+      justify-content: flex-start;
+    }
+
+    &__collapse-toggle {
+      width: 100%;
+    }
+
+    &__table {
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+    }
+
+    &__table-head {
+      display: none;
+    }
+
+    &__table-row {
+      grid-template-columns: 1fr auto;
+      margin-bottom: calc(var(--base) * 0.5);
+      padding: calc(var(--base) * 0.5);
+      border: 1px solid var(--theme-elevation-150);
+      border-radius: var(--border-radius-m);
+      background: var(--theme-bg);
+
+      input {
+        grid-column: 1;
+      }
+
+      button {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+      }
+    }
+  }
+}

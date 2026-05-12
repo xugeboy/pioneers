@@ -156,6 +156,11 @@ export const Products: CollectionConfig<'products'> = {
       label: 'Specification Table',
       required: true,
       minRows: 1,
+      admin: {
+        components: {
+          Field: '@/components/SpecsBulkImport',
+        },
+      },
       fields: [
         {
           name: 'label',
