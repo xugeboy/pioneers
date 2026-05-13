@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 
 import { Breadcrumbs } from '@/components/Breadcrumbs'
+import { JsonLd } from '@/components/JsonLd'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
 import { getPayload, type RequiredDataFromCollectionSlug } from 'payload'
@@ -11,6 +12,7 @@ import { homeStatic } from '@/endpoints/home-static'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
+import { getWebPageJsonLd } from '@/utilities/jsonLd'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
@@ -50,6 +52,7 @@ export default async function Page({ params: paramsPromise }: Args) {
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
   const url = '/' + decodedSlug
+  const pagePath = decodedSlug === 'home' ? '/' : url
   let page: RequiredDataFromCollectionSlug<'pages'> | null
 
   page = await queryPageBySlug({
@@ -74,6 +77,7 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   return (
     <article className={hasImmersiveStart ? '' : 'pt-[68px] md:pt-24'}>
+      <JsonLd data={getWebPageJsonLd(page, pagePath)} />
       <PageClient />
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />

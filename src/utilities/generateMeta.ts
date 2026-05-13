@@ -30,8 +30,8 @@ export const generateMeta = async (args: {
   const ogImage = getImageURL(doc?.meta?.image)
 
   const title = doc?.meta?.title
-    ? doc?.meta?.title + ' | Payload Website Template'
-    : 'Payload Website Template'
+    ? doc?.meta?.title + ' | China 16+ years OEM Factory'
+    : 'China 16+ years OEM Factory'
 
   const slug = Array.isArray(doc?.slug) ? doc.slug.join('/') : doc?.slug
   const path = !slug ? '/' : collection === 'blogs' ? `/blogs/${slug}` : `/${slug}`

@@ -2,7 +2,9 @@ import type { Metadata } from 'next/types'
 
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { CollectionArchive } from '@/components/CollectionArchive'
+import { JsonLd } from '@/components/JsonLd'
 import { Pagination } from '@/components/Pagination'
+import { getBreadcrumbJsonLd, getCollectionPageJsonLd } from '@/utilities/jsonLd'
 import {
   BLOG_ARCHIVE_PAGE_SIZE,
   getBlogArchivePage,
@@ -33,17 +35,30 @@ export default async function Page({ params: paramsPromise }: Args) {
     excludeIDs: excludedIDs,
     page: sanitizedPageNumber,
   })
+  const pagePath = `/blogs/page/${sanitizedPageNumber}`
+  const breadcrumbItems = [
+    { href: '/', label: 'Home' },
+    { href: '/blogs', label: 'Blogs' },
+    { label: `Page ${sanitizedPageNumber}` },
+  ]
 
   return (
     <div className="pt-[68px] md:pt-24">
-      <PageClient />
-      <Breadcrumbs
-        items={[
-          { href: '/', label: 'Home' },
-          { href: '/blogs', label: 'Blogs' },
-          { label: `Page ${sanitizedPageNumber}` },
+      <JsonLd
+        data={[
+          getCollectionPageJsonLd({
+            items: archiveBlogs.docs.map((blog) => ({
+              name: blog.title,
+              url: `/blogs/${blog.slug}`,
+            })),
+            name: `PioneersGears Blog Page ${sanitizedPageNumber}`,
+            path: pagePath,
+          }),
+          getBreadcrumbJsonLd(breadcrumbItems, pagePath),
         ]}
       />
+      <PageClient />
+      <Breadcrumbs items={breadcrumbItems} />
       <div className="container mb-12">
         <h1 className="font-display text-3xl text-[#162019] md:text-4xl">Blogs</h1>
       </div>
@@ -67,7 +82,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const { pageNumber } = await paramsPromise
 
   return {
-    title: `Payload Website Template Blogs Page ${pageNumber || ''}`,
+    title: `China 16+ years OEM Factory Blogs Page ${pageNumber || ''}`,
   }
 }
 

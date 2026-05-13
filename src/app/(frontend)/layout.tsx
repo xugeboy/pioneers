@@ -7,11 +7,13 @@ import { GeistSans } from 'geist/font/sans'
 import React from 'react'
 
 import { AdminBar } from '@/components/AdminBar'
+import { JsonLd } from '@/components/JsonLd'
 import { MarketingBodyScripts, MarketingHeadScripts } from '@/components/MarketingScripts'
 import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
+import { getGlobalJsonLd } from '@/utilities/jsonLd'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
 
@@ -33,17 +35,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       lang="en"
       suppressHydrationWarning
     >
-      <head>
-        <InitTheme />
-        <MarketingHeadScripts />
-        <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="shortcut icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <meta name="apple-mobile-web-app-title" content="MyWebSite" />
-        <link rel="manifest" href="/site.webmanifest" />
-      </head>
       <body>
+        <InitTheme />
+        <JsonLd data={getGlobalJsonLd()} />
+        <MarketingHeadScripts />
         <MarketingBodyScripts />
         <Providers>
           <AdminBar
@@ -62,6 +57,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 }
 
 export const metadata: Metadata = {
+  appleWebApp: {
+    title: 'PioneersGears',
+  },
+  icons: {
+    apple: [{ sizes: '180x180', url: '/apple-touch-icon.png' }],
+    icon: [
+      { sizes: '96x96', type: 'image/png', url: '/favicon-96x96.png' },
+      { type: 'image/svg+xml', url: '/favicon.svg' },
+    ],
+    shortcut: ['/favicon.ico'],
+  },
+  manifest: '/site.webmanifest',
   metadataBase: new URL(getServerSideURL()),
   openGraph: mergeOpenGraph(),
   twitter: {

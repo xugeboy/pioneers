@@ -1,6 +1,7 @@
 import type { Metadata } from 'next/types'
 
 import { Breadcrumbs } from '@/components/Breadcrumbs'
+import { JsonLd } from '@/components/JsonLd'
 import { Media } from '@/components/Media'
 import ProductCategoryBrowserSidebar from '@/components/ProductCategoryBrowserSidebar'
 import ProductCategoryResults from '@/components/ProductCategoryResults'
@@ -23,6 +24,7 @@ import {
   productCardSelect,
   resolveProductCategoryBySegments,
 } from '@/utilities/productCategories'
+import { getBreadcrumbJsonLd, getProductCategoryJsonLd } from '@/utilities/jsonLd'
 
 type Args = {
   params: Promise<{
@@ -79,20 +81,28 @@ export default async function ProductCategoryPage({ params: paramsPromise }: Arg
   ) {
     notFound()
   }
+  const breadcrumbItems =
+    requestedPageNumber > 1
+      ? [
+          ...getProductCategoryBreadcrumbItems(currentCategory),
+          { label: `Page ${requestedPageNumber}` },
+        ]
+      : getProductCategoryBreadcrumbItems(currentCategory)
+  const pagePath =
+    requestedPageNumber > 1
+      ? `${getProductCategoryHref(currentCategory)}/page/${requestedPageNumber}`
+      : getProductCategoryHref(currentCategory)
 
   return (
     <div className=" pt-16 md:pt-24">
-      <PageClient />
-      <Breadcrumbs
-        items={
-          requestedPageNumber > 1
-            ? [
-                ...getProductCategoryBreadcrumbItems(currentCategory),
-                { label: `Page ${requestedPageNumber}` },
-              ]
-            : getProductCategoryBreadcrumbItems(currentCategory)
-        }
+      <JsonLd
+        data={[
+          getProductCategoryJsonLd(currentCategory, products.docs),
+          getBreadcrumbJsonLd(breadcrumbItems, pagePath),
+        ]}
       />
+      <PageClient />
+      <Breadcrumbs items={breadcrumbItems} />
 
       <div className="container mb-8">
         <div className="max-w-3xl space-y-3">

@@ -20,7 +20,7 @@ import { Blog, Page } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 
 const generateTitle: GenerateTitle<Blog | Page> = ({ doc }) => {
-  return doc?.title ? `${doc.title} | Payload Website Template` : 'Payload Website Template'
+  return doc?.title ? `${doc.title} | China 16+ years OEM Factory` : 'China 16+ years OEM Factory'
 }
 
 const generateURL: GenerateURL<Blog | Page> = ({ collectionConfig, doc }) => {

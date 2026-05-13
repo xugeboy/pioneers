@@ -3,12 +3,14 @@ import type { Metadata } from 'next'
 import { RelatedBlogs } from '@/blocks/RelatedBlogs/Component'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { BlogRelatedProductsSidebar } from '@/components/BlogRelatedProductsSidebar'
+import { JsonLd } from '@/components/JsonLd'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { Media } from '@/components/Media'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import RichText from '@/components/RichText'
 import { cn } from '@/utilities/ui'
 import { generateMeta } from '@/utilities/generateMeta'
+import { getBlogPostingJsonLd, getBreadcrumbJsonLd, getWebPageJsonLd } from '@/utilities/jsonLd'
 import { queryBlogBySlug } from '@/utilities/queryBlogs'
 import configPromise from '@payload-config'
 import { draftMode } from 'next/headers'
@@ -72,20 +74,26 @@ export default async function Blog({ params: paramsPromise }: Args) {
     },
   })
   const hasRelatedProducts = relatedProducts.docs.length > 0
+  const breadcrumbItems = [
+    { href: '/', label: 'Home' },
+    { href: '/blogs', label: 'Blogs' },
+    { label: blog.title },
+  ]
 
   return (
     <article className="pt-[68px] pb-16 md:pt-24">
+      <JsonLd
+        data={[
+          getWebPageJsonLd(blog, url),
+          getBlogPostingJsonLd(blog),
+          getBreadcrumbJsonLd(breadcrumbItems, url),
+        ]}
+      />
       <PageClient />
       <PayloadRedirects disableNotFound url={url} />
       {draft ? <LivePreviewListener /> : null}
 
-      <Breadcrumbs
-        items={[
-          { href: '/', label: 'Home' },
-          { href: '/blogs', label: 'Blogs' },
-          { label: blog.title },
-        ]}
-      />
+      <Breadcrumbs items={breadcrumbItems} />
 
       <div
         className={cn(

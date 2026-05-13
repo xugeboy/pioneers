@@ -1,6 +1,7 @@
 import type { Metadata } from 'next/types'
 
 import { Breadcrumbs } from '@/components/Breadcrumbs'
+import { JsonLd } from '@/components/JsonLd'
 import { Media } from '@/components/Media'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
@@ -15,6 +16,7 @@ import {
   getProductCategoryHref,
   getTopLevelProductCategories,
 } from '@/utilities/productCategories'
+import { getCollectionPageJsonLd } from '@/utilities/jsonLd'
 import { cn } from '@/utilities/ui'
 
 export const dynamic = 'force-static'
@@ -24,9 +26,20 @@ export default async function ProductCategoriesPage() {
   const payload = await getPayload({ config: configPromise })
   const allCategories = await getAllProductCategories(payload)
   const topLevelCategories = getTopLevelProductCategories(allCategories)
+  const categoryItems = topLevelCategories.map((category) => ({
+    name: category.title,
+    url: getProductCategoryHref(category),
+  }))
 
   return (
     <div className=" pt-16 md:pt-24">
+      <JsonLd
+        data={getCollectionPageJsonLd({
+          items: categoryItems,
+          name: 'Product Categories',
+          path: '/product-categories',
+        })}
+      />
       <PageClient />
       <Breadcrumbs items={[{ href: '/', label: 'Home' }, { label: 'Product Categories' }]} />
 

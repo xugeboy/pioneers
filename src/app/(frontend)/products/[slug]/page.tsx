@@ -8,14 +8,13 @@ import { notFound } from 'next/navigation'
 
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
+import { JsonLd } from '@/components/JsonLd'
 import { ProductDetailShell } from '@/components/ProductDetailShell'
 import { ProductInterestCarousel } from '@/components/ProductInterestCarousel'
 import type { ProductLeadCardData } from '@/components/ProductLeadCard'
-import type {
-  Form as PayloadForm,
-  Product as PayloadProduct,
-} from '@/payload-types'
+import type { Form as PayloadForm, Product as PayloadProduct } from '@/payload-types'
 import { getProductCategoryBreadcrumbItems } from '@/utilities/productCategories'
+import { getBreadcrumbJsonLd, getProductJsonLd } from '@/utilities/jsonLd'
 
 import PageClient from './page.client'
 
@@ -114,9 +113,13 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
     ),
     { label: title || 'Product' },
   ]
+  const productPath = `/products/${decodedSlug}`
 
   return (
     <article className="pt-[68px] md:pt-24">
+      <JsonLd
+        data={[getProductJsonLd(product), getBreadcrumbJsonLd(breadcrumbItems, productPath)]}
+      />
       <PageClient />
       <Breadcrumbs items={breadcrumbItems} />
 

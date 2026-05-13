@@ -1,6 +1,7 @@
 import type { Metadata } from 'next/types'
 
 import { Breadcrumbs } from '@/components/Breadcrumbs'
+import { JsonLd } from '@/components/JsonLd'
 import { PageRange } from '@/components/PageRange'
 import { Pagination } from '@/components/Pagination'
 import { ProductLeadCard, type ProductLeadCardData } from '@/components/ProductLeadCard'
@@ -11,6 +12,7 @@ import React from 'react'
 
 import PageClient from '../../page.client'
 import { PRODUCT_PAGE_LIMIT } from '@/utilities/productCategories'
+import { getBreadcrumbJsonLd, getCollectionPageJsonLd } from '@/utilities/jsonLd'
 
 export const revalidate = 600
 
@@ -51,17 +53,31 @@ export default async function ProductsPageNumber({ params: paramsPromise }: Args
   if (products.totalPages > 0 && sanitizedPageNumber > products.totalPages) {
     notFound()
   }
+  const pagePath = `/products/page/${sanitizedPageNumber}`
+  const breadcrumbItems = [
+    { href: '/', label: 'Home' },
+    { href: '/products', label: 'Products' },
+    { label: `Page ${sanitizedPageNumber}` },
+  ]
+  const productItems = (products.docs as ProductLeadCardData[]).map((product) => ({
+    name: product.title,
+    url: `/products/${product.slug}`,
+  }))
 
   return (
     <div className="pt-[68px] md:pt-24">
-      <PageClient />
-      <Breadcrumbs
-        items={[
-          { href: '/', label: 'Home' },
-          { href: '/products', label: 'Products' },
-          { label: `Page ${sanitizedPageNumber}` },
+      <JsonLd
+        data={[
+          getCollectionPageJsonLd({
+            items: productItems,
+            name: `Pioneers Product Catalog - Page ${sanitizedPageNumber}`,
+            path: pagePath,
+          }),
+          getBreadcrumbJsonLd(breadcrumbItems, pagePath),
         ]}
       />
+      <PageClient />
+      <Breadcrumbs items={breadcrumbItems} />
 
       <div className="container mb-8">
         <PageRange

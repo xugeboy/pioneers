@@ -3,7 +3,9 @@ import type { Metadata } from 'next/types'
 import { LatestBlogsBlock } from '@/blocks/LatestBlogs/Component'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { CollectionArchive } from '@/components/CollectionArchive'
+import { JsonLd } from '@/components/JsonLd'
 import { Pagination } from '@/components/Pagination'
+import { getCollectionPageJsonLd } from '@/utilities/jsonLd'
 import { getBlogArchivePage, getLatestPublishedBlogs } from '@/utilities/queryBlogs'
 import React from 'react'
 
@@ -16,9 +18,21 @@ export default async function Page() {
   const latestBlogs = await getLatestPublishedBlogs(1)
   const excludedIDs = latestBlogs.map((blog) => blog.id)
   const archiveBlogs = await getBlogArchivePage({ excludeIDs: excludedIDs, page: 1 })
+  const blogItems = [...latestBlogs, ...archiveBlogs.docs].map((blog) => ({
+    name: blog.title,
+    url: `/blogs/${blog.slug}`,
+  }))
 
   return (
     <div className="pt-[68px] md:pt-24">
+      <JsonLd
+        data={getCollectionPageJsonLd({
+          description: 'Tie-down solutions, safety standards, and gear tips from PioneersGears.',
+          items: blogItems,
+          name: 'PioneersGears Blog',
+          path: '/blogs',
+        })}
+      />
       <PageClient />
       <Breadcrumbs items={[{ href: '/', label: 'Home' }, { label: 'Blogs' }]} />
       <div className="container mb-12">
@@ -49,6 +63,6 @@ export default async function Page() {
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Payload Website Template Blogs',
+    title: 'China 16+ years OEM Factory Blogs',
   }
 }
