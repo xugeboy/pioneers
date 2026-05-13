@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from '@/utilities/ui'
-import { Menu, SearchIcon } from 'lucide-react'
+import { Menu, SearchIcon, X } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useEffect, useRef, useState } from 'react'
@@ -31,7 +31,6 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
   const pathname = usePathname()
   const [query, setQuery] = useState('')
   const [isSearchOpen, setIsSearchOpen] = useState(false)
-  const searchContainerRef = useRef<HTMLElement | null>(null)
   const searchInputRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
@@ -42,7 +41,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
     const nextQuery = new URLSearchParams(window.location.search).get('q') ?? ''
 
     setQuery(nextQuery)
-    setIsSearchOpen(pathname.startsWith('/search') && nextQuery.length > 0)
+    setIsSearchOpen(false)
   }, [pathname])
 
   useEffect(() => {
@@ -58,26 +57,29 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
       return
     }
 
-    const handlePointerDown = (event: MouseEvent) => {
-      if (!searchContainerRef.current?.contains(event.target as Node)) {
-        setIsSearchOpen(false)
-      }
-    }
-
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setIsSearchOpen(false)
       }
     }
 
-    document.addEventListener('mousedown', handlePointerDown)
+    document.body.style.overflow = 'hidden'
     document.addEventListener('keydown', handleKeyDown)
 
     return () => {
-      document.removeEventListener('mousedown', handlePointerDown)
+      document.body.style.overflow = ''
       document.removeEventListener('keydown', handleKeyDown)
     }
   }, [isSearchOpen])
+
+  const submitSearch = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    const trimmedQuery = query.trim()
+
+    setIsSearchOpen(false)
+    router.push(trimmedQuery ? `/search?q=${encodeURIComponent(trimmedQuery)}` : '/search')
+  }
 
   const navItems = (data?.navItems || []) as Array<
     NonNullable<HeaderType['navItems']>[number] & {
@@ -112,21 +114,11 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
       ? 'text-white [text-shadow:0_1px_18px_rgba(0,0,0,0.45)] hover:bg-white/12 focus-visible:bg-white/12 focus-visible:outline-none'
       : 'text-[#2d2d2d] hover:bg-[#f3f0ea] focus-visible:bg-[#f3f0ea] focus-visible:outline-none',
   )
-  const searchFormClasses = cn(
-    'absolute inset-y-0 left-0 right-0 z-30 hidden items-center border-b pl-0 pr-0 transition-opacity duration-200 md:flex',
-    isLightTone
-      ? 'border-white/65 bg-black/92'
-      : 'border-[#2d2d2d]/20 bg-white',
-  )
   const searchInputClasses = cn(
-    'h-full min-w-0 flex-1 border-0 bg-transparent px-0 pr-1 text-[14px] shadow-none focus-visible:ring-0 focus-visible:outline-none lg:text-[15px]',
-    isLightTone
-      ? 'text-white placeholder:text-white/68 [text-shadow:0_1px_18px_rgba(0,0,0,0.45)]'
-      : 'text-[#2d2d2d] placeholder:text-[#a7a29a]',
+    'h-14 min-w-0 flex-1 border-0 bg-transparent px-0 text-base text-[#1f2933] shadow-none outline-none placeholder:text-[#8a928d] focus-visible:ring-0 focus-visible:outline-none md:h-16 md:text-lg',
   )
   const searchSubmitClasses = cn(
-    'inline-flex size-9 shrink-0 items-center justify-center rounded-full transition-colors focus-visible:outline-none',
-    isLightTone ? 'text-white hover:bg-white/10' : 'text-[#2d2d2d] hover:bg-black/5',
+    'inline-flex size-11 shrink-0 items-center justify-center rounded-full text-[#1f2933] transition-colors hover:bg-black/5 focus-visible:bg-black/5 focus-visible:outline-none',
   )
   const menuButtonClasses = cn(
     'inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-[1rem] px-4 text-[15px] font-medium transition-[background-color,color] duration-200 xl:hidden',
@@ -136,14 +128,10 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
   )
 
   return (
-    <nav
-      className="relative flex w-full min-w-0 flex-col gap-3 md:w-auto md:flex-row md:items-center md:gap-4"
-      ref={searchContainerRef}
-    >
+    <nav className="relative flex w-full min-w-0 flex-1 flex-col gap-3 md:flex-row md:items-center md:gap-4">
       <div
         className={cn(
           'hidden min-w-0 flex-1 items-center gap-4 transition-opacity duration-150 xl:flex',
-          isSearchOpen && 'pointer-events-none opacity-0',
         )}
       >
         <ProductMegaNav groups={megaNavGroups} tone={tone} />
@@ -232,47 +220,14 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
         </div>
       </div>
 
-      <form
-        className={cn(
-          searchFormClasses,
-          isSearchOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0',
-        )}
-        onSubmit={(event) => {
-          event.preventDefault()
-
-          const trimmedQuery = query.trim()
-
-          router.push(trimmedQuery ? `/search?q=${encodeURIComponent(trimmedQuery)}` : '/search')
-        }}
-      >
-        <label className="sr-only" htmlFor="site-search">
-          Search the site
-        </label>
-        <input
-          autoComplete="off"
-          className={searchInputClasses}
-          id="site-search"
-          onChange={(event) => {
-            setQuery(event.target.value)
-          }}
-          placeholder="Search products, blogs, pages"
-          ref={searchInputRef}
-          type="search"
-          value={query}
-        />
-        <button aria-label="Search the site" className={searchSubmitClasses} type="submit">
-          <SearchIcon className="size-4" />
-        </button>
-      </form>
-
       <div className="flex w-full min-w-0 items-center justify-end gap-2 md:w-auto">
         <div className="relative flex shrink-0 items-center">
           <button
             aria-expanded={isSearchOpen}
-            aria-label={isSearchOpen ? 'Submit search' : 'Open search'}
+            aria-label="Open search"
             className={searchToggleClasses}
             onClick={() => {
-              setIsSearchOpen((currentValue) => !currentValue)
+              setIsSearchOpen(true)
             }}
             type="button"
           >
@@ -284,6 +239,55 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
           <Menu className="size-4" />
         </button>
       </div>
+
+      {isSearchOpen ? (
+        <div
+          aria-modal="true"
+          className="fixed inset-0 z-[70] flex items-start justify-center bg-black/45 px-4 pt-24 backdrop-blur-[2px] md:px-8 md:pt-32"
+          onClick={() => {
+            setIsSearchOpen(false)
+          }}
+          role="dialog"
+        >
+          <form
+            className="flex w-full max-w-3xl items-center gap-2 rounded-lg border border-white/70 bg-white px-4 py-3 shadow-[0_24px_80px_rgba(0,0,0,0.22)] md:px-5"
+            onClick={(event) => {
+              event.stopPropagation()
+            }}
+            onSubmit={submitSearch}
+          >
+            <label className="sr-only" htmlFor="site-search">
+              Search the site
+            </label>
+            <SearchIcon aria-hidden="true" className="size-5 shrink-0 text-[#66756b]" />
+            <input
+              autoComplete="off"
+              className={searchInputClasses}
+              id="site-search"
+              onChange={(event) => {
+                setQuery(event.target.value)
+              }}
+              placeholder="Search products, blogs, pages"
+              ref={searchInputRef}
+              type="search"
+              value={query}
+            />
+            <button aria-label="Search the site" className={searchSubmitClasses} type="submit">
+              <SearchIcon className="size-5" />
+            </button>
+            <button
+              aria-label="Close search"
+              className="inline-flex size-11 shrink-0 items-center justify-center rounded-full text-[#66756b] transition-colors hover:bg-black/5 focus-visible:bg-black/5 focus-visible:outline-none"
+              onClick={() => {
+                setIsSearchOpen(false)
+              }}
+              type="button"
+            >
+              <X className="size-5" />
+            </button>
+          </form>
+        </div>
+      ) : null}
     </nav>
   )
 }
