@@ -7,6 +7,7 @@ import RichText from '@/components/RichText'
 import type { MediaBlock as MediaBlockProps } from '@/payload-types'
 
 import { Media } from '../../components/Media'
+import { VideoPreview } from '../../components/VideoPreview'
 
 type Props = MediaBlockProps & {
   breakout?: boolean
@@ -25,12 +26,19 @@ export const MediaBlock: React.FC<Props> = (props) => {
     enableGutter = true,
     imgClassName,
     media,
+    mediaType = 'image',
     staticImage,
     disableInnerContainer,
+    videoFile,
+    videoURL,
   } = props
 
   let caption
   if (media && typeof media === 'object') caption = media.caption
+
+  const shouldRenderImage = mediaType === 'image'
+  const shouldRenderYouTube = mediaType === 'youtube' && videoURL
+  const shouldRenderUploadedVideo = mediaType === 'uploadVideo' && videoFile
 
   return (
     <div
@@ -42,13 +50,15 @@ export const MediaBlock: React.FC<Props> = (props) => {
         className,
       )}
     >
-      {(media || staticImage) && (
+      {shouldRenderImage && (media || staticImage) && (
         <Media
           imgClassName={cn('border border-border rounded-[0.8rem]', imgClassName)}
           resource={media}
           src={staticImage}
         />
       )}
+      {shouldRenderYouTube ? <VideoPreview title="Media video" url={videoURL} /> : null}
+      {shouldRenderUploadedVideo ? <VideoPreview file={videoFile} title="Media video" /> : null}
       {caption && (
         <div
           className={cn(

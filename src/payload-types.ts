@@ -332,7 +332,10 @@ export interface Page {
         blockType: 'content';
       }
     | {
-        media: number | Media;
+        mediaType: 'image' | 'youtube' | 'uploadVideo';
+        media?: (number | null) | Media;
+        videoURL?: string | null;
+        videoFile?: (number | null) | Video;
         id?: string | null;
         blockName?: string | null;
         blockType: 'mediaBlock';
@@ -849,10 +852,33 @@ export interface ContentBlock {
  * via the `definition` "MediaBlock".
  */
 export interface MediaBlock {
-  media: number | Media;
+  mediaType: 'image' | 'youtube' | 'uploadVideo';
+  media?: (number | null) | Media;
+  videoURL?: string | null;
+  videoFile?: (number | null) | Video;
   id?: string | null;
   blockName?: string | null;
   blockType: 'mediaBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "videos".
+ */
+export interface Video {
+  id: number;
+  title?: string | null;
+  prefix?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1105,26 +1131,6 @@ export interface PhoneField {
   id?: string | null;
   blockName?: string | null;
   blockType: 'phone';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "videos".
- */
-export interface Video {
-  id: number;
-  title?: string | null;
-  prefix?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1983,7 +1989,10 @@ export interface ContentBlockSelect<T extends boolean = true> {
  * via the `definition` "MediaBlock_select".
  */
 export interface MediaBlockSelect<T extends boolean = true> {
+  mediaType?: T;
   media?: T;
+  videoURL?: T;
+  videoFile?: T;
   id?: T;
   blockName?: T;
 }

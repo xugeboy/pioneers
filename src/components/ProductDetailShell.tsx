@@ -4,7 +4,6 @@ import type {
   File as PayloadFile,
   Form as PayloadForm,
   Product as PayloadProduct,
-  Video as PayloadVideo,
 } from '@/payload-types'
 
 import React, { useEffect, useMemo, useState } from 'react'
@@ -12,6 +11,7 @@ import { Download } from 'lucide-react'
 
 import { Media } from '@/components/Media'
 import { ProductInquiryForm } from '@/components/ProductInquiryForm'
+import { ProductVideoPreview } from '@/components/ProductVideoPreview'
 import RichText from '@/components/RichText'
 import { getMediaUrl } from '@/utilities/getMediaUrl'
 import { cn } from '@/utilities/ui'
@@ -52,11 +52,6 @@ const buildImageKey = (resource: PayloadProduct['primaryImage'], fallback: strin
 }
 
 const getAttachmentURL = (file?: PayloadFile | number | null) => {
-  if (!file || typeof file === 'number') return ''
-  return getMediaUrl(file.url, file.updatedAt)
-}
-
-const getUploadedFileURL = (file?: PayloadFile | PayloadVideo | number | null) => {
   if (!file || typeof file === 'number') return ''
   return getMediaUrl(file.url, file.updatedAt)
 }
@@ -189,17 +184,7 @@ export const ProductDetailShell: React.FC<ProductDetailShellProps> = ({ form, pr
         </div>
       </section>
 
-      {product.video && (product.video.url || product.video.file) ? (
-        <section>
-          <div className="mt-5">
-            {product.video.type === 'url' && product.video.url ? (
-              <video className="w-full" controls src={product.video.url} />
-            ) : (
-              <UploadedFilePreview file={product.video.file} />
-            )}
-          </div>
-        </section>
-      ) : null}
+      <ProductVideoPreview title={product.title || 'Product video'} video={product.video} />
 
       <section className="border-t border-[#d8ddd5] pt-8">
         <div
@@ -304,24 +289,5 @@ export const ProductDetailShell: React.FC<ProductDetailShellProps> = ({ form, pr
         </div>
       </section>
     </div>
-  )
-}
-
-const UploadedFilePreview: React.FC<{ file?: PayloadFile | PayloadVideo | number | null }> = ({
-  file,
-}) => {
-  const url = getUploadedFileURL(file)
-  if (!url || !file || typeof file === 'number') return null
-
-  const isVideo = file.mimeType?.startsWith('video/')
-
-  if (isVideo) {
-    return <video className="w-full" controls src={url} />
-  }
-
-  return (
-    <a className="text-sm text-primary underline" href={url} rel="noreferrer" target="_blank">
-      {file.filename || 'View file'}
-    </a>
   )
 }
