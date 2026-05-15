@@ -24,6 +24,7 @@ import {
   productCardSelect,
   resolveProductCategoryBySegments,
 } from '@/utilities/productCategories'
+import { generateMeta } from '@/utilities/generateMeta'
 import { getBreadcrumbJsonLd, getProductCategoryJsonLd } from '@/utilities/jsonLd'
 
 type Args = {
@@ -177,13 +178,20 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
     }
   }
 
-  return {
-    title:
+  const title =
+    requestedPageNumber > 1
+      ? `${category.title} - Page ${requestedPageNumber} | Pioneers Product Catalog`
+      : `${category.title} | Pioneers Product Catalog`
+
+  return generateMeta({
+    description: category.description,
+    doc: category,
+    path:
       requestedPageNumber > 1
-        ? `${category.title} - Page ${requestedPageNumber} | Pioneers Product Catalog`
-        : `${category.title} | Pioneers Product Catalog`,
-    description: category.description || undefined,
-  }
+        ? `${getProductCategoryHref(category)}/page/${requestedPageNumber}`
+        : getProductCategoryHref(category),
+    title,
+  })
 }
 
 export async function generateStaticParams() {

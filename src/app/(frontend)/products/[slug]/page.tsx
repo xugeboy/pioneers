@@ -13,6 +13,7 @@ import { ProductDetailShell } from '@/components/ProductDetailShell'
 import { ProductInterestCarousel } from '@/components/ProductInterestCarousel'
 import type { ProductLeadCardData } from '@/components/ProductLeadCard'
 import type { Form as PayloadForm, Product as PayloadProduct } from '@/payload-types'
+import { generateMeta } from '@/utilities/generateMeta'
 import { getProductCategoryBreadcrumbItems } from '@/utilities/productCategories'
 import { getBreadcrumbJsonLd, getProductJsonLd } from '@/utilities/jsonLd'
 
@@ -152,8 +153,14 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
     draft: false,
     limit: 1,
     pagination: false,
-    depth: 0,
+    depth: 1,
     overrideAccess: false,
+    select: {
+      title: true,
+      slug: true,
+      summary: true,
+      primaryImage: true,
+    },
     where: {
       slug: {
         equals: decodedSlug,
@@ -163,10 +170,12 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
 
   const product = result.docs?.[0] as Product | undefined
 
-  return {
+  return generateMeta({
+    collection: 'products',
+    description: product?.summary,
+    doc: product || null,
     title: product?.title ? `${product.title} | Pioneers` : 'Pioneers Product Detail',
-    description: product?.summary || undefined,
-  }
+  })
 }
 
 export async function generateStaticParams() {
