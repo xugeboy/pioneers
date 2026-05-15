@@ -117,7 +117,7 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
   const productPath = `/products/${decodedSlug}`
 
   return (
-    <article className="pt-[68px] md:pt-24">
+    <article className="pt-[68px] md:pt-24 pb-16 md:pb-24">
       <JsonLd
         data={[getProductJsonLd(product), getBreadcrumbJsonLd(breadcrumbItems, productPath)]}
       />

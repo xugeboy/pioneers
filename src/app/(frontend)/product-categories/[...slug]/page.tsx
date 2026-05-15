@@ -95,7 +95,7 @@ export default async function ProductCategoryPage({ params: paramsPromise }: Arg
       : getProductCategoryHref(currentCategory)
 
   return (
-    <div className=" pt-16 md:pt-24">
+    <div className="pt-16 md:pt-24 pb-16 md:pb-24">
       <JsonLd
         data={[
           getProductCategoryJsonLd(currentCategory, products.docs),

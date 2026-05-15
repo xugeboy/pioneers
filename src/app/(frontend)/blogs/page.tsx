@@ -24,7 +24,7 @@ export default async function Page() {
   }))
 
   return (
-    <div className="pt-[68px] md:pt-24">
+    <div className="pt-[68px] md:pt-24 pb-16 md:pb-24">
       <JsonLd
         data={getCollectionPageJsonLd({
           description: 'Tie-down solutions, safety standards, and gear tips from PioneersGears.',

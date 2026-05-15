@@ -43,7 +43,7 @@ export default async function Page({ params: paramsPromise }: Args) {
   ]
 
   return (
-    <div className="pt-[68px] md:pt-24">
+    <div className="pt-[68px] md:pt-24 pb-16 md:pb-24">
       <JsonLd
         data={[
           getCollectionPageJsonLd({

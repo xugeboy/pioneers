@@ -12,7 +12,7 @@ import { cn } from '@/utilities/ui'
 type FooterNavItem = NonNullable<Footer['navItems']>[number]
 
 export const FooterNavSections: React.FC<{ items: FooterNavItem[] }> = ({ items }) => {
-  const [openIndex, setOpenIndex] = useState<number | null>(0)
+  const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   return (
     <>

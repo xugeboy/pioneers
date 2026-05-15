@@ -66,7 +66,7 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
     : null
 
   return (
-    <div className="pt-[68px] md:pt-24">
+    <div className="pt-[68px] md:pt-24 pb-16 md:pb-24">
       <PageClient />
       <Breadcrumbs items={[{ href: '/', label: 'Home' }, { label: 'Search' }]} />
 

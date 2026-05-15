@@ -23,7 +23,7 @@ export const FullscreenHeroBlock: React.FC<
         <Media fill priority imgClassName="object-cover object-center" resource={backgroundImage} />
       </div>
 
-      <div className="relative z-10 flex min-h-[100svh] items-end px-6 pb-[18svh] pt-28 sm:px-10 md:px-16 lg:px-[8vw] lg:pb-[20svh]">
+      <div className="relative z-10 flex min-h-[100svh] items-end px-6 pb-[calc(9rem+10svh)] pt-28 sm:px-10 sm:pb-[calc(9rem+8svh)] md:px-16 md:pb-[calc(9rem+8svh)] lg:px-[8vw] lg:pb-[20svh]">
         <div className="max-w-[860px] text-left text-white">
           <h1 className="whitespace-pre-line text-balance font-industrial text-[clamp(2.75rem,5.6vw,6.75rem)] font-bold uppercase leading-[0.92] drop-shadow-[0_4px_16px_rgba(0,0,0,0.62)]">
             {title}

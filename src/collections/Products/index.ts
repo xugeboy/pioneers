@@ -137,16 +137,17 @@ export const Products: CollectionConfig<'products'> = {
       type: 'array',
       required: true,
       minRows: 1,
+      admin: {
+        components: {
+          afterInput: ['@/components/GalleryBulkUpload'],
+        },
+      },
       fields: [
         {
           name: 'image',
           type: 'upload',
           relationTo: 'media',
           required: true,
-        },
-        {
-          name: 'alt',
-          type: 'text',
         },
       ],
     },

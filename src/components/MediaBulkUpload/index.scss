@@ -1,0 +1,30 @@
+.media-bulk-upload {
+  align-items: center;
+  background: var(--theme-elevation-50);
+  border: 1px solid var(--theme-elevation-150);
+  display: flex;
+  gap: var(--base);
+  justify-content: space-between;
+  margin-bottom: var(--base);
+  padding: calc(var(--base) * 0.75) var(--base);
+}
+
+.media-bulk-upload h2 {
+  font-size: 1rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.media-bulk-upload p {
+  color: var(--theme-elevation-600);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0.15rem 0 0;
+}
+
+@media (max-width: 768px) {
+  .media-bulk-upload {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

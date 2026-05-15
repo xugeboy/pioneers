@@ -35,7 +35,6 @@ type ProductDetailShellProps = {
 }
 
 type ProductImage = {
-  alt?: string | null
   key: string
   resource: PayloadProduct['primaryImage']
 }
@@ -60,7 +59,6 @@ export const ProductDetailShell: React.FC<ProductDetailShellProps> = ({ form, pr
   const images = useMemo<ProductImage[]>(() => {
     const nextImages: ProductImage[] = [
       {
-        alt: product.title,
         key: buildImageKey(product.primaryImage, 'primary-image'),
         resource: product.primaryImage,
       },
@@ -68,7 +66,6 @@ export const ProductDetailShell: React.FC<ProductDetailShellProps> = ({ form, pr
 
     if (product.secondaryImage) {
       nextImages.push({
-        alt: product.title,
         key: buildImageKey(product.secondaryImage, 'secondary-image'),
         resource: product.secondaryImage,
       })
@@ -78,7 +75,6 @@ export const ProductDetailShell: React.FC<ProductDetailShellProps> = ({ form, pr
       if (!item?.image) return
 
       nextImages.push({
-        alt: item.alt || product.title,
         key: buildImageKey(item.image, `gallery-${index}`),
         resource: item.image,
       })

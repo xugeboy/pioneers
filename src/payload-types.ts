@@ -728,7 +728,6 @@ export interface Product {
     | null;
   gallery: {
     image: number | Media;
-    alt?: string | null;
     id?: string | null;
   }[];
   specs: {
@@ -2100,7 +2099,6 @@ export interface ProductsSelect<T extends boolean = true> {
     | T
     | {
         image?: T;
-        alt?: T;
         id?: T;
       };
   specs?:

@@ -25,6 +25,11 @@ export const Media: CollectionConfig = {
     read: anyone,
     update: isEditorOrAdmin,
   },
+  admin: {
+    components: {
+      beforeList: ['@/components/MediaBulkUpload'],
+    },
+  },
   hooks: {
     afterRead: [
       ({ doc }) => {
@@ -63,6 +68,7 @@ export const Media: CollectionConfig = {
     },
   ],
   upload: {
+    bulkUpload: true,
     // Upload to the public/media directory in Next.js making them publicly accessible even outside of Payload
     staticDir: path.resolve(dirname, '../../public/media'),
     adminThumbnail: ({ doc }) => {
