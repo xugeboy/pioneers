@@ -1,6 +1,6 @@
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'payload'
 
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { safeRevalidatePath, safeRevalidateTag } from '@/utilities/safeRevalidate'
 import { SITE_SITEMAP_TAG } from '@/utilities/sitemapConstants'
 
 import type { Blog } from '../../../payload-types'
@@ -16,8 +16,8 @@ export const revalidateBlog: CollectionAfterChangeHook<Blog> = ({
 
       payload.logger.info(`Revalidating blog at path: ${path}`)
 
-      revalidatePath(path)
-      revalidateTag(SITE_SITEMAP_TAG)
+      safeRevalidatePath(path, payload.logger)
+      safeRevalidateTag(SITE_SITEMAP_TAG, payload.logger)
     }
 
     if (previousDoc._status === 'published' && doc._status !== 'published') {
@@ -25,8 +25,8 @@ export const revalidateBlog: CollectionAfterChangeHook<Blog> = ({
 
       payload.logger.info(`Revalidating old blog at path: ${oldPath}`)
 
-      revalidatePath(oldPath)
-      revalidateTag(SITE_SITEMAP_TAG)
+      safeRevalidatePath(oldPath, payload.logger)
+      safeRevalidateTag(SITE_SITEMAP_TAG, payload.logger)
     }
   }
 
@@ -35,13 +35,13 @@ export const revalidateBlog: CollectionAfterChangeHook<Blog> = ({
 
 export const revalidateDeleteBlog: CollectionAfterDeleteHook<Blog> = ({
   doc,
-  req: { context },
+  req: { context, payload },
 }) => {
   if (!context.disableRevalidate) {
     const path = `/blogs/${doc?.slug}`
 
-    revalidatePath(path)
-    revalidateTag(SITE_SITEMAP_TAG)
+    safeRevalidatePath(path, payload.logger)
+    safeRevalidateTag(SITE_SITEMAP_TAG, payload.logger)
   }
 
   return doc

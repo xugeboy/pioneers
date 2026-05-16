@@ -1,8 +1,8 @@
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'payload'
 
 import type { Product } from '@/payload-types'
-import { revalidateTag } from 'next/cache'
 import { revalidateHeaderTag } from '@/utilities/revalidateHeaderTag'
+import { safeRevalidateTag } from '@/utilities/safeRevalidate'
 import { SITE_SITEMAP_TAG } from '@/utilities/sitemapConstants'
 
 export const revalidateProduct: CollectionAfterChangeHook<Product> = ({
@@ -12,10 +12,10 @@ export const revalidateProduct: CollectionAfterChangeHook<Product> = ({
 }) => {
   if (!context.disableRevalidate) {
     payload.logger.info(`Revalidating header after product change: ${doc.id}`)
-    revalidateHeaderTag()
+    revalidateHeaderTag(payload.logger)
 
     if (doc._status === 'published' || previousDoc?._status === 'published') {
-      revalidateTag(SITE_SITEMAP_TAG)
+      safeRevalidateTag(SITE_SITEMAP_TAG, payload.logger)
     }
   }
 
@@ -28,8 +28,8 @@ export const revalidateDeleteProduct: CollectionAfterDeleteHook<Product> = ({
 }) => {
   if (!context.disableRevalidate) {
     payload.logger.info(`Revalidating header after product delete: ${doc.id}`)
-    revalidateHeaderTag()
-    revalidateTag(SITE_SITEMAP_TAG)
+    revalidateHeaderTag(payload.logger)
+    safeRevalidateTag(SITE_SITEMAP_TAG, payload.logger)
   }
 
   return doc

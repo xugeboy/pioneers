@@ -1,5 +1,5 @@
-import { revalidateTag } from 'next/cache'
+import { safeRevalidateTag } from '@/utilities/safeRevalidate'
 
-export function revalidateHeaderTag(): void {
-  revalidateTag('global_header')
+export function revalidateHeaderTag(logger?: Parameters<typeof safeRevalidateTag>[1]): void {
+  safeRevalidateTag('global_header', logger)
 }
