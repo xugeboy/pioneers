@@ -60,11 +60,11 @@ export const LatestBlogsBlock: React.FC<Props> = async ({ blogs: blogsFromProps,
                     {formatFeaturedBlogDate(featuredBlog.publishedAt)}
                   </time>
                 ) : null}
-                <h3 className="font-display text-[1.5rem] leading-tight text-[#162019] transition-colors group-hover:text-primary md:text-[2.1rem]">
+                <h3 className="font-display text-[1.18rem] leading-[1.16] text-[#162019] transition-colors group-hover:text-primary md:text-[2.1rem] md:leading-tight">
                   {featuredBlog.title}
                 </h3>
                 {featuredBlog.meta?.description ? (
-                  <p className="max-w-3xl text-sm leading-6 text-[#4a5650] md:text-base md:leading-7">
+                  <p className="hidden max-w-3xl text-sm leading-6 text-[#4a5650] md:block md:text-base md:leading-7">
                     {truncateFeaturedDescription(featuredBlog.meta.description)}
                   </p>
                 ) : null}

@@ -106,9 +106,6 @@ export const ProductInterestCarousel: React.FC<Props> = ({ products }) => {
       </div>
 
       <div className="relative">
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 hidden w-16 bg-gradient-to-r from-white via-white/80 to-transparent md:block" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 hidden w-16 bg-gradient-to-l from-white via-white/80 to-transparent md:block" />
-
         <div
           className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           onMouseEnter={() => {
@@ -155,17 +152,17 @@ const InterestCard: React.FC<{
     <Link
       className={cn(
         CARD_BASE_CLASSES,
-        'group block rounded-[1.4rem] border border-[#d8ddd5] bg-white p-3 shadow-[0_20px_40px_-36px_rgba(16,25,20,0.4)] transition-all duration-300 hover:-translate-y-1 hover:border-[#f97316] hover:shadow-[0_26px_60px_-36px_rgba(16,25,20,0.42)]',
+        'group block bg-transparent transition-opacity duration-300 hover:opacity-85',
       )}
       data-interest-card="true"
       href={href}
       prefetch={false}
     >
-      <div className="relative overflow-hidden rounded-[1rem] bg-[#f5f7f2]">
+      <div className="relative overflow-hidden bg-transparent">
         <div className="relative aspect-[5/4]">
           <Media
             fill
-            imgClassName="object-contain p-4 transition-transform duration-300 group-hover:scale-[1.03]"
+            imgClassName="object-contain transition-transform duration-300 group-hover:scale-[1.03]"
             resource={product.primaryImage}
             size="(max-width: 768px) 70vw, 280px"
           />
@@ -195,7 +192,7 @@ const CarouselButton: React.FC<{
   return (
     <button
       aria-label={direction === 'prev' ? 'Previous products' : 'Next products'}
-      className="inline-flex size-11 items-center justify-center rounded-full bg-[#fbc044] text-[#101914] transition-colors duration-200 hover:bg-[#f7b328]"
+      className="inline-flex size-11 items-center justify-center bg-transparent text-[#101914] transition-colors duration-200 hover:text-[#f97316]"
       onClick={onClick}
       type="button"
     >

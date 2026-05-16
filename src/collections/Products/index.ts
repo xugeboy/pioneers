@@ -7,8 +7,6 @@ import {
   HeadingFeature,
   InlineToolbarFeature,
   lexicalEditor,
-  OrderedListFeature,
-  UnorderedListFeature,
 } from '@payloadcms/richtext-lexical'
 
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
@@ -112,8 +110,6 @@ export const Products: CollectionConfig<'products'> = {
           return [
             ...rootFeatures,
             HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-            UnorderedListFeature(),
-            OrderedListFeature(),
             FixedToolbarFeature(),
             InlineToolbarFeature(),
             EXPERIMENTAL_TableFeature(),
