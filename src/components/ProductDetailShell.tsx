@@ -1,13 +1,16 @@
 'use client'
 
 import type {
+  Blog as PayloadBlog,
   File as PayloadFile,
   Form as PayloadForm,
+  Media as PayloadMedia,
   Product as PayloadProduct,
 } from '@/payload-types'
 
 import React, { useEffect, useMemo, useState } from 'react'
-import { ChevronDown, Download } from 'lucide-react'
+import { ArrowRight, ChevronDown, Download } from 'lucide-react'
+import Link from 'next/link'
 
 import { Media } from '@/components/Media'
 import { ProductInquiryForm } from '@/components/ProductInquiryForm'
@@ -25,6 +28,7 @@ type ProductDetailShellProps = {
     | 'gallery'
     | 'model'
     | 'primaryImage'
+    | 'relatedBlogs'
     | 'secondaryImage'
     | 'specs'
     | 'slug'
@@ -41,6 +45,8 @@ type ProductImage = {
 
 type TabKey = 'detail' | 'specifications' | 'files'
 
+type RelatedBlog = PayloadBlog
+
 const buildImageKey = (resource: PayloadProduct['primaryImage'], fallback: string) => {
   if (resource && typeof resource === 'object') {
     if ('id' in resource && resource.id) return `media-${String(resource.id)}`
@@ -53,6 +59,21 @@ const buildImageKey = (resource: PayloadProduct['primaryImage'], fallback: strin
 const getAttachmentURL = (file?: PayloadFile | number | null) => {
   if (!file || typeof file === 'number') return ''
   return getMediaUrl(file.url, file.updatedAt)
+}
+
+const formatRelatedBlogDate = (timestamp: string) =>
+  new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(new Date(timestamp))
+
+const getRelatedBlogImage = (blog: RelatedBlog): PayloadMedia | null => {
+  const image = [blog.heroImage, blog.meta?.image].find(
+    (item): item is PayloadMedia => typeof item === 'object' && item !== null,
+  )
+
+  return image || null
 }
 
 export const ProductDetailShell: React.FC<ProductDetailShellProps> = ({ form, product }) => {
@@ -106,8 +127,79 @@ export const ProductDetailShell: React.FC<ProductDetailShellProps> = ({ form, pr
   }, [activeTab, availableTabs])
 
   const quickSpecs = useMemo(() => product.specs?.slice(0, 9) ?? [], [product.specs])
+  const relatedBlogs = useMemo(
+    () =>
+      (product.relatedBlogs || []).filter(
+        (blog): blog is RelatedBlog => typeof blog === 'object' && Boolean(blog.slug),
+      ),
+    [product.relatedBlogs],
+  )
   const selectedImage = images.find((image) => image.key === selectedImageKey) ?? images[0]
   const desktopActiveTab = activeTab ?? 'detail'
+
+  const renderRelatedBlogs = () =>
+    relatedBlogs.length ? (
+      <section className="border-t border-[#d8ddd5] pt-6">
+        <p className="font-display text-sm uppercase tracking-[0.2em] text-[#101914]">
+          Related Blogs
+        </p>
+
+        <div className="mt-5 space-y-5">
+          {relatedBlogs.map((blog) => {
+            const image = getRelatedBlogImage(blog)
+            const href = `/blogs/${blog.slug}`
+
+            return (
+              <article
+                className={cn(
+                  'group grid gap-4',
+                  image ? 'grid-cols-[7rem_minmax(0,1fr)]' : 'grid-cols-1',
+                )}
+                key={blog.id}
+              >
+                {image ? (
+                  <Link className="relative block aspect-4/3 overflow-hidden" href={href}>
+                    <Media fill imgClassName="object-cover" resource={image} />
+                  </Link>
+                ) : null}
+
+                <div className="min-w-0 space-y-2">
+                  {blog.publishedAt ? (
+                    <time
+                      className="block text-[11px] uppercase tracking-[0.16em] text-[#66756b]"
+                      dateTime={blog.publishedAt}
+                    >
+                      {formatRelatedBlogDate(blog.publishedAt)}
+                    </time>
+                  ) : null}
+
+                  <Link
+                    className="block text-[0.98rem] font-semibold leading-6 text-[#101914] transition-colors duration-200 group-hover:text-[#00A650]"
+                    href={href}
+                  >
+                    {blog.title}
+                  </Link>
+
+                  {blog.meta?.description ? (
+                    <p className="line-clamp-2 text-sm leading-6 text-[#526258]">
+                      {blog.meta.description}
+                    </p>
+                  ) : null}
+
+                  <Link
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-[#101914] transition-colors duration-200 hover:text-[#00A650]"
+                    href={href}
+                  >
+                    Read article
+                    <ArrowRight aria-hidden="true" className="size-4" />
+                  </Link>
+                </div>
+              </article>
+            )
+          })}
+        </div>
+      </section>
+    ) : null
 
   const renderDescription = () =>
     product.description ? (
@@ -129,7 +221,7 @@ export const ProductDetailShell: React.FC<ProductDetailShellProps> = ({ form, pr
             variant === 'mobile' ? 'text-[1.45rem]' : 'text-[1.35rem]',
           )}
         >
-          {product.title} Quick Specs:
+          Quick Specs:
         </h2>
 
         {variant === 'mobile' ? (
@@ -162,14 +254,13 @@ export const ProductDetailShell: React.FC<ProductDetailShellProps> = ({ form, pr
         <div className="max-w-none">{renderDescription()}</div>
       </div>
     ) : (
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(22rem,0.96fr)] xl:gap-14">
-        <div>
-          <h2 className="mb-3 text-[1.45rem] font-semibold leading-tight text-[#101914]">
-            {product.title}
-          </h2>
-          <div className="max-w-none">{renderDescription()}</div>
-        </div>
-        {renderQuickSpecs('desktop')}
+      <div className="flow-root">
+        {quickSpecs.length ? (
+          <aside className="mb-8 md:float-right md:ml-10 md:w-[44%] lg:ml-12 xl:w-152">
+            {renderQuickSpecs('desktop')}
+          </aside>
+        ) : null}
+        <div className="max-w-none">{renderDescription()}</div>
       </div>
     )
 
@@ -275,6 +366,8 @@ export const ProductDetailShell: React.FC<ProductDetailShellProps> = ({ form, pr
               })}
             </div>
           ) : null}
+
+          {renderRelatedBlogs()}
         </div>
 
         <div className="space-y-8">

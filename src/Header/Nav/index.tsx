@@ -9,6 +9,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import type { HeaderMegaNavGroup } from '@/Header/getMegaNavData'
 import type { Header as HeaderType } from '@/payload-types'
 
+import { EmailCopyButton } from '@/components/EmailCopyButton'
+import { whatsappContact } from '@/components/socialLinks'
 import { resolveCMSLinkHref } from '@/utilities/resolveCMSLinkHref'
 import { ProductMegaNav } from './ProductMegaNav'
 
@@ -126,6 +128,12 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
       ? 'bg-transparent text-white hover:bg-white/10'
       : 'bg-transparent text-[#2d2d2d] hover:bg-[#f3f0ea]',
   )
+  const headerIconLinkClasses = cn(
+    'hidden size-11 shrink-0 items-center justify-center rounded-full transition-[background-color,color,opacity] duration-200 hover:opacity-85 xl:inline-flex',
+    isLightTone
+      ? 'text-white [text-shadow:0_1px_18px_rgba(0,0,0,0.45)] hover:bg-white/12'
+      : 'text-[#2d2d2d] hover:bg-[#f3f0ea]',
+  )
 
   return (
     <nav className="relative flex w-full min-w-0 flex-1 flex-col gap-3 md:flex-row md:items-center md:gap-4">
@@ -234,6 +242,20 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
             <SearchIcon className="size-4" />
           </button>
         </div>
+
+        <a
+          aria-label={whatsappContact.label}
+          className={headerIconLinkClasses}
+          href={whatsappContact.href}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <svg aria-hidden="true" className="size-4 fill-current" viewBox="0 0 24 24">
+            <path d={whatsappContact.path} />
+          </svg>
+        </a>
+
+        <EmailCopyButton className={headerIconLinkClasses} />
 
         <button className={menuButtonClasses} onClick={onOpenMenu} type="button">
           <Menu className="size-4" />

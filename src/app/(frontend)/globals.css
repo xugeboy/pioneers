@@ -236,3 +236,132 @@ html[data-theme='light'] {
     transform: translateY(18px);
   }
 }
+
+@layer components {
+  .blog-richtext :where(table) {
+    width: auto;
+    max-width: 100%;
+    margin-block: 1.75rem;
+    border-collapse: separate;
+    border-spacing: 0 0.45rem;
+    table-layout: auto;
+  }
+
+  .blog-richtext :where(thead),
+  .blog-richtext tbody tr:first-child:has(th) {
+    display: none;
+  }
+
+  .blog-richtext :where(tbody tr) {
+    background: transparent;
+  }
+
+  .blog-richtext :where(tbody tr:nth-child(even)) {
+    background: #d1d1d1;
+  }
+
+  .blog-richtext :where(th, td) {
+    border: 0 !important;
+    padding: 0.56rem 1rem !important;
+    vertical-align: middle;
+    line-height: 1.35;
+  }
+
+  .blog-richtext :where(tbody td:first-child) {
+    width: auto;
+    font-weight: 700;
+    color: #030712;
+  }
+
+  .blog-richtext :where(tbody td:last-child) {
+    color: #030712;
+  }
+
+  .blog-richtext table :is(th, td) p {
+    margin: 0;
+  }
+
+  @media (max-width: 640px) {
+    .blog-richtext table {
+      display: table;
+      width: 100%;
+      border-spacing: 0 0.4rem;
+      table-layout: auto;
+    }
+
+    .blog-richtext thead,
+    .blog-richtext tbody tr:first-child:has(th) {
+      display: none;
+    }
+
+    .blog-richtext tbody {
+      display: table-row-group;
+    }
+
+    .blog-richtext tbody tr {
+      display: table-row;
+      padding: 0;
+    }
+
+    .blog-richtext tbody td {
+      display: table-cell;
+      border: 0 !important;
+      padding: 0.56rem 0.7rem !important;
+      line-height: 1.35;
+    }
+
+    .blog-richtext tbody td:first-child {
+      width: auto;
+      font-weight: 700;
+    }
+
+    .blog-richtext tbody td:first-child::after {
+      content: none;
+    }
+
+    .blog-richtext table :is(th, td) p {
+      display: block;
+      margin: 0;
+    }
+  }
+}
+
+.blog-richtext.prose
+  table
+  :where(th, td)
+  :where(p):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  margin: 0;
+}
+
+.blog-richtext.prose table:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  width: max-content;
+  max-width: 100%;
+  table-layout: auto;
+}
+
+.blog-richtext.prose
+  table
+  :where(tbody td:first-child):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  width: auto;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .blog-richtext.prose
+    table
+    :where(th, td)
+    :where(p):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+    display: block;
+    margin: 0;
+  }
+
+  .blog-richtext.prose table:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+    width: 100%;
+  }
+
+  .blog-richtext.prose
+    table
+    :where(tbody td:first-child):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+    white-space: normal;
+  }
+}

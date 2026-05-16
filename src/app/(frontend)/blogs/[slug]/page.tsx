@@ -1,19 +1,19 @@
 import type { Metadata } from 'next'
 
 import { RelatedBlogs } from '@/blocks/RelatedBlogs/Component'
-import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { BlogRelatedProductsSidebar } from '@/components/BlogRelatedProductsSidebar'
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { JsonLd } from '@/components/JsonLd'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { Media } from '@/components/Media'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import RichText from '@/components/RichText'
-import { cn } from '@/utilities/ui'
 import { generateMeta } from '@/utilities/generateMeta'
 import { getBlogPostingJsonLd, getBreadcrumbJsonLd, getWebPageJsonLd } from '@/utilities/jsonLd'
 import { queryBlogBySlug } from '@/utilities/queryBlogs'
 import configPromise from '@payload-config'
 import { draftMode } from 'next/headers'
+import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { getPayload } from 'payload'
 import React from 'react'
@@ -95,13 +95,7 @@ export default async function Blog({ params: paramsPromise }: Args) {
 
       <Breadcrumbs items={breadcrumbItems} />
 
-      <div
-        className={cn(
-          'container mt-6 grid gap-10',
-          hasRelatedProducts &&
-            'lg:grid-cols-[minmax(0,1.5fr)_20rem] xl:grid-cols-[minmax(0,1.7fr)_22rem]',
-        )}
-      >
+      <div className="container mt-6">
         <div className="min-w-0">
           <div className="relative bg-slate-100">
             <div className="relative aspect-16/10 overflow-hidden md:aspect-video">
@@ -129,17 +123,11 @@ export default async function Blog({ params: paramsPromise }: Args) {
 
           <div className="border-b border-slate-200 bg-white pb-3 pt-10 md:pt-12" />
         </div>
-
-        {hasRelatedProducts ? (
-          <div className="lg:pt-2">
-            <BlogRelatedProductsSidebar products={relatedProducts.docs} />
-          </div>
-        ) : null}
       </div>
 
       <div className="flex flex-col items-center gap-4 pt-8">
         <div className="container">
-          <RichText className="mx-auto" data={blog.content} enableGutter={false} />
+          <RichText className="blog-richtext mx-auto" data={blog.content} enableGutter={false} />
           {blog.relatedBlogs && blog.relatedBlogs.length > 0 ? (
             <RelatedBlogs
               className="mt-12 max-w-208 lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
@@ -148,6 +136,12 @@ export default async function Blog({ params: paramsPromise }: Args) {
           ) : null}
         </div>
       </div>
+
+      {hasRelatedProducts ? (
+        <section className="container mt-16 border-t border-slate-200 pt-10 md:mt-20 md:pt-12">
+          <BlogRelatedProductsSidebar layout="grid" products={relatedProducts.docs} />
+        </section>
+      ) : null}
 
       <section className="container mt-20 border-t border-slate-200 pt-10 md:mt-24 md:pt-12">
         <div className="mx-auto">
@@ -165,9 +159,7 @@ export default async function Blog({ params: paramsPromise }: Args) {
               className="inline-flex items-center gap-3 text-[28px] font-light text-slate-900 transition-opacity hover:opacity-70"
               href="/blogs"
             >
-              <span aria-hidden="true" className="text-2xl leading-none">
-                ←
-              </span>
+              <ArrowLeft aria-hidden="true" className="size-5" />
               <span className="text-[18px] font-normal">Back to blog</span>
             </Link>
           </div>

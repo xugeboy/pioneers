@@ -6,10 +6,11 @@ import React, { useState } from 'react'
 
 import type { Header } from '@/payload-types'
 
+import { EmailCopyButton } from '@/components/EmailCopyButton'
 import { Logo } from '@/components/Logo/Logo'
 import type { HeaderMegaNavGroup } from '@/Header/getMegaNavData'
 import { MobileProductMegaNav } from '@/Header/MobileProductMegaNav'
-import { socialLinks } from '@/components/socialLinks'
+import { socialLinks, whatsappContact } from '@/components/socialLinks'
 import { resolveCMSLinkHref } from '@/utilities/resolveCMSLinkHref'
 import { cn } from '@/utilities/ui'
 
@@ -145,7 +146,7 @@ export const MobileDrawer: React.FC<{
         </div>
 
         <div className="px-5 py-5">
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             {socialLinks.map((item) => {
               return (
                 <a
@@ -154,16 +155,26 @@ export const MobileDrawer: React.FC<{
                   href={item.href}
                   key={item.label}
                 >
-                  <svg
-                    aria-hidden="true"
-                    className="size-4 fill-current"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg aria-hidden="true" className="size-4 fill-current" viewBox="0 0 24 24">
                     <path d={item.path} />
                   </svg>
                 </a>
               )
             })}
+
+            <a
+              aria-label={whatsappContact.label}
+              className="ml-auto flex size-10 items-center justify-center text-slate-700 transition-colors hover:text-black"
+              href={whatsappContact.href}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <svg aria-hidden="true" className="size-4 fill-current" viewBox="0 0 24 24">
+                <path d={whatsappContact.path} />
+              </svg>
+            </a>
+
+            <EmailCopyButton className="flex size-10 items-center justify-center text-slate-700 transition-colors hover:text-black" />
           </div>
         </div>
       </aside>

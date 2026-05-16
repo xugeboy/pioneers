@@ -20,6 +20,7 @@ interface HeaderClientProps {
 export const HeaderClient: React.FC<HeaderClientProps> = ({ data, megaNavGroups }) => {
   const [isInteractive, setIsInteractive] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [hasScrolled, setHasScrolled] = useState(false)
   const [headerHeight, setHeaderHeight] = useState(96)
   const { headerTheme, setHeaderTheme } = useHeaderTheme()
   const pathname = usePathname()
@@ -29,8 +30,22 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, megaNavGroups 
     setHeaderTheme(null)
     setIsInteractive(false)
     setIsMenuOpen(false)
+    setHasScrolled(window.scrollY > 8)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname])
+
+  useEffect(() => {
+    const updateScrollState = () => {
+      setHasScrolled(window.scrollY > 8)
+    }
+
+    updateScrollState()
+    window.addEventListener('scroll', updateScrollState, { passive: true })
+
+    return () => {
+      window.removeEventListener('scroll', updateScrollState)
+    }
+  }, [])
 
   useEffect(() => {
     document.body.style.overflow = isMenuOpen ? 'hidden' : ''
@@ -67,14 +82,14 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, megaNavGroups 
   const allowTransparentHeader = pathname === '/' || headerTheme === 'dark'
   const isImmersive =
     allowTransparentHeader && (headerTheme === 'dark' || headerTheme == null)
-  const showSolidHeader = isMenuOpen || isInteractive || !isImmersive
+  const showSolidHeader = hasScrolled || isMenuOpen || isInteractive || !isImmersive
   const useTransparentTone = isImmersive && !showSolidHeader
 
   return (
     <>
       <header
         className={cn(
-          'absolute inset-x-0 top-0 z-40 transition-[background-color,box-shadow] duration-300',
+          'absolute inset-x-0 top-0 z-40 transition-[background-color,box-shadow] duration-300 md:fixed',
           showSolidHeader ? 'bg-white shadow-[0_14px_40px_rgba(0,0,0,0.08)]' : 'bg-transparent',
         )}
         onBlurCapture={(event) => {
