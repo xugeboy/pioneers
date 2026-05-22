@@ -17,7 +17,7 @@ type Props = {
 
 export const FeaturedProductsCarouselClient: React.FC<Props> = ({ products, title }) => {
   return (
-    <ContentCarousel itemSelector="[data-featured-product-card='true']" title={title}>
+    <ContentCarousel autoScroll itemSelector="[data-featured-product-card='true']" title={title}>
       {products.map((product) => (
         <FeaturedProductCard key={product.id} product={product} />
       ))}

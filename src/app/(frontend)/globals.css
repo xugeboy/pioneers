@@ -247,9 +247,13 @@ html[data-theme='light'] {
     table-layout: auto;
   }
 
-  .blog-richtext :where(thead),
+  .blog-richtext :where(thead) {
+    display: table-header-group;
+  }
+
+  .blog-richtext :where(thead tr),
   .blog-richtext tbody tr:first-child:has(th) {
-    display: none;
+    background: #00a650;
   }
 
   .blog-richtext :where(tbody tr) {
@@ -265,6 +269,12 @@ html[data-theme='light'] {
     padding: 0.56rem 1rem !important;
     vertical-align: middle;
     line-height: 1.35;
+  }
+
+  .blog-richtext :where(th) {
+    font-weight: 700;
+    color: #ffffff;
+    text-align: left;
   }
 
   .blog-richtext :where(tbody td:first-child) {
@@ -289,9 +299,8 @@ html[data-theme='light'] {
       table-layout: auto;
     }
 
-    .blog-richtext thead,
-    .blog-richtext tbody tr:first-child:has(th) {
-      display: none;
+    .blog-richtext thead {
+      display: table-header-group;
     }
 
     .blog-richtext tbody {

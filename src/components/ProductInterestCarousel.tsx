@@ -16,12 +16,34 @@ const CARD_BASE_CLASSES =
   'w-[15rem] shrink-0 snap-start sm:w-[16rem] lg:w-[17rem] xl:w-[17.5rem]'
 
 const AUTO_SCROLL_SPEED = 0.45
+const AUTO_SCROLL_RESET_THRESHOLD = 2
+
+const getProductKey = (product: ProductLeadCardData) => {
+  if (product.slug) return `slug-${product.slug}`
+  if (product.model) return `model-${product.model}`
+
+  return `id-${product.id}`
+}
 
 export const ProductInterestCarousel: React.FC<Props> = ({ products }) => {
   const scrollRef = useRef<HTMLDivElement | null>(null)
   const animationFrameRef = useRef<number | null>(null)
+  const manualPauseTimeoutRef = useRef<number | null>(null)
   const isPausedRef = useRef(false)
+  const [canScroll, setCanScroll] = useState(false)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+
+  const uniqueProducts = useMemo(() => {
+    const seenKeys = new Set<string>()
+
+    return products.filter((product) => {
+      const key = getProductKey(product)
+      if (seenKeys.has(key)) return false
+
+      seenKeys.add(key)
+      return true
+    })
+  }, [products])
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -39,20 +61,38 @@ export const ProductInterestCarousel: React.FC<Props> = ({ products }) => {
     }
   }, [])
 
-  const trackProducts = useMemo(
-    () => (products.length > 1 ? [...products, ...products] : products),
-    [products],
-  )
+  useEffect(() => {
+    const container = scrollRef.current
+    if (!container || typeof window === 'undefined') return
+
+    const syncCanScroll = () => {
+      setCanScroll(container.scrollWidth > container.clientWidth + AUTO_SCROLL_RESET_THRESHOLD)
+    }
+
+    syncCanScroll()
+
+    const resizeObserver = new ResizeObserver(syncCanScroll)
+    resizeObserver.observe(container)
+
+    window.addEventListener('resize', syncCanScroll)
+
+    return () => {
+      resizeObserver.disconnect()
+      window.removeEventListener('resize', syncCanScroll)
+    }
+  }, [uniqueProducts.length])
 
   useEffect(() => {
     const container = scrollRef.current
-    if (!container || products.length <= 1 || prefersReducedMotion) return
+    if (!container || !canScroll || prefersReducedMotion) return
 
     const animate = () => {
       if (!isPausedRef.current) {
+        const maxScrollLeft = container.scrollWidth - container.clientWidth
+
         container.scrollLeft += AUTO_SCROLL_SPEED
 
-        if (container.scrollLeft >= container.scrollWidth / 2) {
+        if (container.scrollLeft >= maxScrollLeft - AUTO_SCROLL_RESET_THRESHOLD) {
           container.scrollLeft = 0
         }
       }
@@ -66,21 +106,44 @@ export const ProductInterestCarousel: React.FC<Props> = ({ products }) => {
       if (animationFrameRef.current) {
         window.cancelAnimationFrame(animationFrameRef.current)
       }
-    }
-  }, [prefersReducedMotion, products.length])
 
-  if (!products.length) return null
+      if (manualPauseTimeoutRef.current) {
+        window.clearTimeout(manualPauseTimeoutRef.current)
+      }
+    }
+  }, [canScroll, prefersReducedMotion])
+
+  if (!uniqueProducts.length) return null
 
   const stepCarousel = (direction: 'next' | 'prev') => {
     const container = scrollRef.current
-    if (!container) return
+    if (!container || !canScroll) return
 
     const card = container.querySelector<HTMLElement>('[data-interest-card="true"]')
     const stepWidth = card ? card.offsetWidth + 20 : 320
-    const nextOffset = direction === 'next' ? stepWidth : -stepWidth
+    const maxScrollLeft = container.scrollWidth - container.clientWidth
+    const currentOffset = container.scrollLeft
+    const targetOffset =
+      direction === 'next'
+        ? currentOffset >= maxScrollLeft - AUTO_SCROLL_RESET_THRESHOLD
+          ? 0
+          : Math.min(currentOffset + stepWidth, maxScrollLeft)
+        : currentOffset <= AUTO_SCROLL_RESET_THRESHOLD
+          ? maxScrollLeft
+          : Math.max(currentOffset - stepWidth, 0)
 
-    container.scrollBy({
-      left: nextOffset,
+    isPausedRef.current = true
+
+    if (manualPauseTimeoutRef.current) {
+      window.clearTimeout(manualPauseTimeoutRef.current)
+    }
+
+    manualPauseTimeoutRef.current = window.setTimeout(() => {
+      isPausedRef.current = false
+    }, 1800)
+
+    container.scrollTo({
+      left: targetOffset,
       behavior: 'smooth',
     })
   }
@@ -97,7 +160,7 @@ export const ProductInterestCarousel: React.FC<Props> = ({ products }) => {
           </h2>
         </div>
 
-        {products.length > 1 ? (
+        {canScroll ? (
           <div className="hidden items-center gap-3 md:flex">
             <CarouselButton direction="prev" onClick={() => stepCarousel('prev')} />
             <CarouselButton direction="next" onClick={() => stepCarousel('next')} />
@@ -122,16 +185,15 @@ export const ProductInterestCarousel: React.FC<Props> = ({ products }) => {
           }}
           ref={scrollRef}
         >
-          {trackProducts.map((product, index) => (
+          {uniqueProducts.map((product, index) => (
             <InterestCard
-              key={`${product.id}-${index}`}
+              key={`${getProductKey(product)}-${index}`}
               product={product}
-              showDuplicateBadge={index >= products.length}
             />
           ))}
         </div>
 
-        {products.length > 1 ? (
+        {canScroll ? (
           <div className="mt-4 flex items-center justify-center gap-3 md:hidden">
             <CarouselButton direction="prev" onClick={() => stepCarousel('prev')} />
             <CarouselButton direction="next" onClick={() => stepCarousel('next')} />
@@ -144,8 +206,7 @@ export const ProductInterestCarousel: React.FC<Props> = ({ products }) => {
 
 const InterestCard: React.FC<{
   product: ProductLeadCardData
-  showDuplicateBadge?: boolean
-}> = ({ product, showDuplicateBadge = false }) => {
+}> = ({ product }) => {
   const href = product.slug ? `/products/${product.slug}` : '/products'
 
   return (
@@ -167,8 +228,6 @@ const InterestCard: React.FC<{
             size="(max-width: 768px) 70vw, 280px"
           />
         </div>
-
-        {showDuplicateBadge ? <span className="sr-only">Looped item</span> : null}
       </div>
 
       <div className="space-y-2 px-1 pb-1 pt-4">

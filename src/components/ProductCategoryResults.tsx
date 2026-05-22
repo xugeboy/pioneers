@@ -141,13 +141,8 @@ const ProductCategoryResults: React.FC<Props> = ({
           viewMode === 'grid' ? 'grid gap-7 sm:grid-cols-2 xl:grid-cols-3' : 'grid gap-6',
         )}
       >
-        {visibleProducts.map((product, index) => (
-          <ProductLeadCard
-            key={product.id}
-            layout={viewMode}
-            product={product}
-            reverseInList={isDesktop && viewMode === 'list' && index % 2 === 1}
-          />
+        {visibleProducts.map((product) => (
+          <ProductLeadCard key={product.id} layout={viewMode} product={product} />
         ))}
       </div>
 

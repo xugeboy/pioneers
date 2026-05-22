@@ -1,32 +1,110 @@
 'use client'
 
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { cn } from '@/utilities/ui'
 
 type Props = {
+  autoScroll?: boolean
+  autoScrollInterval?: number
   children: React.ReactNode
   className?: string
   itemSelector: string
   title: string
 }
 
-export const ContentCarousel: React.FC<Props> = ({ children, className, itemSelector, title }) => {
+const SCROLL_RESET_THRESHOLD = 2
+
+export const ContentCarousel: React.FC<Props> = ({
+  autoScroll = false,
+  autoScrollInterval = 3200,
+  children,
+  className,
+  itemSelector,
+  title,
+}) => {
   const scrollRef = useRef<HTMLDivElement | null>(null)
+  const autoScrollTimerRef = useRef<number | null>(null)
+  const isPausedRef = useRef(false)
+  const [canScroll, setCanScroll] = useState(false)
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const syncPreference = () => {
+      setPrefersReducedMotion(mediaQuery.matches)
+    }
+
+    syncPreference()
+    mediaQuery.addEventListener('change', syncPreference)
+
+    return () => {
+      mediaQuery.removeEventListener('change', syncPreference)
+    }
+  }, [])
+
+  useEffect(() => {
+    const container = scrollRef.current
+    if (!container || typeof window === 'undefined') return
+
+    const syncCanScroll = () => {
+      setCanScroll(container.scrollWidth > container.clientWidth + SCROLL_RESET_THRESHOLD)
+    }
+
+    syncCanScroll()
+
+    const resizeObserver = new ResizeObserver(syncCanScroll)
+    resizeObserver.observe(container)
+
+    window.addEventListener('resize', syncCanScroll)
+
+    return () => {
+      resizeObserver.disconnect()
+      window.removeEventListener('resize', syncCanScroll)
+    }
+  }, [children])
 
   const stepCarousel = (direction: 'next' | 'prev') => {
     const container = scrollRef.current
-    if (!container) return
+    if (!container || !canScroll) return
 
     const card = container.querySelector<HTMLElement>(itemSelector)
     const stepWidth = card ? card.offsetWidth + 28 : 320
+    const maxScrollLeft = container.scrollWidth - container.clientWidth
+    const currentOffset = container.scrollLeft
+    const targetOffset =
+      direction === 'next'
+        ? currentOffset >= maxScrollLeft - SCROLL_RESET_THRESHOLD
+          ? 0
+          : Math.min(currentOffset + stepWidth, maxScrollLeft)
+        : currentOffset <= SCROLL_RESET_THRESHOLD
+          ? maxScrollLeft
+          : Math.max(currentOffset - stepWidth, 0)
 
-    container.scrollBy({
+    container.scrollTo({
       behavior: 'smooth',
-      left: direction === 'next' ? stepWidth : -stepWidth,
+      left: targetOffset,
     })
   }
+
+  useEffect(() => {
+    if (!autoScroll || !canScroll || prefersReducedMotion || typeof window === 'undefined') return
+
+    autoScrollTimerRef.current = window.setInterval(() => {
+      if (!isPausedRef.current) {
+        stepCarousel('next')
+      }
+    }, autoScrollInterval)
+
+    return () => {
+      if (autoScrollTimerRef.current) {
+        window.clearInterval(autoScrollTimerRef.current)
+      }
+    }
+  }, [autoScroll, autoScrollInterval, canScroll, prefersReducedMotion])
 
   return (
     <section className={cn('relative py-16 md:py-20', className)}>
@@ -46,19 +124,41 @@ export const ContentCarousel: React.FC<Props> = ({ children, className, itemSele
         </div>
 
         <div className="relative">
-          <CarouselButton
-            className="absolute left-0 top-[38%] z-20 -translate-x-1/2"
-            direction="prev"
-            onClick={() => stepCarousel('prev')}
-          />
-          <CarouselButton
-            className="absolute right-0 top-[38%] z-20 translate-x-1/2"
-            direction="next"
-            onClick={() => stepCarousel('next')}
-          />
+          {canScroll ? (
+            <>
+              <CarouselButton
+                className="absolute left-0 top-[38%] z-20 -translate-x-1/2"
+                direction="prev"
+                onClick={() => stepCarousel('prev')}
+              />
+              <CarouselButton
+                className="absolute right-0 top-[38%] z-20 translate-x-1/2"
+                direction="next"
+                onClick={() => stepCarousel('next')}
+              />
+            </>
+          ) : null}
 
           <div
             className="flex snap-x snap-mandatory gap-7 overflow-x-auto scroll-smooth px-1 pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            onBlur={() => {
+              isPausedRef.current = false
+            }}
+            onFocus={() => {
+              isPausedRef.current = true
+            }}
+            onMouseEnter={() => {
+              isPausedRef.current = true
+            }}
+            onMouseLeave={() => {
+              isPausedRef.current = false
+            }}
+            onTouchEnd={() => {
+              isPausedRef.current = false
+            }}
+            onTouchStart={() => {
+              isPausedRef.current = true
+            }}
             ref={scrollRef}
           >
             {children}

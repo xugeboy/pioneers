@@ -26,8 +26,7 @@ export const ProductLeadCard: React.FC<{
   className?: string
   layout?: 'grid' | 'list'
   product: ProductLeadCardData
-  reverseInList?: boolean
-}> = ({ className, product, layout = 'grid', reverseInList = false }) => {
+}> = ({ className, product, layout = 'grid' }) => {
   const { model, primaryImage, secondaryImage, slug, summary, title } = product
   const href = slug ? `/products/${slug}` : '/products'
   const isListLayout = layout === 'list'
@@ -42,7 +41,6 @@ export const ProductLeadCard: React.FC<{
     isListLayout
       ? 'aspect-square min-h-[6.75rem] md:h-full md:min-h-[10rem] md:aspect-square'
       : 'aspect-[4/3] bg-[#eef2eb] sm:aspect-square',
-    isListLayout && reverseInList && 'md:order-2',
   )
   const imgClassName = 'h-full w-full object-contain'
 
@@ -78,7 +76,6 @@ export const ProductLeadCard: React.FC<{
         'group grid h-full overflow-hidden bg-transparent text-[#101914] transition-opacity duration-300 hover:opacity-90',
         isListLayout &&
           'grid-cols-[6.75rem_minmax(0,1fr)] items-start gap-6 md:grid-cols-[10rem_minmax(0,1fr)] md:items-center md:gap-8',
-        isListLayout && reverseInList && 'md:grid-cols-[minmax(0,1fr)_10rem]',
         className,
       )}
     >
@@ -105,7 +102,6 @@ export const ProductLeadCard: React.FC<{
         className={cn(
           'relative z-10 grid min-w-0 flex-1 content-start gap-4 px-0 pb-0 pt-4 md:pt-5',
           isListLayout && 'pt-0 md:px-0 md:pt-0',
-          isListLayout && reverseInList && 'md:order-1',
         )}
       >
         <div className={`space-y-2 ${isListLayout ? '' : 'text-center'}`}>
