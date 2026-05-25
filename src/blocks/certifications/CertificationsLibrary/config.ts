@@ -31,6 +31,15 @@ export const CertificationsLibrary: Block = {
               relationTo: 'files',
               required: true,
             },
+            {
+              name: 'previewImage',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Preview Image',
+              admin: {
+                description: 'Image shown on the website, such as the first page of the PDF.',
+              },
+            },
           ],
         },
       ],

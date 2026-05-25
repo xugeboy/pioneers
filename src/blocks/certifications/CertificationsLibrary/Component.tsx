@@ -56,7 +56,7 @@ export const CertificationsLibraryBlock: React.FC<
 
                   const displayName = item.label || file?.title || file?.filename || 'Certificate'
                   const sizeText = formatFileSize(file?.filesize)
-                  const previewImage = isMediaDoc(file?.previewImage) ? file.previewImage : null
+                  const previewImage = isMediaDoc(item.previewImage) ? item.previewImage : null
 
                   return (
                     <a
