@@ -15,7 +15,12 @@ import type { ProductLeadCardData } from '@/components/ProductLeadCard'
 import type { Form as PayloadForm, Product as PayloadProduct } from '@/payload-types'
 import { generateMeta } from '@/utilities/generateMeta'
 import { getProductCategoryBreadcrumbItems } from '@/utilities/productCategories'
-import { getBreadcrumbJsonLd, getProductJsonLd } from '@/utilities/jsonLd'
+import {
+  compactJsonLd,
+  getBreadcrumbJsonLd,
+  getProductJsonLd,
+  getProductVideoJsonLd,
+} from '@/utilities/jsonLd'
 
 import PageClient from './page.client'
 
@@ -119,7 +124,11 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
   return (
     <article className="pt-[68px] md:pt-24 pb-16 md:pb-24">
       <JsonLd
-        data={[getProductJsonLd(product), getBreadcrumbJsonLd(breadcrumbItems, productPath)]}
+        data={compactJsonLd([
+          getProductJsonLd(product),
+          getProductVideoJsonLd(product),
+          getBreadcrumbJsonLd(breadcrumbItems, productPath),
+        ])}
       />
       <PageClient />
       <Breadcrumbs items={breadcrumbItems} />
@@ -174,6 +183,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
     collection: 'products',
     description: product?.summary,
     doc: product || null,
+    path: `/products/${decodedSlug}`,
     title: product?.title ? `${product.title} | Pioneers` : 'Pioneers Product Detail',
   })
 }

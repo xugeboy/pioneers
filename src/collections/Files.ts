@@ -26,6 +26,15 @@ export const Files: CollectionConfig = {
       name: 'title',
       type: 'text',
     },
+    {
+      name: 'previewImage',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description:
+          'Optional image preview shown on the website, such as the first page of a PDF.',
+      },
+    },
   ],
   upload: {
     staticDir: path.resolve(dirname, '../../public/files'),

@@ -13,7 +13,9 @@ const getAssetBaseURL = (url: string): string => {
 
   if (
     cdnURL &&
-    ['/media/', '/files/', '/images/', '/documents/'].some((prefix) => url.startsWith(prefix))
+    ['/media/', '/files/', '/videos/', '/images/', '/documents/'].some((prefix) =>
+      url.startsWith(prefix),
+    )
   ) {
     return cdnURL
   }

@@ -11,6 +11,7 @@ import { notFound } from 'next/navigation'
 import React from 'react'
 
 import PageClient from '../../page.client'
+import { generateMeta } from '@/utilities/generateMeta'
 import { PRODUCT_PAGE_LIMIT } from '@/utilities/productCategories'
 import { getBreadcrumbJsonLd, getCollectionPageJsonLd } from '@/utilities/jsonLd'
 
@@ -108,9 +109,11 @@ export default async function ProductsPageNumber({ params: paramsPromise }: Args
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { pageNumber } = await paramsPromise
 
-  return {
+  return generateMeta({
+    doc: null,
+    path: `/products/page/${pageNumber}`,
     title: `Pioneers Product Catalog - Page ${pageNumber}`,
-  }
+  })
 }
 
 export async function generateStaticParams() {

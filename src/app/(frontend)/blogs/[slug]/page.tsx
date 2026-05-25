@@ -9,7 +9,13 @@ import { Media } from '@/components/Media'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import RichText from '@/components/RichText'
 import { generateMeta } from '@/utilities/generateMeta'
-import { getBlogPostingJsonLd, getBreadcrumbJsonLd, getWebPageJsonLd } from '@/utilities/jsonLd'
+import {
+  compactJsonLd,
+  getBlogPostingJsonLd,
+  getBlogVideoJsonLd,
+  getBreadcrumbJsonLd,
+  getWebPageJsonLd,
+} from '@/utilities/jsonLd'
 import { queryBlogBySlug } from '@/utilities/queryBlogs'
 import configPromise from '@payload-config'
 import { draftMode } from 'next/headers'
@@ -83,11 +89,12 @@ export default async function Blog({ params: paramsPromise }: Args) {
   return (
     <article className="pt-[68px] pb-16 md:pt-24">
       <JsonLd
-        data={[
+        data={compactJsonLd([
           getWebPageJsonLd(blog, url),
           getBlogPostingJsonLd(blog),
+          getBlogVideoJsonLd(blog),
           getBreadcrumbJsonLd(breadcrumbItems, url),
-        ]}
+        ])}
       />
       <PageClient />
       <PayloadRedirects disableNotFound url={url} />
@@ -174,7 +181,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const decodedSlug = decodeURIComponent(slug)
   const blog = await queryBlogBySlug({ slug: decodedSlug })
 
-  return generateMeta({ collection: 'blogs', doc: blog })
+  return generateMeta({ collection: 'blogs', doc: blog, path: `/blogs/${decodedSlug}` })
 }
 
 function formatBlogHeroDate(timestamp: string): string {

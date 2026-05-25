@@ -28,7 +28,7 @@ export const CertificationsLibrary: Block = {
             {
               name: 'file',
               type: 'relationship',
-              relationTo: 'media',
+              relationTo: 'files',
               required: true,
             },
           ],

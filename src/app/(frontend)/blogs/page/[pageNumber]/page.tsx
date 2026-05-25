@@ -4,6 +4,7 @@ import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { CollectionArchive } from '@/components/CollectionArchive'
 import { JsonLd } from '@/components/JsonLd'
 import { Pagination } from '@/components/Pagination'
+import { generateMeta } from '@/utilities/generateMeta'
 import { getBreadcrumbJsonLd, getCollectionPageJsonLd } from '@/utilities/jsonLd'
 import {
   BLOG_ARCHIVE_PAGE_SIZE,
@@ -81,9 +82,11 @@ export default async function Page({ params: paramsPromise }: Args) {
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { pageNumber } = await paramsPromise
 
-  return {
+  return generateMeta({
+    doc: null,
+    path: `/blogs/page/${pageNumber}`,
     title: `China 16+ years OEM Factory Blogs Page ${pageNumber || ''}`,
-  }
+  })
 }
 
 export async function generateStaticParams() {

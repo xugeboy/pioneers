@@ -69,6 +69,7 @@ const getDocPath = (collection: CollectionSlug | undefined, slug?: string | stri
   const normalizedSlug = Array.isArray(slug) ? slug.join('/') : slug
 
   if (!normalizedSlug) return '/'
+  if (collection === 'pages' && normalizedSlug === 'home') return '/'
 
   const prefix = collection ? COLLECTION_PATH_PREFIXES[collection] : undefined
 
@@ -96,6 +97,9 @@ export const generateMeta = (args: GenerateMetaArgs): Metadata => {
   const imageURL = getImageURL(resolveMetaImage(doc, image))
 
   return {
+    alternates: {
+      canonical: path,
+    },
     description: description || undefined,
     openGraph: mergeOpenGraph({
       description: description || '',

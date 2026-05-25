@@ -16,6 +16,7 @@ import {
   getProductCategoryHref,
   getTopLevelProductCategories,
 } from '@/utilities/productCategories'
+import { generateMeta } from '@/utilities/generateMeta'
 import { getCollectionPageJsonLd } from '@/utilities/jsonLd'
 import { cn } from '@/utilities/ui'
 
@@ -132,7 +133,9 @@ export default async function ProductCategoriesPage() {
 }
 
 export function generateMetadata(): Metadata {
-  return {
+  return generateMeta({
+    doc: null,
+    path: '/product-categories',
     title: 'Product Categories | Pioneers',
-  }
+  })
 }

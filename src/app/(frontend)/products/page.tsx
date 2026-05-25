@@ -10,6 +10,7 @@ import { getPayload } from 'payload'
 import React from 'react'
 
 import PageClient from './page.client'
+import { generateMeta } from '@/utilities/generateMeta'
 import { PRODUCT_PAGE_LIMIT } from '@/utilities/productCategories'
 import { getCollectionPageJsonLd } from '@/utilities/jsonLd'
 
@@ -82,7 +83,9 @@ export default async function ProductsPage() {
 }
 
 export function generateMetadata(): Metadata {
-  return {
+  return generateMeta({
+    doc: null,
+    path: '/products',
     title: 'Pioneers Product Catalog',
-  }
+  })
 }

@@ -3,6 +3,9 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Thank You | PioneersGears',
   description: 'Thank you for your inquiry. Our team will contact you as soon as possible.',
+  alternates: {
+    canonical: '/thank-you',
+  },
   robots: {
     follow: false,
     googleBot: {

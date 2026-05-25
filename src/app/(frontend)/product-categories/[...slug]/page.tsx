@@ -168,14 +168,17 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
     payload,
     trailingPageSegment === 'page' ? decodedSlug.slice(0, -2) : decodedSlug,
   )
+  const path = `/product-categories/${decodedSlug.join('/')}`
 
   if (!category) {
-    return {
+    return generateMeta({
+      doc: null,
+      path,
       title:
         requestedPageNumber > 1
           ? `Product Category - Page ${requestedPageNumber} | Pioneers`
           : 'Product Category | Pioneers',
-    }
+    })
   }
 
   const title =

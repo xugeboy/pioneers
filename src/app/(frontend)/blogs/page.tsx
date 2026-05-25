@@ -5,6 +5,7 @@ import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { CollectionArchive } from '@/components/CollectionArchive'
 import { JsonLd } from '@/components/JsonLd'
 import { Pagination } from '@/components/Pagination'
+import { generateMeta } from '@/utilities/generateMeta'
 import { getCollectionPageJsonLd } from '@/utilities/jsonLd'
 import { getBlogArchivePage, getLatestPublishedBlogs } from '@/utilities/queryBlogs'
 import React from 'react'
@@ -62,7 +63,9 @@ export default async function Page() {
 }
 
 export function generateMetadata(): Metadata {
-  return {
+  return generateMeta({
+    doc: null,
+    path: '/blogs',
     title: 'China 16+ years OEM Factory Blogs',
-  }
+  })
 }

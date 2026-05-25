@@ -9,6 +9,7 @@ import { getPayload } from 'payload'
 import Link from 'next/link'
 import React from 'react'
 
+import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 
 type Args = {
@@ -143,7 +144,19 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Search Results | Pioneers',
+    ...generateMeta({
+      doc: null,
+      path: '/search',
+      title: 'Search Results | Pioneers',
+    }),
+    robots: {
+      follow: true,
+      googleBot: {
+        follow: true,
+        index: false,
+      },
+      index: false,
+    },
   }
 }
 

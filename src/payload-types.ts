@@ -1138,6 +1138,10 @@ export interface PhoneField {
 export interface File {
   id: number;
   title?: string | null;
+  /**
+   * Optional image preview shown on the website, such as the first page of a PDF.
+   */
+  previewImage?: (number | null) | Media;
   prefix?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -1240,7 +1244,7 @@ export interface CertificationsLibraryBlock {
         items?:
           | {
               label?: string | null;
-              file: number | Media;
+              file: number | File;
               id?: string | null;
             }[]
           | null;
@@ -2256,6 +2260,7 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface FilesSelect<T extends boolean = true> {
   title?: T;
+  previewImage?: T;
   prefix?: T;
   updatedAt?: T;
   createdAt?: T;
