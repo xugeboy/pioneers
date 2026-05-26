@@ -54,9 +54,16 @@ export type ProductCategorySummary = Pick<
   | 'sortOrder'
   | 'parent'
   | 'breadcrumbs'
-> 
-& {
+> & {
   megaNavHotProducts?: (number | HeaderMegaNavProduct)[] | null
+}
+
+export type ProductCategoryNavItem = {
+  href: string
+  id: number
+  parentID: number | null
+  sortOrder?: number | null
+  title: string
 }
 
 function normalizeCategoryPath(path: string): string {
@@ -92,9 +99,9 @@ export function getProductCategorySegmentsFromPath(path?: string | null): string
   return path ? normalizeCategoryPath(path).split('/').filter(Boolean) : []
 }
 
-export function sortProductCategories<T extends Pick<ProductCategorySummary, 'sortOrder' | 'title'>>(
-  categories: T[],
-): T[] {
+export function sortProductCategories<
+  T extends Pick<ProductCategorySummary, 'sortOrder' | 'title'>,
+>(categories: T[]): T[] {
   return [...categories].sort((left, right) => {
     const orderDiff = (left.sortOrder || 0) - (right.sortOrder || 0)
 
@@ -104,11 +111,23 @@ export function sortProductCategories<T extends Pick<ProductCategorySummary, 'so
   })
 }
 
-function getRelatedCategoryID(value: ProductCategorySummary['parent']): number | null {
+export function getProductCategoryParentID(value: ProductCategorySummary['parent']): number | null {
   if (typeof value === 'number') return value
   if (typeof value === 'object' && value !== null) return value.id
 
   return null
+}
+
+export function getProductCategoryNavItems(
+  categories: ProductCategorySummary[],
+): ProductCategoryNavItem[] {
+  return categories.map((category) => ({
+    href: getProductCategoryHref(category),
+    id: category.id,
+    parentID: getProductCategoryParentID(category.parent),
+    sortOrder: category.sortOrder,
+    title: category.title,
+  }))
 }
 
 export async function getAllProductCategories(payload: Payload): Promise<ProductCategorySummary[]> {
@@ -159,7 +178,7 @@ export function getDirectChildProductCategories(
   parentID: number,
 ): ProductCategorySummary[] {
   return sortProductCategories(
-    categories.filter((category) => getRelatedCategoryID(category.parent) === parentID),
+    categories.filter((category) => getProductCategoryParentID(category.parent) === parentID),
   )
 }
 
@@ -167,7 +186,7 @@ export function getTopLevelProductCategories(
   categories: ProductCategorySummary[],
 ): ProductCategorySummary[] {
   return sortProductCategories(
-    categories.filter((category) => getRelatedCategoryID(category.parent) === null),
+    categories.filter((category) => getProductCategoryParentID(category.parent) === null),
   )
 }
 

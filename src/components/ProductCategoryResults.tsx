@@ -9,7 +9,7 @@ import { cn } from '@/utilities/ui'
 
 type Props = {
   basePath: string
-  categoryPath: string
+  categoryID: number
   page?: number
   products: ProductLeadCardData[]
   totalDocs: number
@@ -20,7 +20,7 @@ type ViewMode = 'grid' | 'list'
 
 const ProductCategoryResults: React.FC<Props> = ({
   basePath,
-  categoryPath,
+  categoryID,
   page,
   products,
   totalDocs,
@@ -83,7 +83,7 @@ const ProductCategoryResults: React.FC<Props> = ({
 
           try {
             const response = await fetch(
-              `/api/product-category-products?path=${encodeURIComponent(categoryPath)}&page=${currentPage + 1}`,
+              `/api/product-category-products?categoryId=${categoryID}&page=${currentPage + 1}`,
               { cache: 'no-store' },
             )
 
@@ -113,7 +113,7 @@ const ProductCategoryResults: React.FC<Props> = ({
     return () => {
       observer.disconnect()
     }
-  }, [categoryPath, currentPage, isDesktop, isLoadingMore, mobileTotalPages])
+  }, [categoryID, currentPage, isDesktop, isLoadingMore, mobileTotalPages])
 
   return (
     <div className="min-w-0">

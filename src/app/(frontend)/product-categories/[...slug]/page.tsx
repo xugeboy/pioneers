@@ -16,6 +16,7 @@ import {
   PRODUCT_PAGE_LIMIT,
   getAllProductCategories,
   getDescendantProductCategoryIDs,
+  getProductCategoryNavItems,
   getProductCategoryBreadcrumbItems,
   getProductCategoryHref,
   getProductCategoryPath,
@@ -64,6 +65,7 @@ export default async function ProductCategoryPage({ params: paramsPromise }: Arg
   }
 
   const allCategories = await getAllProductCategories(payload)
+  const categoryNavItems = getProductCategoryNavItems(allCategories)
   const descendantIDs = getDescendantProductCategoryIDs(allCategories, currentPath)
   const products = await payload.find({
     collection: 'products',
@@ -136,14 +138,14 @@ export default async function ProductCategoryPage({ params: paramsPromise }: Arg
       <div className="container">
         <div className="grid gap-10 lg:grid-cols-[16rem_minmax(0,1fr)] lg:items-start">
           <ProductCategoryBrowserSidebar
-            categories={allCategories}
-            currentCategory={currentCategory}
+            categories={categoryNavItems}
+            currentCategoryID={currentCategory.id}
           />
 
           <div className="min-w-0">
             <ProductCategoryResults
               basePath={getProductCategoryHref(currentCategory)}
-              categoryPath={currentPath}
+              categoryID={currentCategory.id}
               page={products.page}
               products={products.docs as ProductLeadCardData[]}
               totalDocs={products.totalDocs}

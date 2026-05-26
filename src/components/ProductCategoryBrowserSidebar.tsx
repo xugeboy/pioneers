@@ -3,30 +3,34 @@
 import Link from 'next/link'
 import React, { useEffect, useMemo, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
-import {
-  getDirectChildProductCategories,
-  getProductCategoryHref,
-  getProductCategoryPath,
-  getTopLevelProductCategories,
-  type ProductCategorySummary,
-} from '@/utilities/productCategories'
+import { sortProductCategories, type ProductCategoryNavItem } from '@/utilities/productCategories'
 import { cn } from '@/utilities/ui'
 
 type Props = {
-  categories: ProductCategorySummary[]
-  currentCategory: ProductCategorySummary
+  categories: ProductCategoryNavItem[]
+  currentCategoryID: number
 }
 
-const ProductCategoryBrowserSidebar: React.FC<Props> = ({ categories, currentCategory }) => {
-  const topLevelCategories = getTopLevelProductCategories(categories)
-  const currentPath = getProductCategoryPath(currentCategory)
+const ProductCategoryBrowserSidebar: React.FC<Props> = ({ categories, currentCategoryID }) => {
+  const topLevelCategories = sortProductCategories(
+    categories.filter((category) => category.parentID === null),
+  )
+  const activeCategoryIDs = useMemo(() => {
+    const ids = new Set<number>()
+    const categoryByID = new Map(categories.map((category) => [category.id, category]))
+    let category = categoryByID.get(currentCategoryID)
 
-  const isPathActive = (path?: string | null) =>
-    Boolean(path && currentPath && (currentPath === path || currentPath.startsWith(`${path}/`)))
+    while (category) {
+      ids.add(category.id)
+      category = category.parentID ? categoryByID.get(category.parentID) : undefined
+    }
+
+    return ids
+  }, [categories, currentCategoryID])
 
   const activeTopLevelID = useMemo(
-    () => topLevelCategories.find((category) => isPathActive(getProductCategoryPath(category)))?.id ?? null,
-    [topLevelCategories, currentPath],
+    () => topLevelCategories.find((category) => activeCategoryIDs.has(category.id))?.id ?? null,
+    [activeCategoryIDs, topLevelCategories],
   )
 
   const [expandedParentID, setExpandedParentID] = useState<number | null>(activeTopLevelID)
@@ -39,9 +43,10 @@ const ProductCategoryBrowserSidebar: React.FC<Props> = ({ categories, currentCat
     <div className="flex h-full flex-col">
       <nav aria-label="Product categories" className="space-y-2 overflow-y-auto">
         {topLevelCategories.map((topLevelCategory) => {
-          const topLevelPath = getProductCategoryPath(topLevelCategory)
-          const topLevelIsActive = isPathActive(topLevelPath)
-          const childCategories = getDirectChildProductCategories(categories, topLevelCategory.id)
+          const topLevelIsActive = activeCategoryIDs.has(topLevelCategory.id)
+          const childCategories = sortProductCategories(
+            categories.filter((category) => category.parentID === topLevelCategory.id),
+          )
           const isExpanded = expandedParentID === topLevelCategory.id
 
           return (
@@ -55,7 +60,7 @@ const ProductCategoryBrowserSidebar: React.FC<Props> = ({ categories, currentCat
                       ? 'font-semibold text-[#162019] before:bg-[#162019]'
                       : 'text-[#6a786f] hover:text-[#162019] hover:before:bg-[#b8c4ba]',
                   )}
-                  href={getProductCategoryHref(topLevelCategory)}
+                  href={topLevelCategory.href}
                 >
                   <span className="truncate">{topLevelCategory.title}</span>
                 </Link>
@@ -92,8 +97,7 @@ const ProductCategoryBrowserSidebar: React.FC<Props> = ({ categories, currentCat
                   <div className="min-h-0">
                     <div className="space-y-1 py-1 pl-5">
                       {childCategories.map((childCategory) => {
-                        const childPath = getProductCategoryPath(childCategory)
-                        const childIsActive = isPathActive(childPath)
+                        const childIsActive = activeCategoryIDs.has(childCategory.id)
 
                         return (
                           <Link
@@ -105,7 +109,7 @@ const ProductCategoryBrowserSidebar: React.FC<Props> = ({ categories, currentCat
                                 ? 'font-semibold text-[#162019] before:bg-[#162019]'
                                 : 'text-[#7a887f] hover:text-[#162019] hover:before:bg-[#c6d0c8]',
                             )}
-                            href={getProductCategoryHref(childCategory)}
+                            href={childCategory.href}
                           >
                             {childCategory.title}
                           </Link>

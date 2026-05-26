@@ -6,19 +6,18 @@ import {
   PRODUCT_PAGE_LIMIT,
   getAllProductCategories,
   getDescendantProductCategoryIDs,
+  getProductCategoryPath,
   getProductCategoryProductsWhere,
-  getProductCategorySegmentsFromPath,
   productCardSelect,
-  resolveProductCategoryBySegments,
 } from '@/utilities/productCategories'
 
 export async function GET(request: NextRequest): Promise<Response> {
   const { searchParams } = new URL(request.url)
-  const path = searchParams.get('path')
+  const categoryID = Number(searchParams.get('categoryId'))
   const pageParam = Number(searchParams.get('page') || '1')
 
-  if (!path) {
-    return Response.json({ error: 'Missing category path.' }, { status: 400 })
+  if (!Number.isInteger(categoryID) || categoryID < 1) {
+    return Response.json({ error: 'Invalid category ID.' }, { status: 400 })
   }
 
   if (!Number.isInteger(pageParam) || pageParam < 1) {
@@ -26,17 +25,15 @@ export async function GET(request: NextRequest): Promise<Response> {
   }
 
   const payload = await getPayload({ config: configPromise })
-  const category = await resolveProductCategoryBySegments(
-    payload,
-    getProductCategorySegmentsFromPath(path),
-  )
+  const allCategories = await getAllProductCategories(payload)
+  const category = allCategories.find((item) => item.id === categoryID)
+  const categoryPath = getProductCategoryPath(category)
 
-  if (!category) {
+  if (!category || !categoryPath) {
     return Response.json({ error: 'Category not found.' }, { status: 404 })
   }
 
-  const allCategories = await getAllProductCategories(payload)
-  const descendantIDs = getDescendantProductCategoryIDs(allCategories, path)
+  const descendantIDs = getDescendantProductCategoryIDs(allCategories, categoryPath)
   const products = await payload.find({
     collection: 'products',
     depth: 1,
