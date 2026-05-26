@@ -15,7 +15,7 @@ import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { getGlobalJsonLd } from '@/utilities/jsonLd'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
-import { draftMode } from 'next/headers'
+import { draftMode, headers } from 'next/headers'
 
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -28,6 +28,9 @@ const barlowCondensed = Barlow_Condensed({
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
+  const requestHeaders = await headers()
+  const pathname = requestHeaders.get('x-pathname')
+  const hideSiteChrome = pathname === '/oem-tie-downs'
 
   return (
     <html
@@ -47,9 +50,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             }}
           />
 
-          <Header />
+          {!hideSiteChrome ? <Header /> : null}
           {children}
-          <Footer />
+          {!hideSiteChrome ? <Footer /> : null}
         </Providers>
       </body>
     </html>

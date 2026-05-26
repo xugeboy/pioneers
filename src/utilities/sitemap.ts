@@ -51,6 +51,7 @@ const RESERVED_PAGE_SLUGS = new Set([
   'product-categories',
   'search',
   'thank-you',
+  'oem-tie-downs',
 ])
 
 const normalizePath = (path: string) => {
@@ -245,7 +246,7 @@ export const getSiteRobots = (): MetadataRoute.Robots => {
   return {
     rules: {
       userAgent: '*',
-      disallow: ['/admin', '/admin/*', '/thank-you'],
+      disallow: ['/admin', '/admin/*', '/thank-you', '/oem-tie-downs'],
     },
     sitemap: `${siteUrl}/sitemap.xml`,
   }
