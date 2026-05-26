@@ -9,13 +9,14 @@ import React from 'react'
 import { AdminBar } from '@/components/AdminBar'
 import { JsonLd } from '@/components/JsonLd'
 import { MarketingBodyScripts, MarketingHeadScripts } from '@/components/MarketingScripts'
+import { SiteChromeVisibility } from '@/components/SiteChromeVisibility'
 import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { getGlobalJsonLd } from '@/utilities/jsonLd'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
-import { draftMode, headers } from 'next/headers'
+import { draftMode } from 'next/headers'
 
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -28,9 +29,6 @@ const barlowCondensed = Barlow_Condensed({
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
-  const requestHeaders = await headers()
-  const pathname = requestHeaders.get('x-pathname')
-  const hideSiteChrome = pathname === '/oem-tie-downs'
 
   return (
     <html
@@ -50,9 +48,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             }}
           />
 
-          {!hideSiteChrome ? <Header /> : null}
+          <SiteChromeVisibility>
+            <Header />
+          </SiteChromeVisibility>
           {children}
-          {!hideSiteChrome ? <Footer /> : null}
+          <SiteChromeVisibility>
+            <Footer />
+          </SiteChromeVisibility>
         </Providers>
       </body>
     </html>
