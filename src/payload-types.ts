@@ -333,6 +333,7 @@ export interface Page {
       }
     | {
         mediaType: 'image' | 'youtube' | 'uploadVideo';
+        displayMode: 'fullScreen' | 'textWrap';
         media?: (number | null) | Media;
         videoURL?: string | null;
         videoFile?: (number | null) | Video;
@@ -852,6 +853,7 @@ export interface ContentBlock {
  */
 export interface MediaBlock {
   mediaType: 'image' | 'youtube' | 'uploadVideo';
+  displayMode: 'fullScreen' | 'textWrap';
   media?: (number | null) | Media;
   videoURL?: string | null;
   videoFile?: (number | null) | Video;
@@ -1994,6 +1996,7 @@ export interface ContentBlockSelect<T extends boolean = true> {
  */
 export interface MediaBlockSelect<T extends boolean = true> {
   mediaType?: T;
+  displayMode?: T;
   media?: T;
   videoURL?: T;
   videoFile?: T;

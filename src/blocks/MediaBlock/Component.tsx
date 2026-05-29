@@ -23,6 +23,7 @@ export const MediaBlock: React.FC<Props> = (props) => {
   const {
     captionClassName,
     className,
+    displayMode = 'fullScreen',
     enableGutter = true,
     imgClassName,
     media,
@@ -39,13 +40,17 @@ export const MediaBlock: React.FC<Props> = (props) => {
   const shouldRenderImage = mediaType === 'image'
   const shouldRenderYouTube = mediaType === 'youtube' && videoURL
   const shouldRenderUploadedVideo = mediaType === 'uploadVideo' && videoFile
+  const isTextWrap = displayMode === 'textWrap'
 
   return (
     <div
       className={cn(
-        '',
+        'not-prose',
+        isTextWrap
+          ? 'my-6 w-full md:float-left md:clear-left md:mb-4 md:mr-8 md:mt-2 md:w-[min(42%,24rem)]'
+          : 'clear-both my-10 w-full',
         {
-          container: enableGutter,
+          container: enableGutter && !isTextWrap,
         },
         className,
       )}

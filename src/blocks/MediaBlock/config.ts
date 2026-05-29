@@ -21,6 +21,17 @@ export const MediaBlock: Block = {
       required: true,
     },
     {
+      name: 'displayMode',
+      type: 'select',
+      defaultValue: 'fullScreen',
+      label: 'Display Mode',
+      options: [
+        { label: 'Full Screen', value: 'fullScreen' },
+        { label: 'Text Wrap', value: 'textWrap' },
+      ],
+      required: true,
+    },
+    {
       name: 'media',
       type: 'upload',
       admin: {
