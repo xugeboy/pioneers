@@ -107,9 +107,9 @@ export default async function Blog({ params: paramsPromise }: Args) {
           <div className="relative bg-slate-100">
             <div className="relative aspect-16/10 overflow-hidden md:aspect-video">
               {blog.heroImage && typeof blog.heroImage === 'object' ? (
-                <Media fill priority imgClassName="object-cover" resource={blog.heroImage} />
+                <Media fill priority imgClassName="object-contain" resource={blog.heroImage} />
               ) : blog.meta?.image && typeof blog.meta.image === 'object' ? (
-                <Media fill priority imgClassName="object-cover" resource={blog.meta.image} />
+                <Media fill priority imgClassName="object-contain" resource={blog.meta.image} />
               ) : null}
 
               <div className="absolute inset-x-0 bottom-0 bg-muted/72 px-4 pb-10 pt-4 backdrop-blur-sm md:px-6 md:pb-12 md:pt-5">

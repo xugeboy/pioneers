@@ -11,12 +11,21 @@ import { getMediaUrl } from '@/utilities/getMediaUrl'
 import type { Props as MediaProps } from '../types'
 
 const buildSrcSet = (resource: MediaType): string | undefined => {
+  const originalAspectRatio =
+    resource.width && resource.height ? resource.width / resource.height : undefined
+
+  const matchesOriginalAspectRatio = (width?: number | null, height?: number | null): boolean => {
+    if (!originalAspectRatio || !width || !height) return true
+
+    return Math.abs(width / height - originalAspectRatio) < 0.01
+  }
+
   const variants = [
     ...(resource.url && resource.width
       ? [{ url: resource.url, width: resource.width, updatedAt: resource.updatedAt }]
       : []),
     ...Object.entries(resource.sizes || {}).flatMap(([name, size]) =>
-      name !== 'og' && size?.url && size.width
+      name !== 'og' && size?.url && size.width && matchesOriginalAspectRatio(size.width, size.height)
         ? [{ url: size.url, width: size.width, updatedAt: resource.updatedAt }]
         : [],
     ),
@@ -58,7 +67,7 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
 
     width = fullWidth || undefined
     height = fullHeight || undefined
-    alt = altFromResource || ''
+    alt = altFromProps ?? altFromResource ?? ''
 
     src = getMediaUrl(url, resource.updatedAt)
     srcSet = buildSrcSet(resource)

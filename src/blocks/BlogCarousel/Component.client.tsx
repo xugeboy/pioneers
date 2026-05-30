@@ -39,13 +39,13 @@ const BlogCarouselCard: React.FC<{ blog: BlogCarouselPreview }> = ({ blog }) => 
       data-blog-carousel-card="true"
     >
       <Link
-        className="relative block aspect-[4/3] overflow-hidden bg-[#f5f7f2]"
+        className="relative block aspect-video overflow-hidden bg-white"
         href={`/blogs/${blog.slug}`}
       >
         {image && typeof image === 'object' ? (
           <Media
             fill
-            imgClassName="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+            imgClassName="h-full w-full object-contain"
             resource={image}
             size="(max-width: 768px) 75vw, 320px"
           />
