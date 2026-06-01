@@ -48,12 +48,12 @@ export const Card: React.FC<{
     >
       <Link className="relative block" href={href} ref={link.ref}>
         {imageToUse ? (
-          <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
+          <div className="relative aspect-video overflow-hidden bg-white">
             <Media
               fill
               resource={imageToUse}
               size="33vw"
-              imgClassName="h-full w-full object-cover"
+              imgClassName="h-full w-full object-contain"
             />
           </div>
         ) : null}

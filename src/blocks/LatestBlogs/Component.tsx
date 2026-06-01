@@ -31,13 +31,13 @@ export const LatestBlogsBlock: React.FC<Props> = async ({ blogs: blogsFromProps,
         }
       >
         <Link className="group block overflow-hidden" href={`/blogs/${featuredBlog.slug}`}>
-          <div className="relative aspect-16/10 overflow-hidden bg-muted">
+          <div className="relative aspect-video overflow-hidden bg-white">
             {featuredBlog.heroImage && typeof featuredBlog.heroImage === 'object' ? (
               <Media
                 fill
                 priority
                 className="h-full"
-                imgClassName="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                imgClassName="h-full w-full object-contain"
                 resource={featuredBlog.heroImage}
               />
             ) : featuredBlog.meta?.image && typeof featuredBlog.meta.image === 'object' ? (
@@ -45,7 +45,7 @@ export const LatestBlogsBlock: React.FC<Props> = async ({ blogs: blogsFromProps,
                 fill
                 priority
                 className="h-full"
-                imgClassName="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                imgClassName="h-full w-full object-contain"
                 resource={featuredBlog.meta.image}
               />
             ) : null}
@@ -81,19 +81,19 @@ export const LatestBlogsBlock: React.FC<Props> = async ({ blogs: blogsFromProps,
                 href={`/blogs/${blog.slug}`}
                 key={blog.id}
               >
-                <div className="relative aspect-4/3 overflow-hidden bg-muted">
+                <div className="relative aspect-video overflow-hidden bg-white">
                   {blog.heroImage && typeof blog.heroImage === 'object' ? (
                     <Media
                       fill
                       className="h-full"
-                      imgClassName="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      imgClassName="h-full w-full object-contain"
                       resource={blog.heroImage}
                     />
                   ) : blog.meta?.image && typeof blog.meta.image === 'object' ? (
                     <Media
                       fill
                       className="h-full"
-                      imgClassName="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      imgClassName="h-full w-full object-contain"
                       resource={blog.meta.image}
                     />
                   ) : null}
