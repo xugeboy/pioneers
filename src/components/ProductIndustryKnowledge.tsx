@@ -56,6 +56,7 @@ const applicationTable: KnowledgeTable = {
       <Link
         className="text-[#294133] underline-offset-4 hover:underline"
         href="/product-categories/overlanding-and-off-road"
+        key="overlanding-and-off-road"
       >
         Overlanding and off-road
       </Link>,
@@ -67,6 +68,7 @@ const applicationTable: KnowledgeTable = {
       <Link
         className="text-[#294133] underline-offset-4 hover:underline"
         href="/product-categories/camping-and-outdoor"
+        key="camping-and-outdoor"
       >
         Camping and outdoor
       </Link>,
@@ -78,6 +80,7 @@ const applicationTable: KnowledgeTable = {
       <Link
         className="text-[#294133] underline-offset-4 hover:underline"
         href="/product-categories/marine-and-water-sports"
+        key="marine-and-water-sports"
       >
         Marine and water sports
       </Link>,
