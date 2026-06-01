@@ -1,6 +1,7 @@
 import type { Metadata } from 'next/types'
 
 import { Breadcrumbs } from '@/components/Breadcrumbs'
+import { CertificateOfHonorSection } from '@/components/CertificateOfHonorSection'
 import { JsonLd } from '@/components/JsonLd'
 import { Media } from '@/components/Media'
 import ProductCategoryBrowserSidebar from '@/components/ProductCategoryBrowserSidebar'
@@ -154,6 +155,8 @@ export default async function ProductCategoryPage({ params: paramsPromise }: Arg
           </div>
         </div>
       </div>
+
+      <CertificateOfHonorSection />
     </div>
   )
 }

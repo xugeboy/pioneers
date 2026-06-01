@@ -1,8 +1,10 @@
 import type { Metadata } from 'next/types'
 
 import { Breadcrumbs } from '@/components/Breadcrumbs'
+import { CertificateOfHonorSection } from '@/components/CertificateOfHonorSection'
 import { JsonLd } from '@/components/JsonLd'
 import { Media } from '@/components/Media'
+import { ProductIndustryKnowledge } from '@/components/ProductIndustryKnowledge'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { ArrowRight } from 'lucide-react'
@@ -128,14 +130,19 @@ export default async function ProductCategoriesPage() {
           })}
         </div>
       </div>
+
+      <ProductIndustryKnowledge />
+      <CertificateOfHonorSection />
     </div>
   )
 }
 
 export function generateMetadata(): Metadata {
   return generateMeta({
+    description:
+      'Explore PioneersGears product categories for tie-down straps, bungee cords, cargo control, marine tie-downs, motorcycle straps, and outdoor gear restraint solutions.',
     doc: null,
     path: '/product-categories',
-    title: 'Product Categories | Pioneers',
+    title: 'Product Categories | 16+ years experience direct OEM Factory | PioneersGears',
   })
 }
