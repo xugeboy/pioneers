@@ -175,7 +175,7 @@ const bottomContactItems = [
   {
     href: undefined,
     icon: MapPin,
-    label: 'Export support for brands, distributors, and private-label buyers',
+    label: 'No. 18 Zhongxing Road, Yangshe Town, Zhangjiagang City, Suzhou, China, 215600',
   },
 ] as const
 

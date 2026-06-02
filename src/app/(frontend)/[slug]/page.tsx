@@ -89,7 +89,7 @@ export default async function Page({ params: paramsPromise }: Args) {
       )}
 
       <RenderHero {...hero} />
-      <RenderBlocks blocks={layout} />
+      <RenderBlocks blocks={layout} insertHomeFAQAfterBlog={decodedSlug === 'home'} />
     </article>
   )
 }

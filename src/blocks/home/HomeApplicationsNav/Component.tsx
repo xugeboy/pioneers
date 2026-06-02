@@ -29,7 +29,7 @@ export const HomeApplicationsNavBlock: React.FC<
   HomeApplicationsNavBlockProps & { disableInnerContainer?: boolean }
 > = () => {
   return (
-    <section className="bg-[#FAF9F5]">
+    <section className="bg-[#f7f7f6]">
       <div className="container py-16 md:py-24">
         {/* Header section */}
         <div className="mb-12 flex flex-col items-center text-center">

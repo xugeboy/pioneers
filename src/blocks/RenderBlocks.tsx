@@ -18,6 +18,7 @@ import { AboutHeroBlock } from '@/blocks/aboutus/AboutHero/Component'
 import { CertificationsLibraryBlock } from '@/blocks/certifications/CertificationsLibrary/Component'
 import { HomeApplicationsNavBlock } from '@/blocks/home/HomeApplicationsNav/Component'
 import { HomeClosingCtaBlock } from '@/blocks/home/HomeClosingCta/Component'
+import { HomeFAQSection } from '@/blocks/home/HomeFAQ/Component'
 import { HomeTrustSignalsBlock } from '@/blocks/home/HomeTrustSignals/Component'
 import { FactoryGalleryBlock } from '@/blocks/manufacturing/FactoryGallery/Component'
 import { ManufacturingInquiryBlock } from '@/blocks/manufacturing/ManufacturingInquiry/Component'
@@ -58,8 +59,10 @@ type BlockInput = {
 
 export const RenderBlocks: React.FC<{
   blocks: BlockInput[]
+  insertHomeFAQAfterBlog?: boolean
 }> = (props) => {
-  const { blocks } = props
+  const { blocks, insertHomeFAQAfterBlog } = props
+  let hasInsertedHomeFAQ = false
 
   const hasBlocks = blocks && Array.isArray(blocks) && blocks.length > 0
 
@@ -92,10 +95,22 @@ export const RenderBlocks: React.FC<{
             const Block = blockComponents[blockType] as React.ComponentType<Record<string, unknown>>
 
             if (Block) {
+              const shouldInsertHomeFAQ =
+                insertHomeFAQAfterBlog &&
+                !hasInsertedHomeFAQ &&
+                (blockType === 'blogCarousel' || blockType === 'latestBlogs')
+
+              if (shouldInsertHomeFAQ) {
+                hasInsertedHomeFAQ = true
+              }
+
               return (
-                <div className={spacingClass} key={index}>
-                  <Block {...block} disableInnerContainer />
-                </div>
+                <Fragment key={index}>
+                  <div className={spacingClass}>
+                    <Block {...block} disableInnerContainer />
+                  </div>
+                  {shouldInsertHomeFAQ ? <HomeFAQSection /> : null}
+                </Fragment>
               )
             }
           }

@@ -7,7 +7,7 @@ export const BlogCarousel: Block = {
     {
       name: 'title',
       type: 'text',
-      defaultValue: 'Latest Blogs',
+      defaultValue: 'Manufacturing Resources',
       required: true,
     },
   ],

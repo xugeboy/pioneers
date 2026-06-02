@@ -187,7 +187,7 @@ export const Blogs: CollectionConfig<'blogs'> = {
     {
       name: 'authors',
       access: {
-        read: ({ req: { user } }) => isAdminUser(user),
+        read: () => true,
         update: ({ req: { user } }) => isAdminUser(user),
       },
       type: 'relationship',

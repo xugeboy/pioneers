@@ -41,26 +41,40 @@ const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
   return `/${slug}`
 }
 
-const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) => ({
-  ...defaultConverters,
-  ...LinkJSXConverter({ internalDocToHref }),
-  blocks: {
-    banner: ({ node }) => <BannerBlock className="col-start-2 mb-4" {...node.fields} />,
-    mediaBlock: ({ node }) => (
-      <MediaBlock
-        className="col-start-1 col-span-3"
-        imgClassName="m-0"
-        {...node.fields}
-        captionClassName="mx-auto max-w-[48rem]"
-        enableGutter={false}
-        disableInnerContainer={true}
-      />
-    ),
-    code: ({ node }) => <CodeBlock className="col-start-2" {...node.fields} />,
-    cta: ({ node }) => <CallToActionBlock {...node.fields} />,
-    formBlock: ({ node }) => <FormBlockComponent {...((node.fields as unknown) as FormBlockType)} />,
-  },
-})
+const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) => {
+  const headingIDs = new Map<string, number>()
+
+  return {
+    ...defaultConverters,
+    ...LinkJSXConverter({ internalDocToHref }),
+    heading: ({ node, nodesToJSX }) => {
+      const children = nodesToJSX({ nodes: node.children })
+      const NodeTag = node.tag
+      const label = getRichTextNodePlainText(node).trim().replace(/\s+/g, ' ')
+      const id = label ? getUniqueHeadingID(label, headingIDs) : undefined
+
+      return <NodeTag id={id}>{children}</NodeTag>
+    },
+    blocks: {
+      banner: ({ node }) => <BannerBlock className="col-start-2 mb-4" {...node.fields} />,
+      mediaBlock: ({ node }) => (
+        <MediaBlock
+          className="col-start-1 col-span-3"
+          imgClassName="m-0"
+          {...node.fields}
+          captionClassName="mx-auto max-w-[48rem]"
+          enableGutter={false}
+          disableInnerContainer={true}
+        />
+      ),
+      code: ({ node }) => <CodeBlock className="col-start-2" {...node.fields} />,
+      cta: ({ node }) => <CallToActionBlock {...node.fields} />,
+      formBlock: ({ node }) => (
+        <FormBlockComponent {...((node.fields as unknown) as FormBlockType)} />
+      ),
+    },
+  }
+}
 
 type Props = {
   data: DefaultTypedEditorState
@@ -85,4 +99,27 @@ export default function RichText(props: Props) {
       {...rest}
     />
   )
+}
+
+function getRichTextNodePlainText(node: unknown): string {
+  if (!node || typeof node !== 'object') return ''
+
+  if ('text' in node && typeof node.text === 'string') return node.text
+
+  if ('children' in node && Array.isArray(node.children)) {
+    return node.children.map(getRichTextNodePlainText).join(' ')
+  }
+
+  return ''
+}
+
+function getUniqueHeadingID(label: string, seen: Map<string, number>): string {
+  const base =
+    label
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '') || 'section'
+  const count = seen.get(base) || 0
+  seen.set(base, count + 1)
+  return count > 0 ? `${base}-${count + 1}` : base
 }

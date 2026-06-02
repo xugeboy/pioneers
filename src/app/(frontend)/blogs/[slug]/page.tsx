@@ -1,6 +1,11 @@
 import type { Metadata } from 'next'
 
 import { RelatedBlogs } from '@/blocks/RelatedBlogs/Component'
+import {
+  BlogArticleLeftSidebar,
+  BlogArticleRightSidebar,
+  getBlogTableOfContents,
+} from '@/components/BlogArticleSidebars'
 import { BlogRelatedProductsSidebar } from '@/components/BlogRelatedProductsSidebar'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { JsonLd } from '@/components/JsonLd'
@@ -9,6 +14,7 @@ import { Media } from '@/components/Media'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import RichText from '@/components/RichText'
 import { generateMeta } from '@/utilities/generateMeta'
+import { getServerSideURL } from '@/utilities/getURL'
 import {
   compactJsonLd,
   getBlogPostingJsonLd,
@@ -17,9 +23,11 @@ import {
   getWebPageJsonLd,
 } from '@/utilities/jsonLd'
 import { queryBlogBySlug } from '@/utilities/queryBlogs'
+import { cn } from '@/utilities/ui'
 import configPromise from '@payload-config'
 import { draftMode } from 'next/headers'
 import { ArrowLeft } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { getPayload } from 'payload'
 import React from 'react'
@@ -80,6 +88,9 @@ export default async function Blog({ params: paramsPromise }: Args) {
     },
   })
   const hasRelatedProducts = relatedProducts.docs.length > 0
+  const shareURL = new URL(url, getServerSideURL()).toString()
+  const tableOfContents = getBlogTableOfContents(blog.content)
+  const authorName = blog.populatedAuthors?.find((author) => author.name)?.name || null
   const breadcrumbItems = [
     { href: '/', label: 'Home' },
     { href: '/blogs', label: 'Blogs' },
@@ -102,45 +113,77 @@ export default async function Blog({ params: paramsPromise }: Args) {
 
       <Breadcrumbs items={breadcrumbItems} />
 
-      <div className="container mt-6">
-        <div className="min-w-0">
-          <div className="relative bg-slate-100">
-            <div className="relative aspect-16/10 overflow-hidden md:aspect-video">
-              {blog.heroImage && typeof blog.heroImage === 'object' ? (
-                <Media fill priority imgClassName="object-contain" resource={blog.heroImage} />
-              ) : blog.meta?.image && typeof blog.meta.image === 'object' ? (
-                <Media fill priority imgClassName="object-contain" resource={blog.meta.image} />
+      <section
+        className="bg-[#00A650] bg-repeat py-12 text-white md:py-16 lg:py-20"
+        style={{ backgroundImage: "url('/topography.svg')", backgroundSize: '1840px auto' }}
+      >
+        <div className="container grid gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(26rem,1fr)] lg:items-center xl:gap-14">
+          <div>
+            <h1 className="max-w-3xl font-display text-4xl font-semibold leading-tight text-white md:text-5xl lg:text-[3.25rem]">
+              {blog.title}
+            </h1>
+
+            <div className="mt-8 flex flex-col gap-5 text-white sm:flex-row sm:items-center md:mt-10">
+              {authorName ? (
+                <div className="flex items-center gap-3">
+                  <div className="relative size-12 shrink-0 overflow-hidden rounded-full bg-white">
+                    <Image
+                      alt={authorName}
+                      className="object-cover"
+                      fill
+                      sizes="48px"
+                      src="/Dustin.png"
+                    />
+                  </div>
+                  <div>
+                    <p className="text-lg font-semibold leading-6">{authorName}</p>
+                  </div>
+                </div>
               ) : null}
 
-              <div className="absolute inset-x-0 bottom-0 bg-muted/72 px-4 pb-10 pt-4 backdrop-blur-sm md:px-6 md:pb-12 md:pt-5">
-                <h1 className="max-w-5xl font-display text-[1.25rem] leading-[0.98] text-slate-950 md:text-[2rem]">
-                  {blog.title}
-                </h1>
-              </div>
-            </div>
-
-            {blog.publishedAt ? (
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 flex translate-y-1/2 justify-center">
-                <div className="inline-flex min-w-56 justify-center bg-[#efb23d] px-6 py-3 text-sm font-semibold text-slate-950 md:min-w-[16rem] md:text-base">
+              {blog.publishedAt ? (
+                <div
+                  className={cn(
+                    'text-base leading-6',
+                    authorName ? 'border-l border-white/45 pl-6' : '',
+                  )}
+                >
+                  <span className="font-semibold">Published Date:</span>{' '}
                   <time dateTime={blog.publishedAt}>{formatBlogHeroDate(blog.publishedAt)}</time>
                 </div>
-              </div>
+              ) : null}
+            </div>
+          </div>
+
+          <div className="relative aspect-[1.42] overflow-hidden rounded-md bg-white shadow-[0_18px_45px_rgba(6,18,11,0.08)]">
+            {blog.heroImage && typeof blog.heroImage === 'object' ? (
+              <Media fill priority imgClassName="object-cover" resource={blog.heroImage} />
+            ) : blog.meta?.image && typeof blog.meta.image === 'object' ? (
+              <Media fill priority imgClassName="object-cover" resource={blog.meta.image} />
+            ) : null}
+          </div>
+        </div>
+      </section>
+
+      <div className="pt-8">
+        <div className="mx-auto grid w-[calc(100%-2rem)] max-w-[128rem] gap-10 sm:w-[calc(100%-3rem)] md:w-[calc(100%-4rem)] xl:grid-cols-[minmax(16rem,21rem)_minmax(0,78rem)_minmax(16rem,21rem)] xl:items-start 2xl:grid-cols-[22rem_minmax(0,84rem)_22rem] 2xl:gap-14">
+          <BlogArticleLeftSidebar
+            shareTitle={blog.title}
+            shareURL={shareURL}
+            tableOfContents={tableOfContents}
+          />
+
+          <div className="min-w-0">
+            <RichText className="blog-richtext mx-auto" data={blog.content} enableGutter={false} />
+            {blog.relatedBlogs && blog.relatedBlogs.length > 0 ? (
+              <RelatedBlogs
+                className="mt-12"
+                docs={blog.relatedBlogs.filter((relatedBlog) => typeof relatedBlog === 'object')}
+              />
             ) : null}
           </div>
 
-          <div className="border-b border-slate-200 bg-white pb-3 pt-10 md:pt-12" />
-        </div>
-      </div>
-
-      <div className="flex flex-col items-center gap-4 pt-8">
-        <div className="container">
-          <RichText className="blog-richtext mx-auto" data={blog.content} enableGutter={false} />
-          {blog.relatedBlogs && blog.relatedBlogs.length > 0 ? (
-            <RelatedBlogs
-              className="mt-12 max-w-208 lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
-              docs={blog.relatedBlogs.filter((relatedBlog) => typeof relatedBlog === 'object')}
-            />
-          ) : null}
+          <BlogArticleRightSidebar />
         </div>
       </div>
 

@@ -1,13 +1,4 @@
-import {
-  ArrowRight,
-  Award,
-  Clock,
-  Factory,
-  Globe,
-  Package,
-  PencilRuler,
-  Settings,
-} from 'lucide-react'
+import { ArrowRight, Clock, Package, PencilRuler, Settings } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
@@ -38,34 +29,43 @@ const features = [
   },
 ] as const
 
-const stats = [
+type GlobalStat = {
+  label: string
+  suffix?: React.ReactNode
+  value: string
+}
+
+const globalStats: GlobalStat[] = [
   {
-    icon: Award,
-    value: '10+',
-    unit: 'Years',
-    description: 'Experience in tie down solutions.',
+    value: '10,000+',
+    label: 'Customers Worldwide',
   },
   {
-    icon: Factory,
-    value: '20,000+',
-    unit: 'm²',
-    description: 'Factory Area',
+    value: '120+',
+    label: 'Countries & Regions Served',
   },
   {
-    icon: Globe,
-    value: '50+',
-    unit: 'Countries',
-    description: 'Trusted by clients worldwide.',
+    value: '20,000',
+    suffix: (
+      <>
+        m<sup className="text-xl md:text-2xl">2</sup>
+      </>
+    ),
+    label: 'Factory Area',
   },
-] as const
+  {
+    value: '60+',
+    label: 'Workshop Staff',
+  },
+]
 
 export const HomeTrustSignalsBlock: React.FC<
   HomeTrustSignalsBlockProps & { disableInnerContainer?: boolean }
 > = () => {
   return (
-    <section className="bg-[#FAF9F5] pb-16 md:pb-24">
+    <section className="bg-[#f7f7f6] pb-16 md:pb-24">
       {/* Top Features Bar */}
-      <div className="border-b border-[#e2dfd5] bg-[#f4f2eb] py-10 md:py-12">
+      <div className="border-b border-[#e2dfd5] bg-[#f7f7f6] py-10 md:py-12">
         <div className="container">
           <div className="grid grid-cols-1 gap-y-8 md:grid-cols-2 md:gap-x-8 lg:grid-cols-4 lg:gap-x-0 lg:divide-x lg:divide-[#dcd9ce]">
             {features.map((feature, index) => (
@@ -134,11 +134,10 @@ export const HomeTrustSignalsBlock: React.FC<
             </div>
           </div>
 
-          {/* Right Column - Image & Stats Card */}
-          <div className="flex flex-col shadow-xl lg:col-span-8 lg:flex-row">
-            {/* Factory Image Half */}
+          {/* Right Column - Factory Image */}
+          <div className="shadow-xl lg:col-span-8">
             <div
-              className="relative min-h-[300px] w-full bg-cover bg-center lg:w-[65%]"
+              className="relative min-h-[300px] w-full bg-cover bg-center md:min-h-[420px] lg:min-h-[500px]"
               style={{
                 backgroundImage: `url('https://cdn.pioneersgears.com/images/factory entrance.webp')`,
               }}
@@ -146,28 +145,45 @@ export const HomeTrustSignalsBlock: React.FC<
               {/* Fallback styling/overlay in case image is missing */}
               <div className="absolute inset-0 bg-black/10"></div>
             </div>
+          </div>
+        </div>
+      </div>
 
-            {/* Stats Panel Half */}
-            <div className="flex w-full flex-col justify-center bg-[#1c1c1a] p-8 lg:w-[35%]">
-              {stats.map((stat, index) => (
-                <div
-                  key={stat.unit}
-                  className={`flex items-start gap-6 ${
-                    index !== stats.length - 1 ? 'mb-6 border-b border-white/10 pb-6' : ''
-                  }`}
-                >
-                  <stat.icon className="mt-1 size-10 shrink-0 text-[#00A650]" strokeWidth={1.5} />
-                  <div>
-                    <div className="flex items-baseline gap-3">
-                      <span className="font-industrial text-3xl font-bold tracking-wider text-[#00A650] md:text-4xl">
-                        {stat.value}
+      <div className="mt-16 bg-[#f7f7f6] py-12 md:mt-24 md:py-20 lg:py-24">
+        <div className="container">
+          <div className="relative isolate overflow-hidden px-3 py-8 md:px-6 md:py-12 lg:px-10 lg:py-14">
+            <div
+              aria-hidden="true"
+              className="absolute inset-x-0 top-32 -z-10 h-[390px] scale-100 bg-contain bg-center bg-no-repeat md:inset-0 md:h-auto"
+              style={{ backgroundImage: "url('/world-map-pioneers.webp')" }}
+            />
+
+            <div className="max-w-3xl">
+              <h2 className="max-w-xl font-display text-3xl font-semibold leading-[1.25] text-[#06120b] md:text-4xl md:leading-tight">
+                Your Trusted Manufacturing Partner in China. Global Shipping
+              </h2>
+              <p className="mt-6 max-w-3xl text-sm leading-7 text-[#1f2a22] md:text-base md:leading-8">
+                Based in China, PioneersGears combines in-house production with export-ready service
+                for cargo control and mobility restraint programs. We support brands, distributors,
+                and private-label buyers across time zones to keep development, production, and
+                delivery running smoothly.
+              </p>
+            </div>
+
+            <div className="mt-10 grid grid-cols-2 gap-x-6 gap-y-9 text-center sm:gap-x-10 lg:mt-16 lg:grid-cols-4 lg:text-left">
+              {globalStats.map((stat) => (
+                <div key={stat.label}>
+                  <div className="font-industrial text-4xl font-bold leading-none tracking-wide text-[#00A650] md:text-5xl">
+                    {stat.value}
+                    {stat.suffix ? (
+                      <span className="ml-1 inline-flex items-start text-3xl md:text-4xl">
+                        {stat.suffix}
                       </span>
-                      <span className="text-xs font-bold uppercase tracking-widest text-[#00A650]">
-                        {stat.unit}
-                      </span>
-                    </div>
-                    <p className="mt-2 text-sm leading-relaxed text-gray-300">{stat.description}</p>
+                    ) : null}
                   </div>
+                  <p className="mt-4 text-sm leading-5 text-[#06120b] md:text-base md:leading-6">
+                    {stat.label}
+                  </p>
                 </div>
               ))}
             </div>
