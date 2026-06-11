@@ -1,8 +1,8 @@
-import { ChevronRight, ExternalLink } from 'lucide-react'
-import Image from 'next/image'
+import { ExternalLink } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
+import { BlogArticleImageCarousel } from '@/components/BlogArticleImageCarousel.client'
 import type { Blog } from '@/payload-types'
 
 import { cn } from '@/utilities/ui'
@@ -30,35 +30,18 @@ const CTA_STATS = [
 
 export function BlogArticleRightSidebar({ className }: { className?: string }) {
   return (
-    <aside className={cn('block', className)}>
-      <div className="mx-auto w-full max-w-3xl xl:sticky xl:top-28 xl:max-w-none">
-        <div className="rounded-[22px] border-t-[5px] border-[#00A650] bg-white p-5 text-center shadow-[0_16px_40px_rgba(6,18,11,0.14)]">
+    <aside
+      className={cn(
+        'block xl:sticky xl:top-28 xl:max-h-[calc(100vh-8rem)] xl:self-start xl:overflow-y-auto xl:px-4 xl:pb-6',
+        className,
+      )}
+    >
+      <div className="mx-auto w-full max-w-3xl xl:max-w-none">
+        <div className="rounded-[22px] border border-slate-200 border-t-[5px] border-t-[#00A650] bg-white p-5 text-center shadow-sm">
           <p className="font-display text-3xl font-semibold text-[#1f1f1f]">PioneersGears</p>
           <p className="mt-3 text-sm font-semibold text-[#00A650]">Factory direct MFG</p>
 
-          <div className="relative mt-4 overflow-hidden">
-            <Image
-              alt="PioneersGears manufacturing floor"
-              className="aspect-[1.7] w-full object-cover"
-              height={220}
-              src="/blog-manufacturing-cta.png"
-              width={374}
-            />
-            <button
-              aria-label="Previous manufacturing image"
-              className="absolute left-2 top-1/2 flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white text-[#00A650] shadow-md"
-              type="button"
-            >
-              <ChevronRight aria-hidden="true" className="size-5 rotate-180" />
-            </button>
-            <button
-              aria-label="Next manufacturing image"
-              className="absolute right-2 top-1/2 flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white text-[#00A650] shadow-md"
-              type="button"
-            >
-              <ChevronRight aria-hidden="true" className="size-5" />
-            </button>
-          </div>
+          <BlogArticleImageCarousel className="mt-4" />
 
           <h2 className="mt-4 text-xl font-semibold text-[#1f1f1f]">Ready to Manufacture?</h2>
           <p className="mt-2 text-sm text-slate-600">Get instant pricing and DFM feedback</p>

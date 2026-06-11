@@ -91,6 +91,13 @@ export default async function Blog({ params: paramsPromise }: Args) {
   const shareURL = new URL(url, getServerSideURL()).toString()
   const tableOfContents = getBlogTableOfContents(blog.content)
   const authorName = blog.populatedAuthors?.find((author) => author.name)?.name || null
+  const blogHeroImage =
+    blog.heroImage && typeof blog.heroImage === 'object'
+      ? blog.heroImage
+      : blog.meta?.image && typeof blog.meta.image === 'object'
+        ? blog.meta.image
+        : null
+  const blogHeroImageStyle = getBlogHeroImageStyle(blogHeroImage)
   const breadcrumbItems = [
     { href: '/', label: 'Home' },
     { href: '/blogs', label: 'Blogs' },
@@ -125,7 +132,10 @@ export default async function Blog({ params: paramsPromise }: Args) {
 
             <div className="mt-8 flex flex-col gap-5 text-white sm:flex-row sm:items-center md:mt-10">
               {authorName ? (
-                <div className="flex items-center gap-3">
+                <Link
+                  className="flex w-fit items-center gap-3 rounded-full pr-2 transition-opacity hover:opacity-85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+                  href="/author/dustin-xu"
+                >
                   <div className="relative size-12 shrink-0 overflow-hidden rounded-full bg-white">
                     <Image
                       alt={authorName}
@@ -138,7 +148,7 @@ export default async function Blog({ params: paramsPromise }: Args) {
                   <div>
                     <p className="text-lg font-semibold leading-6">{authorName}</p>
                   </div>
-                </div>
+                </Link>
               ) : null}
 
               {blog.publishedAt ? (
@@ -155,13 +165,20 @@ export default async function Blog({ params: paramsPromise }: Args) {
             </div>
           </div>
 
-          <div className="relative aspect-[1.42] overflow-hidden rounded-md bg-white shadow-[0_18px_45px_rgba(6,18,11,0.08)]">
-            {blog.heroImage && typeof blog.heroImage === 'object' ? (
-              <Media fill priority imgClassName="object-cover" resource={blog.heroImage} />
-            ) : blog.meta?.image && typeof blog.meta.image === 'object' ? (
-              <Media fill priority imgClassName="object-cover" resource={blog.meta.image} />
-            ) : null}
-          </div>
+          {blogHeroImage ? (
+            <div
+              className="relative mx-auto flex min-h-[14rem] w-full max-w-[46rem] overflow-hidden rounded-md bg-white/95 shadow-[0_18px_45px_rgba(6,18,11,0.08)] md:min-h-[18rem] lg:max-h-[30rem] xl:max-h-[32rem]"
+              style={blogHeroImageStyle}
+            >
+              <Media
+                fill
+                priority
+                imgClassName="object-contain"
+                resource={blogHeroImage}
+                size="(min-width: 1280px) 46rem, (min-width: 1024px) 48vw, calc(100vw - 2rem)"
+              />
+            </div>
+          ) : null}
         </div>
       </section>
 
@@ -233,4 +250,17 @@ function formatBlogHeroDate(timestamp: string): string {
     day: 'numeric',
     year: 'numeric',
   }).format(new Date(timestamp))
+}
+
+function getBlogHeroImageStyle(
+  image: { height?: number | null; width?: number | null } | null,
+): React.CSSProperties {
+  if (!image?.width || !image?.height) {
+    return { aspectRatio: '1.42 / 1' }
+  }
+
+  const imageRatio = image.width / image.height
+  const controlledRatio = Math.min(Math.max(imageRatio, 1.15), 2.05)
+
+  return { aspectRatio: `${controlledRatio} / 1` }
 }

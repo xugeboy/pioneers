@@ -52,6 +52,8 @@ const RESERVED_PAGE_SLUGS = new Set([
   'search',
   'thank-you',
   'oem-tie-downs',
+  'author',
+  'llm-instructions',
 ])
 
 const normalizePath = (path: string) => {
@@ -185,6 +187,20 @@ export const getSiteSitemap = unstable_cache(
           getLatestUpdatedAt(...productCategories.map((category) => category.updatedAt)),
         ),
         ...defaultSitemapMeta,
+      },
+      {
+        url: toAbsoluteUrl('/author/dustin-xu'),
+        lastModified: getLastModified(
+          getLatestUpdatedAt(...blogs.map((blog) => blog.updatedAt)),
+        ),
+        changeFrequency: 'monthly',
+        priority: 0.7,
+      },
+      {
+        url: toAbsoluteUrl('/llm-instructions'),
+        lastModified: getLastModified(),
+        changeFrequency: 'monthly',
+        priority: 0.6,
       },
     ]
 

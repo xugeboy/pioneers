@@ -1,7 +1,6 @@
 'use client'
 
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import Link from 'next/link'
 import { useState } from 'react'
 
 import { cn } from '@/utilities/ui'
@@ -33,8 +32,13 @@ export function BlogArticleLeftSidebar({
   }
 
   return (
-    <aside className={cn('block', className)}>
-      <div className="space-y-9 xl:sticky xl:top-28">
+    <aside
+      className={cn(
+        'block xl:sticky xl:top-28 xl:max-h-[calc(100vh-8rem)] xl:self-start xl:overflow-y-auto xl:pr-2',
+        className,
+      )}
+    >
+      <div className="space-y-9">
         <div className="flex items-center gap-5">
           <p className="text-lg font-semibold text-[#06120b]">Share</p>
           <a

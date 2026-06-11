@@ -24,6 +24,13 @@ type VideoSource =
 const SITE_NAME = 'PioneersGears'
 const SITE_DESCRIPTION =
   'Application-driven cargo control and mobility restraint solutions for OEM and ODM programs.'
+const BLOG_AUTHOR_PROFILE = {
+  name: 'Dustin Xu',
+  jobTitle: 'Sales Director',
+  url: '/author/dustin-xu',
+  sameAs: ['https://www.linkedin.com/in/dustin-xu-262256286/'],
+  worksForName: 'PioneerGears',
+} as const
 
 const removeEmpty = <T extends JsonLdNode>(input: T): T => {
   return Object.fromEntries(
@@ -268,6 +275,22 @@ const getOrganizationNode = (): JsonLdNode =>
     logo: toAbsoluteURL('/pioneers-logo.png'),
   })
 
+const getBlogAuthorNode = (): JsonLdNode =>
+  removeEmpty({
+    '@type': 'Person',
+    '@id': toAbsoluteURL(`${BLOG_AUTHOR_PROFILE.url}#person`),
+    name: BLOG_AUTHOR_PROFILE.name,
+    jobTitle: BLOG_AUTHOR_PROFILE.jobTitle,
+    url: toAbsoluteURL(BLOG_AUTHOR_PROFILE.url),
+    image: toAbsoluteURL('/Dustin.png'),
+    worksFor: {
+      '@id': toAbsoluteURL('/#organization'),
+      '@type': 'Organization',
+      name: BLOG_AUTHOR_PROFILE.worksForName,
+    },
+    sameAs: BLOG_AUTHOR_PROFILE.sameAs,
+  })
+
 export const getGlobalJsonLd = (): JsonLdNode[] => [
   {
     '@context': 'https://schema.org',
@@ -313,17 +336,7 @@ export const getWebPageJsonLd = (
 export const getBlogPostingJsonLd = (blog: Blog): JsonLdNode => {
   const path = `/blogs/${blog.slug}`
   const image = getMediaURL(blog.meta?.image || blog.heroImage)
-  const authors =
-    blog.populatedAuthors
-      ?.map((author) =>
-        author.name
-          ? {
-              '@type': 'Person',
-              name: author.name,
-            }
-          : null,
-      )
-      .filter(Boolean) || []
+  const hasConfiguredAuthor = Boolean(blog.populatedAuthors?.some((author) => author.name))
 
   return removeEmpty({
     '@context': 'https://schema.org',
@@ -334,7 +347,7 @@ export const getBlogPostingJsonLd = (blog: Blog): JsonLdNode => {
     image,
     datePublished: blog.publishedAt || blog.createdAt,
     dateModified: blog.updatedAt,
-    author: authors.length ? authors : getOrganizationNode(),
+    author: hasConfiguredAuthor ? [getBlogAuthorNode()] : getOrganizationNode(),
     publisher: {
       '@id': toAbsoluteURL('/#organization'),
     },
