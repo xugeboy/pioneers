@@ -1,5 +1,5 @@
 import type { BreadcrumbItem } from '@/components/Breadcrumbs'
-import type { Product, ProductCategory } from '@/payload-types'
+import type { Blog, Product, ProductCategory } from '@/payload-types'
 import type { Payload, Where } from 'payload'
 
 export const PRODUCT_PAGE_LIMIT = 12
@@ -38,6 +38,15 @@ const productCategorySelect = {
   megaNavHotProducts: true,
 } as const
 
+const productCategoryDetailSelect = {
+  ...productCategorySelect,
+  faqItems: true,
+  oemCapabilities: true,
+  pillarContent: true,
+  qualityHighlights: true,
+  relatedBlogs: true,
+} as const
+
 export type HeaderMegaNavProduct = Pick<
   Product,
   'id' | 'title' | 'model' | 'slug' | 'primaryImage' | 'isFeatured' | 'publishedAt'
@@ -50,12 +59,17 @@ export type ProductCategorySummary = Pick<
   | 'slug'
   | 'description'
   | 'heroImage'
+  | 'faqItems'
+  | 'oemCapabilities'
+  | 'pillarContent'
+  | 'qualityHighlights'
   | 'showInMegaNav'
   | 'sortOrder'
   | 'parent'
   | 'breadcrumbs'
 > & {
   megaNavHotProducts?: (number | HeaderMegaNavProduct)[] | null
+  relatedBlogs?: (number | Blog)[] | null
 }
 
 export type ProductCategoryNavItem = {
@@ -158,7 +172,7 @@ export async function resolveProductCategoryBySegments(
     limit: 100,
     overrideAccess: false,
     pagination: false,
-    select: productCategorySelect,
+    select: productCategoryDetailSelect,
     where: {
       slug: {
         equals: leafSlug,

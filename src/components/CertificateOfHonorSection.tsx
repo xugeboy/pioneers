@@ -53,7 +53,7 @@ export const CertificateOfHonorSection: React.FC = () => {
           <h2 className="font-display text-3xl font-semibold leading-tight text-[#123d63] md:text-4xl">
             Certificate Of Honor
           </h2>
-          <div className="mx-auto mt-6 h-1 w-16 rounded-full bg-[#e87412]" />
+          <div className="mx-auto mt-6 h-1 w-[clamp(4rem,28%,12rem)] rounded-full bg-[#00A650]" />
         </div>
 
         <CertificateCarousel certificates={certificateImages} />

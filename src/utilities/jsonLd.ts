@@ -468,6 +468,35 @@ export const getProductCategoryJsonLd = (
   })
 }
 
+export const getProductCategoryFAQJsonLd = (
+  category: ProductCategorySummary | ProductCategory,
+): JsonLdNode | null => {
+  const path = getProductCategoryHref(category)
+  const items =
+    category.faqItems
+      ?.map((item) => ({
+        answer: getRichTextPlainText(item.answer).trim(),
+        question: item.question?.trim(),
+      }))
+      .filter((item) => Boolean(item.question && item.answer)) || []
+
+  if (!items.length) return null
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    '@id': `${toAbsoluteURL(path)}#faq`,
+    mainEntity: items.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  }
+}
+
 export const getBreadcrumbJsonLd = (
   items: { label: string; href?: string }[],
   currentPath: string,
@@ -481,3 +510,19 @@ export const getBreadcrumbJsonLd = (
     item: toAbsoluteURL(item.href || currentPath),
   })),
 })
+
+function getRichTextPlainText(value: unknown): string {
+  if (!value || typeof value !== 'object') return ''
+
+  if ('text' in value && typeof value.text === 'string') return value.text
+
+  if ('children' in value && Array.isArray(value.children)) {
+    return value.children.map(getRichTextPlainText).join(' ')
+  }
+
+  if ('root' in value) {
+    return getRichTextPlainText(value.root)
+  }
+
+  return ''
+}

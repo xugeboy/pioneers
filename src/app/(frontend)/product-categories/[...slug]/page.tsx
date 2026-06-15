@@ -5,6 +5,7 @@ import { CertificateOfHonorSection } from '@/components/CertificateOfHonorSectio
 import { JsonLd } from '@/components/JsonLd'
 import { Media } from '@/components/Media'
 import ProductCategoryBrowserSidebar from '@/components/ProductCategoryBrowserSidebar'
+import { ProductCategoryPillarSections } from '@/components/ProductCategoryPillarSections'
 import ProductCategoryResults from '@/components/ProductCategoryResults'
 import { type ProductLeadCardData } from '@/components/ProductLeadCard'
 import configPromise from '@payload-config'
@@ -27,7 +28,12 @@ import {
   resolveProductCategoryBySegments,
 } from '@/utilities/productCategories'
 import { generateMeta } from '@/utilities/generateMeta'
-import { getBreadcrumbJsonLd, getProductCategoryJsonLd } from '@/utilities/jsonLd'
+import {
+  compactJsonLd,
+  getBreadcrumbJsonLd,
+  getProductCategoryFAQJsonLd,
+  getProductCategoryJsonLd,
+} from '@/utilities/jsonLd'
 
 type Args = {
   params: Promise<{
@@ -100,10 +106,11 @@ export default async function ProductCategoryPage({ params: paramsPromise }: Arg
   return (
     <div className="pt-16 md:pt-24 pb-16 md:pb-24">
       <JsonLd
-        data={[
+        data={compactJsonLd([
           getProductCategoryJsonLd(currentCategory, products.docs),
           getBreadcrumbJsonLd(breadcrumbItems, pagePath),
-        ]}
+          requestedPageNumber === 1 ? getProductCategoryFAQJsonLd(currentCategory) : null,
+        ])}
       />
       <PageClient />
       <Breadcrumbs items={breadcrumbItems} />
@@ -155,6 +162,10 @@ export default async function ProductCategoryPage({ params: paramsPromise }: Arg
           </div>
         </div>
       </div>
+
+      {requestedPageNumber === 1 ? (
+        <ProductCategoryPillarSections category={currentCategory} />
+      ) : null}
 
       <CertificateOfHonorSection />
     </div>

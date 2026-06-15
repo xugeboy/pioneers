@@ -722,7 +722,16 @@ export interface Product {
             blockType: 'cta';
           }
         | ContentBlock
-        | MediaBlock
+        | {
+            mediaType: 'image' | 'youtube' | 'uploadVideo';
+            displayMode: 'fullScreen' | 'textWrap';
+            media?: (number | null) | Media;
+            videoURL?: string | null;
+            videoFile?: (number | null) | Video;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'mediaBlock';
+          }
         | ArchiveBlock
         | FormBlock
       )[]
@@ -766,6 +775,88 @@ export interface ProductCategory {
   id: number;
   title: string;
   description?: string | null;
+  /**
+   * Long-form SEO content for this category page. Use this for scenario expertise, sourcing notes, and buyer education.
+   */
+  pillarContent?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  oemCapabilities?: {
+    heading?: string | null;
+    /**
+     * Use this for richer OEM/ODM content with headings, media, lists, and tables. If filled, it is shown instead of the plain Intro field.
+     */
+    introRichText?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    items?:
+      | {
+          title: string;
+          description?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  qualityHighlights?: {
+    heading?: string | null;
+    intro?: string | null;
+    items?:
+      | {
+          title: string;
+          description?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  /**
+   * Manually select supporting blog posts for this category pillar page. Leave empty to hide the section.
+   */
+  relatedBlogs?: (number | Blog)[] | null;
+  faqItems?:
+    | {
+        question: string;
+        answer: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        id?: string | null;
+      }[]
+    | null;
   heroImage?: (number | null) | Media;
   sortOrder?: number | null;
   /**
@@ -846,20 +937,6 @@ export interface ContentBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'content';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "MediaBlock".
- */
-export interface MediaBlock {
-  mediaType: 'image' | 'youtube' | 'uploadVideo';
-  displayMode: 'fullScreen' | 'textWrap';
-  media?: (number | null) | Media;
-  videoURL?: string | null;
-  videoFile?: (number | null) | Video;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'mediaBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2144,6 +2221,41 @@ export interface ProductsSelect<T extends boolean = true> {
 export interface ProductCategoriesSelect<T extends boolean = true> {
   title?: T;
   description?: T;
+  pillarContent?: T;
+  oemCapabilities?:
+    | T
+    | {
+        heading?: T;
+        introRichText?: T;
+        items?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+      };
+  qualityHighlights?:
+    | T
+    | {
+        heading?: T;
+        intro?: T;
+        items?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+      };
+  relatedBlogs?: T;
+  faqItems?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
   heroImage?: T;
   sortOrder?: T;
   showInMegaNav?: T;
@@ -2909,6 +3021,20 @@ export interface CallToActionBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'cta';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MediaBlock".
+ */
+export interface MediaBlock {
+  mediaType: 'image' | 'youtube' | 'uploadVideo';
+  displayMode: 'fullScreen' | 'textWrap';
+  media?: (number | null) | Media;
+  videoURL?: string | null;
+  videoFile?: (number | null) | Video;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'mediaBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
