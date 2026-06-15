@@ -215,7 +215,7 @@ const SectionIntro: React.FC<{
     const trimmedIntro = intro.trim()
 
     return trimmedIntro ? (
-      <p className="mx-auto mt-6 max-w-3xl text-center text-base leading-8 text-[#4f5f55]">
+      <p className="mx-auto mt-6 max-w-6xl text-center text-base leading-8 text-[#4f5f55]">
         {trimmedIntro}
       </p>
     ) : null
@@ -225,7 +225,7 @@ const SectionIntro: React.FC<{
 
   return (
     <RichText
-      className="mt-7 max-w-none prose-headings:font-display prose-headings:text-[#162019] prose-p:text-[#39483f] prose-p:leading-7 prose-li:text-[#39483f] prose-li:leading-6 md:prose-lg md:prose-p:leading-7 md:prose-li:leading-6"
+      className="mt-7 max-w-none prose-headings:mb-3 prose-headings:mt-7 prose-headings:font-display prose-headings:text-[#162019] prose-p:my-2 prose-p:text-[#39483f] prose-p:leading-6 prose-li:my-1 prose-li:text-[#39483f] prose-li:leading-6"
       data={intro}
       enableGutter={false}
     />

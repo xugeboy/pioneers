@@ -116,7 +116,7 @@ export default async function ProductCategoryPage({ params: paramsPromise }: Arg
       <Breadcrumbs items={breadcrumbItems} />
 
       <div className="container mb-8">
-        <div className="max-w-3xl space-y-3">
+        <div className="max-w-6xl space-y-3">
           <h1 className="font-display text-3xl text-[#162019] md:text-4xl">
             {currentCategory.title}
           </h1>
