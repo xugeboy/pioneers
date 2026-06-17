@@ -28,7 +28,6 @@ import {
   getDescendantProductCategoryIDs,
   getProductCategoryHref,
   getProductCategoryPath,
-  getProductCategoryProductsWhere,
   productCardSelect,
 } from '@/utilities/productCategories'
 
@@ -269,7 +268,11 @@ async function getLandingProductGroups(): Promise<ProductGroup[]> {
         pagination: false,
         select: productCardSelect,
         sort: '-publishedAt',
-        where: getProductCategoryProductsWhere(descendantIDs),
+        where: {
+          primaryCategory: {
+            in: descendantIDs,
+          },
+        },
       })
 
       return {

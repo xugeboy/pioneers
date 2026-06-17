@@ -218,7 +218,7 @@ export const OemTieDownLeadForm: React.FC<OemTieDownLeadFormProps> = ({
   return (
     <section
       className={cn(
-        'rounded-xl border border-[#dce5dc] bg-white p-5 shadow-[0_24px_70px_rgba(10,22,14,0.12)] sm:p-6 lg:p-7',
+        'rounded-xl border border-[#dce5dc] bg-white p-5 text-[#162019] shadow-[0_24px_70px_rgba(10,22,14,0.12)] sm:p-6 lg:p-7',
         className,
       )}
       id={anchorID}
