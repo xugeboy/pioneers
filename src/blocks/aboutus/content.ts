@@ -73,7 +73,6 @@ export const aboutAdvantageContent = {
   summary:
     'Our production and support teams help customers keep projects on track. Tell us what you need, and we will help you find the right product path for your application.',
   summaryTitle: 'High-quality products, when you need them',
-  title: 'The Pioneers Gears Advantage',
 } as const
 
 export const aboutClosingCtaContent = {

@@ -1,0 +1,232 @@
+export type TeamContact = {
+  email?: string
+  heading?: string
+  phone?: string
+}
+
+export type TeamQuestion = {
+  answer: string
+  question: string
+}
+
+export type TeamMember = {
+  bio: string
+  contact?: TeamContact
+  imageAlt?: string
+  imageUrl?: string
+  initials: string
+  name: string
+  questions: TeamQuestion[]
+  role: string
+}
+
+export const defaultTeamContact = {
+  email: 'sales@pioneersgears.com',
+  heading: 'Project enquiries',
+  phone: '+86 199 5279 2557',
+} satisfies TeamContact
+
+export const aboutTeamContent = {
+  contact: defaultTeamContact,
+  members: [
+    {
+      bio: 'Steven co-founded the factory in 2010 and leads overall company operations',
+      imageUrl: '',
+      initials: '01',
+      name: 'Steven Chen',
+      questions: [
+        {
+          question: 'What do you do at Pioneers Gears?',
+          answer:
+            'I help connect customer requirements with the right product path, making sure priorities are clear before production begins.',
+        },
+        {
+          question: 'What is your favourite part of the work?',
+          answer:
+            'Seeing a rough product idea become a dependable, repeatable item that customers can sell with confidence.',
+        },
+        {
+          question: 'What should a new customer know first?',
+          answer:
+            'The more clearly we understand the application, market, and packaging needs, the faster we can recommend the best route.',
+        },
+      ],
+      role: 'General Manager',
+    },
+    {
+      bio: 'Co-founded the factory and supports production coordination and daily operations.',
+      imageUrl: '',
+      initials: '02',
+      name: 'Sophia Liu',
+      questions: [
+        {
+          question: 'What do you focus on each day?',
+          answer:
+            'I keep conversations organized so customers can get clear updates on samples, quotes, specifications, and next steps.',
+        },
+        {
+          question: 'What makes a project run smoothly?',
+          answer:
+            'Clear priorities, confirmed details, and quick feedback when something needs to change.',
+        },
+      ],
+      role: 'Assistant Manager',
+    },
+    {
+      bio: 'Dustin started with us in 2023 and leads global sales strategy and key account development.',
+      imageUrl: '',
+      initials: '03',
+      name: 'Dustin Xu',
+      questions: [
+        {
+          question: 'What do you help customers decide?',
+          answer:
+            'I help narrow down materials, sizes, finishes, and load requirements so the final product fits the real use case.',
+        },
+        {
+          question: 'What detail matters most in cargo gear?',
+          answer:
+            'Consistency. A product needs to be strong on paper, practical in use, and stable across repeat orders.',
+        },
+        {
+          question: 'What do you enjoy outside work?',
+          answer:
+            'I like testing gear outdoors and noticing small details that make products easier to use.',
+        },
+      ],
+      role: 'Sales Manager',
+    },
+    {
+      bio: 'Warren joined in 2018 and focuses on new inquiries and account follow-up.',
+      imageUrl: '',
+      initials: '04',
+      name: 'Warren Wu',
+      questions: [
+        {
+          question: 'What is your role in production?',
+          answer:
+            'I help organize capacity, materials, and timelines so orders move through production with fewer surprises.',
+        },
+        {
+          question: 'What is the best way to protect delivery dates?',
+          answer:
+            'Confirm specifications early, leave room for approvals, and make sure every department is working from the same plan.',
+        },
+      ],
+      role: 'Sales Executive',
+    },
+    {
+      bio: 'Alex Zuo joined in 2019 and handles inquiries, quotations, and order follow-up for international customers.',
+      imageUrl: '',
+      initials: '05',
+      name: 'Alex Zuo',
+      questions: [
+        {
+          question: 'What does quality mean to you?',
+          answer:
+            'Quality means the product matches the specification, performs reliably, and looks right when it reaches the customer.',
+        },
+        {
+          question: 'Where do you pay the most attention?',
+          answer:
+            'Load-bearing details, stitching consistency, hardware finish, labeling, and packing accuracy.',
+        },
+        {
+          question: 'What advice would you give a new teammate?',
+          answer:
+            'Check the small things carefully. Small details are often where customers notice the difference.',
+        },
+      ],
+      role: 'Sales Executive',
+    },
+    {
+      bio: 'Zhuang joined our team in 2025, managing custom production, sample coordination, and OEM order execution.',
+      imageUrl: '',
+      initials: '08',
+      name: 'Zhuang Kai',
+      questions: [
+        {
+          question: 'What do you look for in materials?',
+          answer:
+            'Stable supply, consistent performance, and finishes that match the customer specification across repeat production.',
+        },
+        {
+          question: 'What is your favourite thing about the job?',
+          answer:
+            'Finding practical solutions that keep both product quality and project timing under control.',
+        },
+      ],
+      role: 'Production Manager',
+    },
+    {
+      bio: 'Zhou joined our team in 2018, managing standard product production, scheduling, and quality control.',
+      imageUrl: '',
+      initials: '09',
+      name: 'Zhou Yao Qian',
+      questions: [
+        {
+          question: 'How do you support returning customers?',
+          answer:
+            'I keep order history, feedback, and update requests organized so the next production run is easier to manage.',
+        },
+        {
+          question: 'What do customers appreciate most?',
+          answer:
+            'Fast answers, honest timelines, and having someone who remembers the details of their program.',
+        },
+      ],
+      role: 'Production Manager',
+    },
+    {
+      bio: 'Sunny joined in 2020 and coordinates sales, production, and logistics.',
+      imageUrl: '',
+      initials: '10',
+      name: 'Sunny Meng',
+      questions: [
+        {
+          question: 'What do you do for the team?',
+          answer:
+            'I help organize product information, visuals, and copy so customers can understand product options quickly.',
+        },
+        {
+          question: 'What makes product content useful?',
+          answer:
+            'Clear photos, accurate specifications, practical application notes, and no unnecessary confusion.',
+        },
+        {
+          question: 'If you had one meal for the rest of your life, what would it be?',
+          answer: 'Something simple, filling, and easy to share after a long production day.',
+        },
+      ],
+      role: 'Order Coordinator',
+    },
+    {
+      bio: 'Joined in 2019 and handles payments, bookkeeping, and financial operations.',
+      imageUrl: '',
+      initials: '11',
+      name: 'Jenniler Xu',
+      questions: [
+        {
+          question: 'What do you do for the team?',
+          answer:
+            'I help organize product information, visuals, and copy so customers can understand product options quickly.',
+        },
+        {
+          question: 'What makes product content useful?',
+          answer:
+            'Clear photos, accurate specifications, practical application notes, and no unnecessary confusion.',
+        },
+        {
+          question: 'If you had one meal for the rest of your life, what would it be?',
+          answer: 'Something simple, filling, and easy to share after a long production day.',
+        },
+      ],
+      role: 'Finance',
+    },
+  ],
+  title: 'Meet Our Team',
+} satisfies {
+  contact: TeamContact
+  members: TeamMember[]
+  title: string
+}

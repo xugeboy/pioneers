@@ -5,6 +5,7 @@ import React, { useRef } from 'react'
 
 import type { AboutAdvantageBlock as AboutAdvantageBlockProps } from '@/payload-types'
 
+import { AboutTeamSection } from '@/blocks/aboutus/AboutTeam/Component'
 import { aboutAdvantageContent } from '@/blocks/aboutus/content'
 import { useScrollScene } from '@/utilities/gsap'
 
@@ -35,8 +36,11 @@ export const AboutAdvantageBlock: React.FC<
       <div className="py-10 md:py-12">
         <div className="container text-center" data-advantage-reveal>
           <h2 className="font-industrial text-2xl font-bold uppercase tracking-wide text-[#202833] md:text-3xl">
-            {aboutAdvantageContent.title}
+            {aboutAdvantageContent.summaryTitle}
           </h2>
+          <p className="mx-auto mt-4 max-w-3xl leading-7 text-[#5f6670] md:text-lg">
+            {aboutAdvantageContent.summary}
+          </p>
         </div>
 
         <div className="mt-8 grid gap-4 px-4 xl:grid-cols-3 md:px-6 xl:px-8">
@@ -67,14 +71,7 @@ export const AboutAdvantageBlock: React.FC<
           ))}
         </div>
 
-        <div className="container mt-20 mb-10 text-center md:mt-22 md:mb-12" data-advantage-reveal>
-          <h3 className="font-industrial text-2xl font-bold uppercase tracking-wide text-[#202833] md:text-3xl">
-            {aboutAdvantageContent.summaryTitle}
-          </h3>
-          <p className="mx-auto mt-4 max-w-3xl leading-7 text-[#5f6670] md:text-lg">
-            {aboutAdvantageContent.summary}
-          </p>
-        </div>
+        <AboutTeamSection />
       </div>
     </section>
   )
