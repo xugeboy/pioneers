@@ -167,13 +167,12 @@ export default async function Blog({ params: paramsPromise }: Args) {
 
           {blogHeroImage ? (
             <div
-              className="relative mx-auto flex min-h-[14rem] w-full max-w-[46rem] overflow-hidden rounded-md bg-white/95 shadow-[0_18px_45px_rgba(6,18,11,0.08)] md:min-h-[18rem] lg:max-h-[30rem] xl:max-h-[32rem]"
+              className="relative mx-auto flex w-fit max-w-full overflow-hidden rounded-md bg-white/95 shadow-[0_18px_45px_rgba(6,18,11,0.08)]"
               style={blogHeroImageStyle}
             >
               <Media
-                fill
                 priority
-                imgClassName="object-contain"
+                imgClassName="block h-auto max-h-[32rem] max-w-full object-contain"
                 resource={blogHeroImage}
                 size="(min-width: 1280px) 46rem, (min-width: 1024px) 48vw, calc(100vw - 2rem)"
               />
@@ -256,11 +255,8 @@ function getBlogHeroImageStyle(
   image: { height?: number | null; width?: number | null } | null,
 ): React.CSSProperties {
   if (!image?.width || !image?.height) {
-    return { aspectRatio: '1.42 / 1' }
+    return {}
   }
 
-  const imageRatio = image.width / image.height
-  const controlledRatio = Math.min(Math.max(imageRatio, 1.15), 2.05)
-
-  return { aspectRatio: `${controlledRatio} / 1` }
+  return { maxWidth: `${image.width}px` }
 }
