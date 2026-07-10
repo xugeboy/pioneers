@@ -259,34 +259,6 @@ export const aboutTeamContent: AboutTeamContent = {
       ],
       role: 'Order Coordinator',
     },
-    {
-      bio: 'Joined in 2019 and handles payments, bookkeeping, and financial operations.',
-      imageUrl: 'https://cdn.pioneersgears.com/images/Jenniler Xu.webp',
-      initials: '11',
-      name: 'Jenniler Xu',
-      questions: [
-        {
-          question: 'What do you do at Xiangle Tools?',
-          answer:
-            'I manage all of the company’s financial operations, including international payments, bookkeeping, and ensuring our financial foundation is solid.',
-        },
-        {
-          question: 'What is your favourite thing about working for Xiangle Tools?',
-          answer:
-            'Bringing order to complex data. It is incredibly satisfying to see the factory’s steady, hard-earned growth reflected accurately in the numbers.',
-        },
-        {
-          question: 'What do you like to do when you are not at work?',
-          answer:
-            'I spend my weekends tending to my garden and relaxing with a good historical fiction novel.',
-        },
-        {
-          question: 'If you had to eat one meal for the rest of your life what would it be?',
-          answer: 'peking duck',
-        },
-      ],
-      role: 'Finance',
-    },
   ],
   title: 'Meet Our Team',
 }
