@@ -20,13 +20,19 @@ export type TeamMember = {
   role: string
 }
 
+export type AboutTeamContent = {
+  contact: TeamContact
+  members: TeamMember[]
+  title: string
+}
+
 export const defaultTeamContact = {
   email: 'sales@pioneersgears.com',
   heading: 'Project enquiries',
   phone: '+86 199 5279 2557',
 } satisfies TeamContact
 
-export const aboutTeamContent = {
+export const aboutTeamContent: AboutTeamContent = {
   contact: defaultTeamContact,
   members: [
     {
@@ -283,8 +289,4 @@ export const aboutTeamContent = {
     },
   ],
   title: 'Meet Our Team',
-} satisfies {
-  contact: TeamContact
-  members: TeamMember[]
-  title: string
 }
