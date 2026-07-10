@@ -238,10 +238,6 @@ html[data-theme='light'] {
 }
 
 @layer components {
-  .blog-richtext :where(h1, h2, h3, h4, h5) {
-    font-family: Forza, var(--font-geist-sans), sans-serif;
-  }
-
   .blog-richtext :where(table) {
     width: auto;
     max-width: 100%;
