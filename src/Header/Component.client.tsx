@@ -6,6 +6,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import type { Header } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
+import { FloatingContactActions } from '@/Header/FloatingContactActions'
 import { MobileDrawer } from '@/Header/MobileDrawer'
 import type { HeaderMegaNavGroup } from '@/Header/getMegaNavData'
 import { useHeaderTheme } from '@/providers/HeaderTheme'
@@ -80,8 +81,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, megaNavGroups 
   }, [])
 
   const allowTransparentHeader = pathname === '/' || headerTheme === 'dark'
-  const isImmersive =
-    allowTransparentHeader && (headerTheme === 'dark' || headerTheme == null)
+  const isImmersive = allowTransparentHeader && (headerTheme === 'dark' || headerTheme == null)
   const showSolidHeader = hasScrolled || isMenuOpen || isInteractive || !isImmersive
   const useTransparentTone = isImmersive && !showSolidHeader
 
@@ -135,6 +135,8 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, megaNavGroups 
           />
         </div>
       </header>
+
+      <FloatingContactActions />
 
       <MobileDrawer
         items={data.navItems || []}

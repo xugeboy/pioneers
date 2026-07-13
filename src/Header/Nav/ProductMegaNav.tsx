@@ -24,13 +24,7 @@ export const ProductMegaNav: React.FC<ProductMegaNavProps> = ({ groups, tone }) 
     return null
   }
 
-  return (
-    <div className="relative hidden min-w-0 items-center gap-1 xl:flex">
-      {groups.map((group) => (
-        <DesktopMegaNavGroup key={group.id} group={group} tone={tone} />
-      ))}
-    </div>
-  )
+  return groups.map((group) => <DesktopMegaNavGroup key={group.id} group={group} tone={tone} />)
 }
 
 const DesktopMegaNavGroup: React.FC<GroupItemProps> = ({ group, tone }) => {

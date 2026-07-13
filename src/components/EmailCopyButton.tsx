@@ -1,6 +1,6 @@
 'use client'
 
-import { Mail } from 'lucide-react'
+import { Check, Copy, Mail } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 
 import { emailContact } from '@/components/socialLinks'
@@ -8,10 +8,15 @@ import { cn } from '@/utilities/ui'
 
 type EmailCopyButtonProps = {
   className?: string
+  icon?: 'copy' | 'mail'
   iconClassName?: string
 }
 
-export const EmailCopyButton: React.FC<EmailCopyButtonProps> = ({ className, iconClassName }) => {
+export const EmailCopyButton: React.FC<EmailCopyButtonProps> = ({
+  className,
+  icon = 'mail',
+  iconClassName,
+}) => {
   const [showCopied, setShowCopied] = useState(false)
 
   useEffect(() => {
@@ -29,27 +34,23 @@ export const EmailCopyButton: React.FC<EmailCopyButtonProps> = ({ className, ico
   const copyEmail = async () => {
     try {
       await navigator.clipboard.writeText(emailContact.email)
-    } finally {
       setShowCopied(true)
+    } catch {
+      // Keep the copy icon visible when clipboard access is unavailable.
     }
   }
 
-  return (
-    <>
-      <button
-        aria-label={emailContact.label}
-        className={className}
-        onClick={copyEmail}
-        type="button"
-      >
-        <Mail aria-hidden="true" className={cn('size-4', iconClassName)} />
-      </button>
+  const Icon = showCopied ? Check : icon === 'copy' ? Copy : Mail
 
-      {showCopied ? (
-        <span className="pointer-events-none fixed right-4 top-4 z-[100] whitespace-nowrap rounded-full bg-[#00A650] px-5 py-3 text-sm font-semibold text-white shadow-[0_18px_50px_rgba(0,166,80,0.28)] md:right-6 md:top-6">
-          Email address copied
-        </span>
-      ) : null}
-    </>
+  return (
+    <button
+      aria-label={showCopied ? 'Email address copied' : `Copy ${emailContact.email}`}
+      aria-live="polite"
+      className={className}
+      onClick={copyEmail}
+      type="button"
+    >
+      <Icon aria-hidden="true" className={cn('size-4', iconClassName)} />
+    </button>
   )
 }

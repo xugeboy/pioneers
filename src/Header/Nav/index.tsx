@@ -9,8 +9,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import type { HeaderMegaNavGroup } from '@/Header/getMegaNavData'
 import type { Header as HeaderType } from '@/payload-types'
 
-import { EmailCopyButton } from '@/components/EmailCopyButton'
-import { whatsappContact } from '@/components/socialLinks'
 import { resolveCMSLinkHref } from '@/utilities/resolveCMSLinkHref'
 import { ProductMegaNav } from './ProductMegaNav'
 
@@ -123,109 +121,100 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
     'inline-flex size-11 shrink-0 items-center justify-center rounded-full text-[#1f2933] transition-colors hover:bg-black/5 focus-visible:bg-black/5 focus-visible:outline-none',
   )
   const menuButtonClasses = cn(
-    'inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-[1rem] px-4 text-[15px] font-medium transition-[background-color,color] duration-200 xl:hidden',
+    'inline-flex h-11 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-[1rem] px-4 text-[15px] font-medium transition-[background-color,color] duration-200 xl:hidden',
     isLightTone
       ? 'bg-transparent text-white hover:bg-white/10'
       : 'bg-transparent text-[#2d2d2d] hover:bg-[#f3f0ea]',
   )
-  const headerIconLinkClasses = cn(
-    'hidden size-11 shrink-0 items-center justify-center rounded-full transition-[background-color,color,opacity] duration-200 hover:opacity-85 xl:inline-flex',
-    isLightTone
-      ? 'text-white [text-shadow:0_1px_18px_rgba(0,0,0,0.45)] hover:bg-white/12'
-      : 'text-[#2d2d2d] hover:bg-[#f3f0ea]',
-  )
-
   return (
     <nav className="relative flex w-full min-w-0 flex-1 flex-col gap-3 md:flex-row md:items-center md:gap-4">
       <div
         className={cn(
-          'hidden min-w-0 flex-1 items-center gap-4 transition-opacity duration-150 xl:flex',
+          'hidden min-w-0 flex-1 items-center justify-end gap-1 transition-opacity duration-150 xl:flex',
         )}
       >
         <ProductMegaNav groups={megaNavGroups} tone={tone} />
 
-        <div className="ml-auto flex min-w-0 items-center gap-1 md:gap-2">
-          {navItems.map((item, i) => {
-            const { link, subItems } = item
-            const hasSubItems = Array.isArray(subItems) && subItems.length > 0
-            const href = resolveCMSLinkHref(link)
+        {navItems.map((item, i) => {
+          const { link, subItems } = item
+          const hasSubItems = Array.isArray(subItems) && subItems.length > 0
+          const href = resolveCMSLinkHref(link)
 
-            if (!hasSubItems) {
-              if (!href) return null
-
-              return (
-                <Link
-                  className={navItemShellClasses}
-                  href={href}
-                  key={i}
-                  rel={link?.newTab ? 'noopener noreferrer' : undefined}
-                  target={link?.newTab ? '_blank' : undefined}
-                >
-                  <span className={navTextClasses}>{link?.label}</span>
-                </Link>
-              )
-            }
+          if (!hasSubItems) {
+            if (!href) return null
 
             return (
-              <div className="group relative py-1" key={i}>
-                <div className={cn(navItemShellClasses, 'pr-3')}>
-                  {href ? (
-                    <Link
-                      className={navTextClasses}
-                      href={href}
-                      rel={link?.newTab ? 'noopener noreferrer' : undefined}
-                      target={link?.newTab ? '_blank' : undefined}
-                    >
-                      {link?.label}
-                    </Link>
-                  ) : (
-                    <span className={navTextClasses}>{link?.label}</span>
-                  )}
-                  <svg
-                    aria-hidden="true"
-                    className="size-3 transition-transform duration-200 group-hover:rotate-180"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
+              <Link
+                className={navItemShellClasses}
+                href={href}
+                key={i}
+                rel={link?.newTab ? 'noopener noreferrer' : undefined}
+                target={link?.newTab ? '_blank' : undefined}
+              >
+                <span className={navTextClasses}>{link?.label}</span>
+              </Link>
+            )
+          }
+
+          return (
+            <div className="group relative py-1" key={i}>
+              <div className={cn(navItemShellClasses, 'pr-3')}>
+                {href ? (
+                  <Link
+                    className={navTextClasses}
+                    href={href}
+                    rel={link?.newTab ? 'noopener noreferrer' : undefined}
+                    target={link?.newTab ? '_blank' : undefined}
                   >
-                    <path
-                      clipRule="evenodd"
-                      d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.7a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.21 8.29a.75.75 0 0 1 .02-1.08Z"
-                      fillRule="evenodd"
-                    />
-                  </svg>
-                </div>
-
-                <div
-                  className={cn(
-                    'pointer-events-none invisible absolute left-1/2 top-full z-20 w-max -translate-x-1/2 translate-y-1 pt-2 opacity-0 transition-all duration-200',
-                    'group-hover:pointer-events-auto group-hover:visible group-hover:translate-y-0 group-hover:opacity-100',
-                    'group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100',
-                  )}
+                    {link?.label}
+                  </Link>
+                ) : (
+                  <span className={navTextClasses}>{link?.label}</span>
+                )}
+                <svg
+                  aria-hidden="true"
+                  className="size-3 transition-transform duration-200 group-hover:rotate-180"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
                 >
-                  <div className={dropdownPanelClasses}>
-                    {subItems?.map((subItem, subIndex) => {
-                      const subHref = resolveCMSLinkHref(subItem.link)
+                  <path
+                    clipRule="evenodd"
+                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.7a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.21 8.29a.75.75 0 0 1 .02-1.08Z"
+                    fillRule="evenodd"
+                  />
+                </svg>
+              </div>
 
-                      if (!subHref) return null
+              <div
+                className={cn(
+                  'pointer-events-none invisible absolute left-1/2 top-full z-20 w-max -translate-x-1/2 translate-y-1 pt-2 opacity-0 transition-all duration-200',
+                  'group-hover:pointer-events-auto group-hover:visible group-hover:translate-y-0 group-hover:opacity-100',
+                  'group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100',
+                )}
+              >
+                <div className={dropdownPanelClasses}>
+                  {subItems?.map((subItem, subIndex) => {
+                    const subHref = resolveCMSLinkHref(subItem.link)
 
-                      return (
-                        <Link
-                          className={dropdownLinkClasses}
-                          href={subHref}
-                          key={subIndex}
-                          rel={subItem.link?.newTab ? 'noopener noreferrer' : undefined}
-                          target={subItem.link?.newTab ? '_blank' : undefined}
-                        >
-                          {subItem.link?.label}
-                        </Link>
-                      )
-                    })}
-                  </div>
+                    if (!subHref) return null
+
+                    return (
+                      <Link
+                        className={dropdownLinkClasses}
+                        href={subHref}
+                        key={subIndex}
+                        rel={subItem.link?.newTab ? 'noopener noreferrer' : undefined}
+                        target={subItem.link?.newTab ? '_blank' : undefined}
+                      >
+                        {subItem.link?.label}
+                      </Link>
+                    )
+                  })}
                 </div>
               </div>
-            )
-          })}
-        </div>
+            </div>
+          )
+        })}
       </div>
 
       <div className="flex w-full min-w-0 items-center justify-end gap-2 md:w-auto">
@@ -242,20 +231,6 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
             <SearchIcon className="size-4" />
           </button>
         </div>
-
-        <a
-          aria-label={whatsappContact.label}
-          className={headerIconLinkClasses}
-          href={whatsappContact.href}
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          <svg aria-hidden="true" className="size-4 fill-current" viewBox="0 0 24 24">
-            <path d={whatsappContact.path} />
-          </svg>
-        </a>
-
-        <EmailCopyButton className={headerIconLinkClasses} />
 
         <button className={menuButtonClasses} onClick={onOpenMenu} type="button">
           <Menu className="size-4" />
