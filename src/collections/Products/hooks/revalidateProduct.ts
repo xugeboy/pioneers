@@ -2,7 +2,7 @@ import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'paylo
 
 import type { Product } from '@/payload-types'
 import { revalidateHeaderTag } from '@/utilities/revalidateHeaderTag'
-import { safeRevalidateTag } from '@/utilities/safeRevalidate'
+import { safeRevalidatePath, safeRevalidateTag } from '@/utilities/safeRevalidate'
 import { SITE_SITEMAP_TAG } from '@/utilities/sitemapConstants'
 
 export const revalidateProduct: CollectionAfterChangeHook<Product> = ({
@@ -16,6 +16,7 @@ export const revalidateProduct: CollectionAfterChangeHook<Product> = ({
 
     if (doc._status === 'published' || previousDoc?._status === 'published') {
       safeRevalidateTag(SITE_SITEMAP_TAG, payload.logger)
+      safeRevalidatePath('/sitemap.xml', payload.logger)
     }
   }
 
@@ -30,6 +31,7 @@ export const revalidateDeleteProduct: CollectionAfterDeleteHook<Product> = ({
     payload.logger.info(`Revalidating header after product delete: ${doc.id}`)
     revalidateHeaderTag(payload.logger)
     safeRevalidateTag(SITE_SITEMAP_TAG, payload.logger)
+    safeRevalidatePath('/sitemap.xml', payload.logger)
   }
 
   return doc

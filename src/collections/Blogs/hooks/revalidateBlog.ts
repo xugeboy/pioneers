@@ -18,6 +18,7 @@ export const revalidateBlog: CollectionAfterChangeHook<Blog> = ({
 
       safeRevalidatePath(path, payload.logger)
       safeRevalidateTag(SITE_SITEMAP_TAG, payload.logger)
+      safeRevalidatePath('/sitemap.xml', payload.logger)
     }
 
     if (previousDoc._status === 'published' && doc._status !== 'published') {
@@ -27,6 +28,7 @@ export const revalidateBlog: CollectionAfterChangeHook<Blog> = ({
 
       safeRevalidatePath(oldPath, payload.logger)
       safeRevalidateTag(SITE_SITEMAP_TAG, payload.logger)
+      safeRevalidatePath('/sitemap.xml', payload.logger)
     }
   }
 
@@ -42,6 +44,7 @@ export const revalidateDeleteBlog: CollectionAfterDeleteHook<Blog> = ({
 
     safeRevalidatePath(path, payload.logger)
     safeRevalidateTag(SITE_SITEMAP_TAG, payload.logger)
+    safeRevalidatePath('/sitemap.xml', payload.logger)
   }
 
   return doc

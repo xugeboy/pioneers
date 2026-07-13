@@ -18,6 +18,7 @@ export const revalidatePage: CollectionAfterChangeHook<Page> = ({
 
       safeRevalidatePath(path, payload.logger)
       safeRevalidateTag(SITE_SITEMAP_TAG, payload.logger)
+      safeRevalidatePath('/sitemap.xml', payload.logger)
     }
 
     // If the page was previously published, we need to revalidate the old path
@@ -28,6 +29,7 @@ export const revalidatePage: CollectionAfterChangeHook<Page> = ({
 
       safeRevalidatePath(oldPath, payload.logger)
       safeRevalidateTag(SITE_SITEMAP_TAG, payload.logger)
+      safeRevalidatePath('/sitemap.xml', payload.logger)
     }
   }
   return doc
@@ -41,6 +43,7 @@ export const revalidateDelete: CollectionAfterDeleteHook<Page> = ({
     const path = doc?.slug === 'home' ? '/' : `/${doc?.slug}`
     safeRevalidatePath(path, payload.logger)
     safeRevalidateTag(SITE_SITEMAP_TAG, payload.logger)
+    safeRevalidatePath('/sitemap.xml', payload.logger)
   }
 
   return doc
