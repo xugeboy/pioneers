@@ -120,10 +120,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    gallery: Gallery;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    gallery: GallerySelect<false> | GallerySelect<true>;
   };
   locale: null;
   widgets: {
@@ -2859,6 +2861,32 @@ export interface Footer {
   createdAt?: string | null;
 }
 /**
+ * Manage the production images shown on the public Gallery page.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gallery".
+ */
+export interface Gallery {
+  id: number;
+  /**
+   * Add images from the Media Library, drag to reorder them, and switch individual images on or off.
+   */
+  items?:
+    | {
+        image: number | Media;
+        /**
+         * Turn this off to keep the image in CMS without showing it publicly.
+         */
+        visible?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
@@ -2928,6 +2956,24 @@ export interface FooterSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gallery_select".
+ */
+export interface GallerySelect<T extends boolean = true> {
+  items?:
+    | T
+    | {
+        image?: T;
+        visible?: T;
+        id?: T;
+      };
+  metaTitle?: T;
+  metaDescription?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

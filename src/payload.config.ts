@@ -14,6 +14,7 @@ import { Products } from './collections/Products'
 import { Users } from './collections/Users'
 import { Videos } from './collections/Videos'
 import { Footer } from './Footer/config'
+import { Gallery } from './Gallery/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
@@ -81,7 +82,7 @@ export default buildConfig({
   }),
   collections: [Pages, Blogs, Products, ProductCategories, Media, Files, Videos, Categories, Users],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
+  globals: [Header, Footer, Gallery],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   sharp,
