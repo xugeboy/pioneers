@@ -7,6 +7,7 @@ import { ContentBlock } from '@/blocks/Content/Component'
 import { FeaturedProductsCarouselBlock } from '@/blocks/FeaturedProductsCarousel/Component'
 import { FullscreenHeroBlock } from '@/blocks/FullscreenHero/Component'
 import { FormBlock } from '@/blocks/Form/Component'
+import { GalleryMasonryBlock } from '@/blocks/GalleryMasonry/Component'
 import { GoogleMapLocationBlock } from '@/blocks/GoogleMapLocation/Component'
 import { FAQAccordionBlock } from '@/blocks/FAQAccordion/Component'
 import { LatestBlogsBlock } from '@/blocks/LatestBlogs/Component'
@@ -40,6 +41,7 @@ const blockComponents = {
   featuredProductsCarousel: FeaturedProductsCarouselBlock,
   fullscreenHero: FullscreenHeroBlock,
   formBlock: FormBlock,
+  galleryMasonry: GalleryMasonryBlock,
   googleMapLocation: GoogleMapLocationBlock,
   homeApplicationsNav: HomeApplicationsNavBlock,
   homeClosingCta: HomeClosingCtaBlock,
@@ -82,6 +84,7 @@ export const RenderBlocks: React.FC<{
             blockType === 'qualityControl' ||
             blockType === 'oemOdmCapability' ||
             blockType === 'factoryGallery' ||
+            blockType === 'galleryMasonry' ||
             blockType === 'manufacturingInquiry' ||
             blockType === 'homeApplicationsNav' ||
             blockType === 'homeTrustSignals' ||

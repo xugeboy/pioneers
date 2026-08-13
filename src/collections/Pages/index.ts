@@ -10,6 +10,7 @@ import { FeaturedProductsCarousel } from '../../blocks/FeaturedProductsCarousel/
 import { FAQAccordion } from '../../blocks/FAQAccordion/config'
 import { FullscreenHero } from '../../blocks/FullscreenHero/config'
 import { FormBlock } from '../../blocks/Form/config'
+import { GalleryMasonry } from '../../blocks/GalleryMasonry/config'
 import { GoogleMapLocation } from '../../blocks/GoogleMapLocation/config'
 import { LatestBlogs } from '../../blocks/LatestBlogs/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
@@ -102,6 +103,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 QualityControl,
                 OemOdmCapability,
                 FactoryGallery,
+                GalleryMasonry,
                 ManufacturingInquiry,
                 HomeApplicationsNav,
                 HomeTrustSignals,

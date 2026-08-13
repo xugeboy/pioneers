@@ -5,7 +5,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { ImageMedia } from '@/components/Media/ImageMedia'
 import type { Gallery, Media } from '@/payload-types'
-import { useHeaderTheme } from '@/providers/HeaderTheme'
 
 export type GalleryItem = NonNullable<Gallery['items']>[number] & { image: Media }
 
@@ -16,22 +15,17 @@ type GalleryResponse = {
   totalDocs: number
 }
 
-export const GalleryGrid: React.FC<{
+export const GalleryMasonryClient: React.FC<{
   initialItems: GalleryItem[]
   pageSize: number
   totalItems: number
 }> = ({ initialItems, pageSize, totalItems }) => {
-  const { setHeaderTheme } = useHeaderTheme()
   const [items, setItems] = useState(initialItems)
   const [page, setPage] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
   const sentinelRef = useRef<HTMLDivElement | null>(null)
   const hasNextPage = items.length < totalItems
-
-  useEffect(() => {
-    setHeaderTheme('light')
-  }, [setHeaderTheme])
 
   const loadNextPage = useCallback(async () => {
     if (isLoading || !hasNextPage) return

@@ -226,6 +226,7 @@ export interface Page {
     | QualityControlBlock
     | OemOdmCapabilityBlock
     | FactoryGalleryBlock
+    | GalleryMasonryBlock
     | ManufacturingInquiryBlock
     | HomeApplicationsNavBlock
     | HomeTrustSignalsBlock
@@ -1374,6 +1375,15 @@ export interface FactoryGalleryBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "GalleryMasonryBlock".
+ */
+export interface GalleryMasonryBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'galleryMasonry';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ManufacturingInquiryBlock".
  */
 export interface ManufacturingInquiryBlock {
@@ -1811,6 +1821,7 @@ export interface PagesSelect<T extends boolean = true> {
         qualityControl?: T | QualityControlBlockSelect<T>;
         oemOdmCapability?: T | OemOdmCapabilityBlockSelect<T>;
         factoryGallery?: T | FactoryGalleryBlockSelect<T>;
+        galleryMasonry?: T | GalleryMasonryBlockSelect<T>;
         manufacturingInquiry?: T | ManufacturingInquiryBlockSelect<T>;
         homeApplicationsNav?: T | HomeApplicationsNavBlockSelect<T>;
         homeTrustSignals?: T | HomeTrustSignalsBlockSelect<T>;
@@ -1948,6 +1959,14 @@ export interface OemOdmCapabilityBlockSelect<T extends boolean = true> {
  * via the `definition` "FactoryGalleryBlock_select".
  */
 export interface FactoryGalleryBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "GalleryMasonryBlock_select".
+ */
+export interface GalleryMasonryBlockSelect<T extends boolean = true> {
   id?: T;
   blockName?: T;
 }
