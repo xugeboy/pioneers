@@ -25,6 +25,9 @@ export const Gallery: GlobalConfig = {
               name: 'items',
               type: 'array',
               admin: {
+                components: {
+                  Field: '@/components/GalleryManager',
+                },
                 description:
                   'Add images from the Media Library, drag to reorder them, and switch individual images on or off.',
                 initCollapsed: true,
@@ -40,7 +43,8 @@ export const Gallery: GlobalConfig = {
                   name: 'visible',
                   type: 'checkbox',
                   admin: {
-                    description: 'Turn this off to keep the image in CMS without showing it publicly.',
+                    description:
+                      'Turn this off to keep the image in CMS without showing it publicly.',
                   },
                   defaultValue: true,
                   label: 'Show on Gallery page',
